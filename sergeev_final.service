@@ -1,0 +1,22 @@
+[Unit]
+Description=Sergeev Digitization System
+After=network.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/opt/sergeev/app
+Environment="PORT=8100"
+Environment="NODE_ENV=production"
+Environment="DATABASE_URL=mysql://2nu4qSW83Be3aLD.4d0a842aa60c:1K08lOVyQBt9YK6nyz9q@gateway05.us-east-1.prod.aws.tidbcloud.com:4000/NKQCazhHNmf6LjGzc6eGdS?ssl={\"rejectUnauthorized\":true}"
+Environment="JWT_SECRET=QhvhFozbDpjoesGg73dbDm"
+Environment="OAUTH_SERVER_URL=https://api.manus.im"
+Environment="VITE_APP_ID=NKQCazhHNmf6LjGzc6eGdS"
+Environment="VITE_APP_TITLE=Sergeev Digitization System"
+Environment="VITE_OAUTH_PORTAL_URL=https://manus.im"
+ExecStart=/usr/bin/node /opt/sergeev/app/dist/index.js
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
