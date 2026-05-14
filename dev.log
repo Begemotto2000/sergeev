@@ -1,0 +1,25 @@
+$ NODE_ENV=development tsx watch server/_core/index.ts
+
+  #  Node.js[41116]: void node::ResetStdio() at ../src/node.cc:760
+  #  Assertion failed: !(err != 0) || (err == -1 && (*__errno_location ()) == 1)
+
+----- Native stack trace -----
+
+ 1: 0xf95cf7 node::Assert(node::AssertionInfo const&) [node]
+ 2: 0xf42264  [node]
+ 3: 0x7f2966045495  [/lib/x86_64-linux-gnu/libc.so.6]
+ 4: 0x7f2966045610 on_exit [/lib/x86_64-linux-gnu/libc.so.6]
+ 5: 0xe98a4f node::DefaultProcessExitHandlerInternal(node::Environment*, node::ExitCode) [node]
+ 6: 0xf01e4f node::Environment::Exit(node::ExitCode) [node]
+ 7: 0x7f295edcf5e2 
+
+  #  Node.js[41116]: void node::ResetStdio() at ../src/node.cc:760
+  #  Assertion failed: !(err != 0) || (err == -1 && (*__errno_location ()) == 1)
+
+----- Native stack trace -----
+
+ 1: 0xf95cf7 node::Assert(node::AssertionInfo const&) [node]
+ 2: 0xf42264  [node]
+[ELIFECYCLE] Command failed.
+ 3: 0xf42982 node::TrapWebAssemblyOrContinue(int, siginfo_t*, void*) [node]
+ 4: 0x7f2966042520  [/lib/x86_64-linux-gnu/libc.so.6]
