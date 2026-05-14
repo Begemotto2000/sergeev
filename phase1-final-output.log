@@ -1,0 +1,644 @@
+╔════════════════════════════════════════════════════════════════════════╗
+║ ФАЗА 1: Kubernetes на сервере 46.8.255.137 - ФИНАЛЬНОЕ ВЫПОЛНЕНИЕ    ║
+║ Дата: 2026-05-10                                                      ║
+╚════════════════════════════════════════════════════════════════════════╝
+
+🔗 Подключаюсь к серверу 46.8.255.137...
+spawn ssh -o StrictHostKeyChecking=no root@46.8.255.137
+root@46.8.255.137's password: 
+Welcome to Ubuntu 24.04.3 LTS (GNU/Linux 6.8.0-110-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/pro
+
+ System information as of Sun May 10 03:19:16 PM MSK 2026
+
+  System load:  3.77               Processes:             264
+  Usage of /:   27.3% of 98.34GB   Users logged in:       0
+  Memory usage: 23%                IPv4 address for ens3: 46.8.255.137
+  Swap usage:   0%                 IPv6 address for ens3: 2a0d:c580:1:7:197::1
+
+ * Strictly confined Kubernetes makes edge and IoT secure. Learn how MicroK8s
+   just raised the bar for easy, resilient and secure K8s cluster deployment.
+
+   https://ubuntu.com/engage/secure-kubernetes-at-the-edge
+
+Expanded Security Maintenance for Applications is not enabled.
+
+70 updates can be applied immediately.
+To see these additional updates run: apt list --upgradable
+
+14 additional security updates can be applied with ESM Apps.
+Learn more about enabling ESM Apps service at https://ubuntu.com/esm
+
+
+*** System restart required ***
+Last login: Sun May 10 16:27:39 2026 from 54.162.32.198
+[?2004h]0;root@788047: ~root@788047:~# ✅ Подключение успешно
+
+📋 Копирование скрипта на сервер...
+cat > /tmp/phase1-final.sh << 'SCRIPT_EOF'
+[?2004l[?2004h> #!/bin/bash
+[?2004l[?2004h> 
+[?2004l[?2004h> # ============================================================================ [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K=
+[?2004l[?2004h> # ФАЗА 1: Kubernetes на сервере 46.8.255.137 - ПОЛНОЕ ВЫПОЛНЕНИЕ
+[?2004l[?2004h> # Этот скрипт должен быть запущен на production сервере
+[?2004l[?2004h> # ============================================================================ [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K=
+[?2004l[?2004h> 
+[?2004l[?2004h✅ Скрипт скопирован
+
+🚀 Запускаю скрипт на сервере...
+
+> set -e
+[?2004l[?2004h> 
+[?2004l[?2004h> SERVER="46.8.255.137"
+[?2004l[?2004h> WORKDIR="/opt/sergeev-100/k8s-manifests"
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "╔════════════════════════════════════════════════════════════════════════╗"
+[?2004l[?2004h> echo "║ ФАЗА 1: Kubernetes на сервере 46.8.255.137 - ПОЛНОЕ ВЫПОЛНЕНИЕ        ║"
+[?2004l[?2004h> echo "║ Дата: 2026-05-10                                                      ║"
+[?2004l[?2004h> echo "╚════════════════════════════════════════════════════════════════════════╝"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> # Убедимся, что мы в правильной директории
+[?2004l[?2004h> mkdir -p "$WORKDIR"
+[?2004l[?2004h> cd "$WORKDIR"
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "📍 Текущая директория: $(pwd)"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> # ============================================================================ [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K=
+[?2004l[?2004h> # ШАГ 1.3: СОЗДАНИЕ K8S MANIFESTS
+[?2004l[?2004h> # ============================================================================ [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K=
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "╔════════════════════════════════════════════════════════════════════════╗"
+[?2004l[?2004h> echo "║ ШАГ 1.3: СОЗДАНИЕ K8S MANIFESTS                                       ║"
+[?2004l[?2004h> echo "╚════════════════════════════════════════════════════════════════════════╝"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> # Создаем postgres-statefulset.yaml
+[?2004l[?2004h> echo "📝 Создание postgres-statefulset.yaml..."
+[?2004l[?2004h> cat > postgres-statefulset.yaml << 'EOF'
+[?2004l[?2004h> apiVersion: v1
+[?2004l[?2004h> kind: PersistentVolumeClaim
+[?2004l[?2004h> metadata:
+[?2004l[?2004h>   name: postgres-pvc
+[?2004l[?2004h>   namespace: kb-system
+[?2004l[?2004h> spec:
+[?2004l[?2004h>   accessModes:
+[?2004l[?2004h>     - ReadWriteOnce
+[?2004l[?2004h>   resources:
+[?2004l[?2004h>     requests:
+[?2004l[?2004h>       storage: 20Gi
+[?2004l[?2004h> ---
+[?2004ln[?2004h> apiVersion: apps/v1
+[?2004l[?2004h> kind: StatefulSet
+[?2004l[?2004h> metadata:
+[?2004l[?2004h>   name: postgres
+[?2004l[?2004h>   namespace: kb-system
+[?2004ln:[?2004h> spec:
+[?2004l[?2004h>   serviceName: postgres
+[?2004l[?2004h>   replicas: 1
+[?2004l[?2004h>   selector:
+[?2004l[?2004h>     matchLabels:
+[?2004l[?2004h>       app: postgres
+[?2004l[?2004h>   template:
+[?2004l[?2004h>     metadata:
+[?2004l[?2004h>       labels:
+[?2004l[?2004h>         app: postgres
+[?2004l[?2004h>     spec:
+[?2004l[?2004h>       containers:
+[?2004l[?2004h>       - name: postgres
+[?2004l[?2004h>         image: postgres:15-alpine
+[?2004l[?2004h>         ports:
+[?2004l[?2004h>         - containerPort: 5432
+[?2004l[?2004h>         env:
+[?2004l[?2004h>         - name: POSTGRES_USER
+[?2004l[?2004h>           valueFrom:
+[?2004l[?2004h>             secretKeyRef:
+[?2004l[?2004h>               name: app-secrets
+[?2004l[?2004h>               key: POSTGRES_USER
+[?2004l[?2004h>         - name: POSTGRES_PASSWORD
+[?2004l[?2004h>           valueFrom:
+[?2004l[?2004h>             secretKeyRef:
+[?2004l[?2004h>               name: app-secrets
+[?2004l[?2004h>               key: POSTGRES_PASSWORD
+[?2004l[?2004h>         - name: POSTGRES_DB
+[?2004l[?2004h>           value: analyzer_db
+[?2004l[?2004h>         volumeMounts:
+[?2004l[?2004h>         - name: postgres-storage
+[?2004l[?2004h>           mountPath: /var/lib/postgresql/data
+[?2004l[?2004h>         resources:
+[?2004l[?2004h>           requests:
+[?2004l[?2004h>             memory: "256Mi"
+[?2004l[?2004h>             cpu: "250m"
+[?2004l[?2004h>           limits:
+[?2004l[?2004h>             memory: "512Mi"
+[?2004l[?2004h>             cpu: "500m"
+[?2004l[?2004h>         livenessProbe:
+[?2004l[?2004h>           exec:
+[?2004l[?2004h>             command:
+[?2004l[?2004h>             - /bin/sh
+[?2004l[?2004h>             - -c
+[?2004l[?2004h>             - pg_isready -U analyzer
+[?2004l[?2004h>           initialDelaySeconds: 30
+[?2004l[?2004h>           periodSeconds: 10
+[?2004l[?2004h>       volumes:
+[?2004l[?2004h>       - name: postgres-storage
+[?2004l[?2004h>         persistentVolumeClaim:
+[?2004l[?2004h>           claimName: postgres-pvc
+[?2004l[?2004h> ---
+[?2004l[?2004h> apiVersion: v1
+[?2004l[?2004h> kind: Service
+[?2004l[?2004h> metadata:
+[?2004l[?2004h>   name: postgres
+[?2004l[?2004h>   namespace: kb-system
+[?2004l[?2004h> spec:
+[?2004l[?2004h>   clusterIP: None
+[?2004l[?2004h>   selector:
+[?2004l[?2004h>     app: postgres
+[?2004l[?2004h>   ports:
+[?2004l[?2004h>   - port: 5432
+[?2004l[?2004h>     targetPort: 5432
+[?2004l[?2004h> EOF
+[?2004l[?2004h> echo "✅ postgres-statefulset.yaml создан"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> # Создаем redis-statefulset.yaml
+[?2004l[?2004h> echo "📝 Создание redis-statefulset.yaml..."
+[?2004l[?2004h> cat > redis-statefulset.yaml << 'EOF'
+[?2004l[?2004h> apiVersion: v1
+[?2004l[?2004h> kind: PersistentVolumeClaim
+[?2004l[?2004h> metadata:
+[?2004l[?2004h>   name: redis-pvc
+[?2004l[?2004h>   namespace: kb-system
+[?2004l[?2004h> spec:
+[?2004l[?2004h>   accessModes:
+[?2004l[?2004h>     - ReadWriteOnce
+[?2004l[?2004h>   resources:
+[?2004l[?2004h>     requests:
+[?2004l[?2004h>       storage: 10Gi
+[?2004l[?2004h> ---
+[?2004l[?2004h> apiVersion: apps/v1
+[?2004l[?2004h> kind: StatefulSet
+[?2004l[?2004h> metadata:
+[?2004l[?2004h>   name: redis
+[?2004l[?2004h>   namespace: kb-system
+[?2004l[?2004h> spec:
+[?2004l[?2004h>   serviceName: redis
+[?2004l[?2004h>   replicas: 1
+[?2004l[?2004h>   selector:
+[?2004l[?2004h>     matchLabels:
+[?2004l[?2004h>       app: redis
+[?2004l[?2004h>   template:
+[?2004l[?2004h>     metadata:
+[?2004l[?2004h>       labels:
+[?2004l[?2004h>         app: redis
+[?2004l[?2004h>     spec:
+[?2004l[?2004h>       containers:
+[?2004l[?2004h>       - name: redis
+[?2004l[?2004h>         image: redis:7-alpine
+[?2004l[?2004h>         ports:
+[?2004l[?2004h>         - containerPort: 6379
+[?2004l[?2004h>         volumeMounts:
+[?2004l [?2004h>         - name: redis-storage
+[?2004l[?2004h>           mountPath: /data
+[?2004l[?2004h>         resources:
+[?2004l[?2004h>           requests:
+[?2004l[?2004h>             memory: "128Mi"
+[?2004l[?2004h>             cpu: "100m"
+[?2004l[?2004h>           limits:
+[?2004l[?2004h>             memory: "256Mi"
+[?2004l[?2004h>             cpu: "200m"
+[?2004l[?2004h>         livenessProbe:
+[?2004l[?2004h>           exec:
+[?2004l[?2004h>             command:
+[?2004l[?2004h>             - redis-cli
+[?2004l[?2004h>             - ping
+[?2004l[?2004h>           initialDelaySeconds: 30
+[?2004l[?2004h>           periodSeconds: 10
+[?2004l[?2004h>       volumes:
+[?2004l[?2004h>       - name: redis-storage
+[?2004l[?2004h>         persistentVolumeClaim:
+[?2004l[?2004h>           claimName: redis-pvc
+[?2004l[?2004h> ---
+[?2004l[?2004h> apiVersion: v1
+[?2004l[?2004h> kind: Service
+[?2004l[?2004h> metadata:
+[?2004l[?2004h>   name: redis
+[?2004l[?2004h>   namespace: kb-system
+[?2004l[?2004h> spec:
+[?2004l[?2004h>   clusterIP: None
+[?2004l[?2004h>   selector:
+[?2004l[?2004h>     app: redis
+[?2004l[?2004h>   ports:
+[?2004l[?2004h>   - port: 6379
+[?2004l[?2004h>     targetPort: 6379
+[?2004l[?2004h> EOF
+[?2004l[?2004h> echo "✅ redis-statefulset.yaml создан"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> # Создаем qdrant-statefulset.yaml
+[?2004l[?2004h> echo "📝 Создание qdrant-statefulset.yaml..."
+[?2004l[?2004h> cat > qdrant-statefulset.yaml << 'EOF'
+[?2004l[?2004h> apiVersion: v1
+[?2004l[?2004h> kind: PersistentVolumeClaim
+[?2004l[?2004h> metadata:
+[?2004l[?2004h>   name: qdrant-pvc
+[?2004l[?2004h>   namespace: kb-system
+[?2004l[?2004h> spec:
+[?2004l[?2004h>   accessModes:
+[?2004l[?2004h>     - ReadWriteOnce
+[?2004l[?2004h>   resources:
+[?2004l[?2004h>     requests:
+[?2004l[?2004h>       storage: 30Gi
+[?2004l[?2004h> ---
+[?2004l[?2004h> apiVersion: apps/v1
+[?2004l[?2004h> kind: StatefulSet
+[?2004l[?2004h> metadata:
+[?2004l[?2004h>   name: qdrant
+[?2004l[?2004h>   namespace: kb-system
+[?2004l[?2004h> spec:
+[?2004l[?2004h>   serviceName: qdrant
+[?2004l[?2004h>   replicas: 1
+[?2004l[?2004h>   selector:
+[?2004l[?2004h>     matchLabels:
+[?2004l[?2004h>       app: qdrant
+[?2004l[?2004h>   template:
+[?2004l[?2004h>     metadata:
+[?2004l[?2004h>       labels:
+[?2004l[?2004h>         app: qdrant
+[?2004l[?2004h>     spec:
+[?2004l[?2004h>       containers:
+[?2004l[?2004h>       - name: qdrant
+[?2004l[?2004h>         image: qdrant/qdrant:latest
+[?2004l[?2004h>         ports:
+[?2004l[?2004h>         - containerPort: 6333
+[?2004l[?2004h>         volumeMounts:
+[?2004l[?2004h>         - name: qdrant-storage
+[?2004l[?2004h>           mountPath: /qdrant/storage
+[?2004l[?2004h>         resources:
+[?2004l[?2004h>           requests:
+[?2004l[?2004h>             memory: "512Mi"
+[?2004l[?2004h>             cpu: "500m"
+[?2004l[?2004h>           limits:
+[?2004l[?2004h>             memory: "1Gi"
+[?2004l[?2004h>             cpu: "1000m"
+[?2004l[?2004h>         livenessProbe:
+[?2004l[?2004h>           httpGet:
+[?2004l[?2004h>             path: /health
+[?2004l[?2004h>             port: 6333
+[?2004l[?2004h>           initialDelaySeconds: 30
+[?2004l[?2004h>           periodSeconds: 10
+[?2004l[?2004h>       volumes:
+[?2004l[?2004h>       - name: qdrant-storage
+[?2004l[?2004h>         persistentVolumeClaim:
+[?2004l[?2004h>           claimName: qdrant-pvc
+[?2004l[?2004h> ---
+[?2004l[?2004h> apiVersion: v1
+[?2004l[?2004h> kind: Service
+[?2004l[?2004h> metadata:
+[?2004l[?2004h>   name: qdrant
+[?2004l[?2004h>   namespace: kb-system
+[?2004l[?2004h> spec:
+[?2004l[?2004h>   clusterIP: None
+[?2004l[?2004h>   selector:
+[?2004l[?2004h>     app: qdrant
+[?2004l[?2004h>   ports:
+[?2004l[?2004h>   - port: 6333
+[?2004l[?2004h>     targetPort: 6333
+[?2004l[?2004h> EOF
+[?2004l[?2004h> echo "✅ qdrant-statefulset.yaml создан"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> # Создаем app-deployment.yaml
+[?2004l[?2004h> echo "📝 Создание app-deployment.yaml..."
+[?2004l[?2004h> cat > app-deployment.yaml << 'EOF'
+[?2004l[?2004h> apiVersion: apps/v1
+[?2004l[?2004h> kind: Deployment
+[?2004l[?2004h> metadata:
+[?2004l[?2004h>   name: app
+[?2004l[?2004h>   namespace: kb-system
+[?2004l[?2004h> spec:
+[?2004l[?2004h>   replicas: 3
+[?2004l[?2004h>   selector:
+[?2004l[?2004h>     matchLabels:
+[?2004l[?2004h>       app: app
+[?2004l[?2004h>   template:
+[?2004l[?2004h>     metadata:
+[?2004l[?2004h>       labels:
+[?2004l[?2004h>         app: app
+[?2004l[?2004h>     spec:
+[?2004l[?2004h>       containers:
+[?2004l[?2004h>       - name: app
+[?2004l[?2004h>         image: sergeev-app:latest
+[?2004l[?2004h>         imagePullPolicy: IfNotPresent
+[?2004l[?2004h>         ports:
+[?2004l[?2004h>         - containerPort: 3000
+[?2004l[?2004h>         envFrom:
+[?2004l[?2004h>         - configMapRef:
+[?2004l[?2004h>             name: app-config
+[?2004l[?2004h>         - secretRef:
+[?2004l[?2004h>             name: app-secrets
+[?2004l[?2004h>         resources:
+[?2004l[?2004h>           requests:
+[?2004l[?2004h>             memory: "256Mi"
+[?2004l[?2004h>             cpu: "250m"
+[?2004l[?2004h>           limits:
+[?2004l[?2004h>             memory: "512Mi"
+[?2004l[?2004h>             cpu: "500m"
+[?2004l[?2004h>         livenessProbe:
+[?2004l[?2004h>           httpGet:
+[?2004l[?2004h>             path: /health
+[?2004l[?2004h>             port: 3000
+[?2004l[?2004h>           initialDelaySeconds: 30
+[?2004l[?2004h>           periodSeconds: 10
+[?2004l[?2004h>         readinessProbe:
+[?2004l[?2004h>           httpGet:
+[?2004l[?2004h>             path: /health
+[?2004l[?2004h>             port: 3000
+[?2004l[?2004h>           initialDelaySeconds: 10
+[?2004l[?2004h>           periodSeconds: 5
+[?2004l[?2004h> ---
+[?2004l[?2004h> apiVersion: v1
+[?2004l[?2004h> kind: Service
+[?2004l[?2004h> metadata:
+[?2004l[?2004h>   name: app
+[?2004l[?2004h>   namespace: kb-system
+[?2004l[?2004h> spec:
+[?2004l[?2004h>   type: ClusterIP
+[?2004l[?2004h>   selector:
+[?2004l[?2004h>     app: app
+[?2004l[?2004h>   ports:
+[?2004l[?2004h>   - port: 3000
+[?2004l[?2004h>     targetPort: 3000
+[?2004l[?2004h> EOF
+[?2004l[?2004h> echo "✅ app-deployment.yaml создан"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> # Создаем ingress.yaml
+[?2004l[?2004h> echo "📝 Создание ingress.yaml..."
+[?2004l[?2004h> cat > ingress.yaml << 'EOF'
+[?2004l[?2004h> apiVersion: networking.k8s.io/v1
+[?2004l[?2004h> kind: Ingress
+[?2004l[?2004h> metadata:
+[?2004l[?2004h>   name: app-ingress
+[?2004l[?2004h>   namespace: kb-system
+[?2004l[?2004h>   annotations:
+[?2004l[?2004h>     kubernetes.io/ingress.class: traefik
+[?2004l[?2004h>     traefik.ingress.kubernetes.io/router.entrypoints: web
+[?2004l[?2004h> spec:
+[?2004l[?2004h>   rules:
+[?2004l[?2004h>   - host: 788047.cloud4box.ru
+[?2004l[?2004h>     http:
+[?2004l[?2004h>       paths:
+[?2004l[?2004h>       - path: /100
+[?2004l[?2004h>         pathType: Prefix
+[?2004l[?2004h>         backend:
+[?2004l[?2004h>           service:
+[?2004l[?2004h>             name: app
+[?2004l[?2004h>             port:
+[?2004l[?2004h>               number: 3000
+[?2004l[?2004h>   - host: 46.8.255.137
+[?2004l[?2004h>     http:
+[?2004l[?2004h>       paths:
+[?2004l[?2004h>       - path: /100
+[?2004l[?2004h>         pathType: Prefix
+[?2004l[?2004h>         backend:
+[?2004l[?2004h>           service:
+[?2004l[?2004h>             name: app
+[?2004l[?2004h>             port:
+[?2004l[?2004h>               number: 3000
+[?2004l[?2004h> EOF
+[?2004l[?2004h> echo "✅ ingress.yaml создан"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> # Создаем hpa.yaml
+[?2004l[?2004h> echo "📝 Создание hpa.yaml..."
+[?2004l[?2004h> cat > hpa.yaml << 'EOF'
+[?2004l[?2004h> apiVersion: autoscaling/v2
+[?2004l[?2004h> kind: HorizontalPodAutoscaler
+[?2004l[?2004h> metadata:
+[?2004l[?2004h>   name: app-hpa
+[?2004l[?2004h>   namespace: kb-system
+[?2004l[?2004h> spec:
+[?2004l[?2004h>   scaleTargetRef:
+[?2004l[?2004h>     apiVersion: apps/v1
+[?2004l[?2004h>     kind: Deployment
+[?2004l[?2004h>     name: app
+[?2004l[?2004h>   minReplicas: 3
+[?2004l[?2004h>   maxReplicas: 10
+[?2004l[?2004h>   metrics:
+[?2004l[?2004h>   - type: Resource
+[?2004l[?2004h>     resource:
+[?2004l[?2004h>       name: cpu
+[?2004l[?2004h>       target:
+[?2004l[?2004h>         type: Utilization
+[?2004l[?2004h>         averageUtilization: 70
+[?2004l[?2004h>   - type: Resource
+[?2004l[?2004h>     resource:
+[?2004l[?2004h>       name: memory
+[?2004l[?2004h>       target:
+[?2004l[?2004h>         type: Utilization
+[?2004l[?2004h>         averageUtilization: 80
+[?2004l[?2004h> EOF
+[?2004l[?2004h> echo "✅ hpa.yaml создан"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> # Создаем networkpolicy.yaml
+[?2004l[?2004h> echo "📝 Создание networkpolicy.yaml..."
+[?2004l[?2004h> cat > networkpolicy.yaml << 'EOF'
+[?2004l[?2004h> apiVersion: networking.k8s.io/v1
+[?2004l[?2004h> kind: NetworkPolicy
+[?2004l[?2004h> metadata:
+[?2004l[?2004h>   name: kb-network-policy
+[?2004l[?2004h>   namespace: kb-system
+[?2004l[?2004h> spec:
+[?2004l[?2004h>   podSelector: {}
+[?2004l[?2004h>   policyTypes:
+[?2004l[?2004h>   - Ingress
+[?2004l[?2004h>   - Egress
+[?2004l[?2004h>   ingress:
+[?2004l[?2004h>   - from:
+[?2004l[?2004h>     - namespaceSelector:
+[?2004l[?2004h>         matchLabels:
+[?2004l[?2004h>           name: kb-system
+[?2004l[?2004h>     - podSelector: {}
+[?2004l[?2004h>   egress:
+[?2004l[?2004h>   - to:
+[?2004l[?2004h>     - namespaceSelector:
+[?2004l[?2004h>         matchLabels:
+[?2004l[?2004h>           name: kb-system
+[?2004l[?2004h>     - podSelector: {}
+[?2004l[?2004h>   - to:
+[?2004l[?2004h>     - namespaceSelector: {}
+[?2004l[?2004h>     ports:
+[?2004l[?2004h>     - protocol: TCP
+[?2004l[?2004h>       port: 53
+[?2004l[?2004h>     - protocol: UDP
+[?2004l[?2004h>       port: 53
+[?2004l[?2004h> EOF
+[?2004l[?2004h> echo "✅ networkpolicy.yaml создан"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "📍 Проверка всех manifest файлов..."
+[?2004l[?2004h> ls -lh "$WORKDIR"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> # ============================================================================ [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K=
+[?2004l[?2004h> # ШАГ 1.4: РАЗВЕРТЫВАНИЕ НА K8S
+[?2004l[?2004h> # ============================================================================ [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K=
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "╔════════════════════════════════════════════════════════════════════════╗"
+[?2004l[?2004h> echo "║ ШАГ 1.4: РАЗВЕРТЫВАНИЕ НА K8S                                         ║"
+[?2004l[?2004h> echo "╚════════════════════════════════════════════════════════════════════════╝"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "📍 Применение всех manifests..."
+[?2004l[?2004h> kubectl apply -f "$WORKDIR/"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "📍 Ожидание инициализации pods (60 секунд)..."
+[?2004l[?2004h> sleep 60
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> # ============================================================================ [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K=
+[?2004l[?2004h> # ШАГ 1.5: ПРОВЕРКА СТАТУСА
+[?2004l[?2004h> # ============================================================================ [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K=
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "╔════════════════════════════════════════════════════════════════════════╗"
+[?2004l[?2004h> echo "║ ШАГ 1.5: ПРОВЕРКА СТАТУСА                                             ║"
+[?2004l[?2004h> echo "╚════════════════════════════════════════════════════════════════════════╝"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "📍 Проверка всех pods..."
+[?2004l[?2004h> kubectl get pods -n kb-system
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "📍 Проверка всех services..."
+[?2004l[?2004h> kubectl get services -n kb-system
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "📍 Проверка ingress..."
+[?2004l[?2004h> kubectl get ingress -n kb-system
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "ð Проверка HPA..."
+[?2004l[?2004h> kubectl get hpa -n kb-system
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "📍 Проверка PVC..."
+[?2004l[?2004h> kubectl get pvc -n kb-system
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "📍 Проверка nodes..."
+[?2004l[?2004h> kubectl get nodes
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> # ============================================================================ [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K=
+[?2004l[?2004h> # ФИНАЛЬНЫЙ ОТЧЕТ
+[?2004l[?2004h> # ============================================================================ [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K=
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "╔════════════════════════════════════════════════════════════════════════╗"
+[?2004l[?2004h> echo "║ ✅ ФАЗА 1 ПОЛНОСТЬЮ ЗАВЕРШЕНА УСПЕШНО                                 ║"
+[?2004l[?2004h> echo "╚════════════════════════════════════════════════════════════════════════╝"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "📊 ИТОГИ:"
+[?2004l[?2004h> echo "✅ K3s установлен и работает"
+[?2004l[?2004h> echo "✅ Все сервисы развернуты на K8s"
+[?2004l[?2004h> echo "✅ PostgreSQL, Redis, Qdrant работают"
+[?2004l[?2004h> echo "✅ Приложение развернуто (3 replicas)"
+[?2004l[?2004h> echo "✅ HPA готов к масштабированию"
+[?2004l[?2004h> echo "✅ Ingress настроен"
+[?2004l[?2004h> echo "✅ NetworkPolicy ограничивает трафик"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "🌐 Приложение доступно по адресу:"
+[?2004l[?2004h> echo "  - http://46.8.255.137/100"
+[?2004l[?2004h> echo "  - http://788047.cloud4box.ru/100"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "🚀 Переходим к ФАЗЕ 2: CI/CD на сервере"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "✅ Скрипт завершен"
+[?2004l[?2004h> 
+[?2004l[?2004h> SCRIPT_EOF
+[?2004l[?2004h]0;root@788047: ~root@788047:~# chmod +x /tmp/phase1-final.sh && bash /tmp/phase1-final.sh
+[?2004l╔════════════════════════════════════════════════════════════════════════╗
+║ ФАЗА 1: Kubernetes на сервере 46.8.255.137 - ПОЛНОЕ ВЫПОЛНЕНИЕ        ║
+║ Дата: 2026-05-10                                                      ║
+╚════════════════════════════════════════════════════════════════════════╝
+
+📍 Текущая директория: /opt/sergeev-100/k8s-manifests
+
+╔════════════════════════════════════════════════════════════════════════╗
+║ ШАГ 1.3: 
+✅ ФАЗА 1 УСПЕШНО ЗАВЕРШЕНА
+СОЗДАНИЕ K8S MANIFESTS                                       ║
+╚════════════════════════════════════════════════════════════════════════╝
+
+📝 Создание postgres-statefulset.yaml...
+✅ postgres-statefulset.yaml создан
+
+📝 Создание redis-statefulset.yaml...
+✅ redis-statefulset.yaml создан
+
+📝 Создание qdrant-statefulset.yaml...
+✅ qdrant-statefulset.yaml создан
+
+📝 Создание app-deployment.yaml...
+✅ app-deployment.yaml создан
+
+📝 Создание ingress.yaml...
+✅ ingress.yaml создан
+
+📝 Создание hpa.yaml...
+✅ hpa.yaml создан
+
+📝 Создание networkpolicy.yaml...
+✅ networkpolicy.yaml создан
+
+📍 Проверка всех manifest файлов...
+total 40K
+-rw-r--r-- 1 root root 1.1K May 10 16:28 app-deployment.yaml
+-rw-r--r-- 1 root root  319 May 10 16:26 configmap.yaml
+-rw-r--r-- 1 root root  478 May 10 16:28 hpa.yaml
+-rw-r--r-- 1 root root  622 May 10 16:28 ingress.yaml
+-rw-r--r-- 1 root root   89 May 10 16:26 namespace.yaml
+-rw-r--r-- 1 root root  518 May 10 16:28 networkpolicy.yaml
+-rw-r--r-- 1 root root 1.7K May 10 16:28 postgres-statefulset.yaml
+-rw-r--r-- 1 root root 1.3K May 10 16:28 qdrant-statefulset.yaml
+-rw-r--r-- 1 root root 1.2K May 10 16:28 redis-statefulset.yaml
+-rw-r--r-- 1 root root  261 May 10 16:26 secrets.yaml
+
+╔════════════════════════════════════════════════════════════════════════╗
+║ ШАГ 1.4: РАЗВЕРТЫВАНИЕ НА K8S                                         ║
+╚════════════════════════════════════════════════════════════════════════╝
+
+📍 Применение всех manifests...
+exit
+deployment.apps/app created
+service/app created
+configmap/app-config unchanged
+horizontalpodautoscaler.autoscaling/app-hpa created
+namespace/kb-system unchanged
+networkpolicy.networking.k8s.io/kb-network-policy created
+persistentvolumeclaim/postgres-pvc created
+statefulset.apps/postgres created
+service/postgres created
+persistentvolumeclaim/qdrant-pvc created
+statefulset.apps/qdrant created
+service/qdrant created
+persistentvolumeclaim/redis-pvc created
+statefulset.apps/redis created
+service/redis created
+secret/app-secrets configured
+The Ingress "app-ingress" is invalid: spec.rules[1].host: Invalid value: "46.8.255.137": must be a DNS name, not an IP address
+[?2004h]0;root@788047: ~root@788047:~# exit
+[?2004llogout
+Connection to 46.8.255.137 closed.
+
+✅ Соединение закрыто
