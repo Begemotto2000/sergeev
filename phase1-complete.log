@@ -1,0 +1,47 @@
+╔════════════════════════════════════════════════════════════════════════╗
+║ ФАЗА 1: Kubernetes на сервере 46.8.255.137 - ПОЛНОЕ ВЫПОЛНЕНИЕ        ║
+║ Дата: 2026-05-10                                                      ║
+╚════════════════════════════════════════════════════════════════════════╝
+
+🔗 Подключаюсь к серверу 46.8.255.137...
+spawn ssh -o StrictHostKeyChecking=no root@46.8.255.137
+root@46.8.255.137's password: 
+Welcome to Ubuntu 24.04.3 LTS (GNU/Linux 6.8.0-110-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/pro
+
+ System information as of Sun May 10 03:19:16 PM MSK 2026
+
+  System load:  3.77               Processes:             264
+  Usage of /:   27.3% of 98.34GB   Users logged in:       0
+  Memory usage: 23%                IPv4 address for ens3: 46.8.255.137
+  Swap usage:   0%                 IPv6 address for ens3: 2a0d:c580:1:7:197::1
+
+ * Strictly confined Kubernetes makes edge and IoT secure. Learn how MicroK8s
+   just raised the bar for easy, resilient and secure K8s cluster deployment.
+
+   https://ubuntu.com/engage/secure-kubernetes-at-the-edge
+
+Expanded Security Maintenance for Applications is not enabled.
+
+70 updates can be applied immediately.
+To see these additional updates run: apt list --upgradable
+
+14 additional security updates can be applied with ESM Apps.
+Learn more about enabling ESM Apps service at https://ubuntu.com/esm
+
+
+*** System restart required ***
+Last login: Sun May 10 16:26:02 2026 from 44.202.248.196
+[?2004h]0;root@788047: ~root@788047:~# ✅ Подключение успешно
+
+cd /opt/sergeev-100/k8s-manifests
+[?2004l[?2004h]0;root@788047: /opt/sergeev-100/k8s-manifestsroot@788047:/opt/sergeev-100/k8s-manifests# 📍 Создание остальных manifests...
+
+📝 Создание postgres-statefulset.yaml...
+bad flag "---": must be -i, -h, -s, -null, -0, -raw, -break, or --
+    while executing
+"send "---\r""
+    (file "/home/ubuntu/phase1-complete.exp" line 62)
