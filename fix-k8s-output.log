@@ -1,0 +1,178 @@
+╔════════════════════════════════════════════════════════════════════════╗
+║ ИСПРАВЛЕНИЕ: K8s Deployment Issues                                    ║
+║ Дата: 2026-05-10                                                      ║
+╚════════════════════════════════════════════════════════════════════════╝
+
+🔗 Подключаюсь к серверу 46.8.255.137...
+spawn ssh -o StrictHostKeyChecking=no root@46.8.255.137
+root@46.8.255.137's password: 
+Welcome to Ubuntu 24.04.3 LTS (GNU/Linux 6.8.0-110-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/pro
+
+ System information as of Sun May 10 03:19:16 PM MSK 2026
+
+  System load:  3.77               Processes:             264
+  Usage of /:   27.3% of 98.34GB   Users logged in:       0
+  Memory usage: 23%                IPv4 address for ens3: 46.8.255.137
+  Swap usage:   0%                 IPv6 address for ens3: 2a0d:c580:1:7:197::1
+
+ * Strictly confined Kubernetes makes edge and IoT secure. Learn how MicroK8s
+   just raised the bar for easy, resilient and secure K8s cluster deployment.
+
+   https://ubuntu.com/engage/secure-kubernetes-at-the-edge
+
+Expanded Security Maintenance for Applications is not enabled.
+
+70 updates can be applied immediately.
+To see these additional updates run: apt list --upgradable
+
+14 additional security updates can be applied with ESM Apps.
+Learn more about enabling ESM Apps service at https://ubuntu.com/esm
+
+
+*** System restart required ***
+Last login: Sun May 10 17:00:05 2026 from 54.197.15.158
+[?2004h]0;root@788047: ~root@788047:~# ✅ Подключение успешно
+
+╔════════════════════════════════════════════════════════════════════════╗
+║ ШАГ 1: ПРОВЕРКА DOCKER IMAGES                                         ║
+╚════════════════════════════════════════════════════════════════════════╝
+
+echo '📍 Docker images:' && docker images | grep -E 'sergeev|app|latest'
+[?2004l📍 Docker images:
+WARNING: This output is designed for human readability. For machine-readable output, please use --format.
+qdrant/qdrant:[01;31m[Klatest[m[K                     94728574965d        285MB           79MB   U    
+[01;31m[Ksergeev[m[K_digitization_system-[01;31m[Kapp[m[K:[01;31m[Klatest[m[K   1ce6026ddb13       1.42GB          257MB   U    
+ubuntu/squid:[01;31m[Klatest[m[K                      6a097f68bae7        303MB         70.3MB   U    
+[?2004h]0;root@788047: ~root@788047:~# 
+╔════════════════════════════════════════════════════════════════════════╗
+║ ШАГ 2: ПРОВЕРКА DOCKER КОНТЕЙНЕРОВ                                     ║
+╚════════════════════════════════════════════════════════════════════════╝
+
+echo '📍 Docker контейнеры:' && docker ps --format 'table {{.Image}}\t{{.Status}}\t{{.Names}}'
+[?2004l📍 Docker контейнеры:
+IMAGE                             STATUS                 NAMES
+sergeev_digitization_system-app   Up 2 hours (healthy)   sergeev_digitization_system-app-1
+redis:7-alpine                    Up 16 hours            sergeev_digitization_system-redis-1
+qdrant/qdrant:latest              Up 16 hours            sergeev_digitization_system-qdrant-1
+mysql:8.0                         Up 16 hours            sergeev_digitization_system-mysql-1
+qdrant/qdrant:latest              Up 2 weeks             dt_qdrant
+ubuntu/squid:latest               Up 2 weeks             dt_squid
+[?2004h]0;root@788047: ~root@788047:~# 
+╔════════════════════════════════════════════════════════════════════════╗
+║ ШАГ 3: ПРОВЕРКА K8S POD EVENTS                                         ║
+╚════════════════════════════════════════════════════════════════════════╝
+
+echo '📍 App pod events:' && kubectl describe pod -n kb-system -l app=app | grep -A 20 'Events:'
+[?2004l📍 App pod events:
+[01;31m[KEvents:[m[K
+  Type     Reason     Age                    From               Message
+  ----     ------     ----                   ----               -------
+  Normal   Scheduled  32m                    default-scheduler  Successfully assigned kb-system/app-5c97c58479-d6wjh to 788047.cloud4box.ru
+  Normal   Pulling    29m (x5 over 32m)      kubelet            spec.containers{app}: Pulling image "sergeev-app:latest"
+  Warning  Failed     29m (x5 over 32m)      kubelet            spec.containers{app}: Failed to pull image "sergeev-app:latest": failed to pull and unpack image "docker.io/library/sergeev-app:latest": failed to resolve reference "docker.io/library/sergeev-app:latest": pull access denied, repository does not exist or may require authorization: server message: insufficient_scope: authorization failed
+  Warning  Failed     29m (x5 over 32m)      kubelet            spec.containers{app}: Error: ErrImagePull
+  Normal   BackOff    2m15s (x128 over 32m)  kubelet            spec.containers{app}: Back-off pulling image "sergeev-app:latest"
+  Warning  Failed     2m15s (x128 over 32m)  kubelet            spec.containers{app}: Error: ImagePullBackOff
+
+
+Name:             app-5c97c58479-kmq4f
+Namespace:        kb-system
+Priority:         0
+Service Account:  default
+Node:             788047.cloud4box.ru/46.8.255.137
+Start Time:       Sun, 10 May 2026 16:28:13 +0300
+Labels:           app=app
+                  pod-template-hash=5c97c58479
+Annotations:      <none>
+Status:           Pending
+[36m[K--[m[K
+[01;31m[KEvents:[m[K
+  Type     Reason     Age                    From               Message
+  ----     ------     ----                   ----               -------
+  Normal   Scheduled  32m                    default-scheduler  Successfully assigned kb-system/app-5c97c58479-kmq4f to 788047.cloud4box.ru
+  Normal   Pulling    29m (x5 over 32m)      kubelet            spec.containers{app}: Pulling image "sergeev-app:latest"
+  Warning  Failed     29m (x5 over 32m)      kubelet            spec.containers{app}: Failed to pull image "sergeev-app:latest": failed to pull and unpack image "docker.io/library/sergeev-app:latest": failed to resolve reference "docker.io/library/sergeev-app:latest": pull access denied, repository does not exist or may require authorization: server message: insufficient_scope: authorization failed
+  Warning  Failed     29m (x5 over 32m)      kubelet            spec.containers{app}: Error: ErrImagePull
+  Normal   BackOff    2m10s (x132 over 32m)  kubelet            spec.containers{app}: Back-off pulling image "sergeev-app:latest"
+  Warning  Failed     2m10s (x132 over 32m)  kubelet            spec.containers{app}: Error: ImagePullBackOff
+
+
+Name:             app-5c97c58479-zgrms
+Namespace:        kb-system
+Priority:         0
+Service Account:  default
+Node:             788047.cloud4box.ru/46.8.255.137
+Start Time:       Sun, 10 May 2026 16:28:13 +0300
+Labels:           app=app
+                  pod-template-hash=5c97c58479
+Annotations:      <none>
+Status:           Pending
+[36m[K--[m[K
+[01;31m[KEvents:[m[K
+  Type     Reason     Age                    From               Message
+  ----     ------     ----                   ----               -------
+  Normal   Scheduled  32m                    default-scheduler  Successfully assigned kb-system/app-5c97c58479-zgrms to 788047.cloud4box.ru
+  Normal   Pulling    29m (x5 over 32m)      kubelet            spec.containers{app}: Pulling image "sergeev-app:latest"
+  Warning  Failed     29m (x5 over 32m)      kubelet            spec.containers{app}: Failed to pull image "sergeev-app:latest": failed to pull and unpack image "docker.io/library/sergeev-app:latest": failed to resolve reference "docker.io/library/sergeev-app:latest": pull access denied, repository does not exist or may require authorization: server message: insufficient_scope: authorization failed
+  Warning  Failed     29m (x5 over 32m)      kubelet            spec.containers{app}: Error: ErrImagePull
+  Normal   BackOff    2m18s (x129 over 32m)  kubelet            spec.containers{app}: Back-off pulling image "sergeev-app:latest"
+  Warning  Failed     2m18s (x129 over 32m)  kubelet            spec.containers{app}: Error: ImagePullBackOff
+[?2004h]0;root@788047: ~root@788047:~# 
+╔════════════════════════════════════════════════════════════════════════╗
+║ ШАГ 4: ПРОВЕРКА QDRANT POD                                             ║
+╚════════════════════════════════════════════════════════════════════════╝
+
+echo '📍 Qdrant pod logs:' && kubectl logs -n kb-system qdrant-0 --tail=50 2>/dev/null || echo 'Нет логов'
+[?2004l📍 Qdrant pod logs:
+           _                 _    
+  __ _  __| |_ __ __ _ _ __ | |_  
+ / _` |/ _` | '__/ _` | '_ \| __| 
+| (_| | (_| | | | (_| | | | | |_  
+ \__, |\__,_|_|  \__,_|_| |_|\__| 
+    |_|                           
+
+Version: 1.18.0, build: fd6746ea
+Access web UI at http://localhost:6333/dashboard
+Agentic Skills: https://skills.qdrant.tech/
+
+2026-05-10T14:00:05.897883Z  INFO storage::content_manager::consensus::persistent: Loading raft state from ./storage/raft_state.json
+2026-05-10T14:00:05.898778Z  INFO qdrant: Distributed mode disabled
+2026-05-10T14:00:05.898803Z  INFO qdrant: Telemetry reporting enabled, id: 9c66e5d1-e720-4453-85bc-2d6aae35ec36
+2026-05-10T14:00:05.912569Z  INFO qdrant::actix: REST transport settings: keep_alive=5s, client_request_timeout=5s, client_disconnect_timeout=5s
+2026-05-10T14:00:05.912601Z  INFO qdrant::actix: TLS disabled for REST API
+2026-05-10T14:00:05.912678Z  INFO qdrant::actix: Qdrant HTTP listening on 6333
+2026-05-10T14:00:05.912684Z  INFO actix_server::builder: starting 1 workers
+2026-05-10T14:00:05.912690Z  INFO actix_server::server: Actix runtime found; starting in Actix runtime
+2026-05-10T14:00:05.912694Z  INFO actix_server::server: starting service: "actix-web-service-0.0.0.0:6333", workers: 1, listening on: 0.0.0.0:6333
+2026-05-10T14:00:05.917460Z  INFO qdrant::tonic: Qdrant gRPC listening on 6334
+2026-05-10T14:00:05.917492Z  INFO qdrant::tonic: TLS disabled for gRPC API
+2026-05-10T14:00:05.984402Z ERROR qdrant::common::telemetry_reporting: Failed to report telemetry Service internal error: Http request error: error sending request for url (https://telemetry.qdrant.io/)
+[?2004h]0;root@788047: ~root@788047:~# 
+╔════════════════════════════════════════════════════════════════════════╗
+║ ШАГ 5: ПРОВЕРКА DOCKER COMPOSE СТАТУСА                                ║
+╚════════════════════════════════════════════════════════════════════════╝
+
+echo '📍 Docker Compose status:' && cd /opt/sergeev-100 && docker-compose -f docker-compose.moscow.yml ps
+[?2004l📍 Docker Compose status:
+Command 'docker-compose' not found, but can be installed with:
+snap install docker          # version 28.4.0, or
+apt  install docker-compose  # version 1.29.2-6
+See 'snap info docker' for additional versions.
+
+╔════════════════════════════════════════════════════════════════════════╗
+║ ШАГ 6: УДАЛЕНИЕ НЕРАБОТАЮЩИХ K8S PODS                                  ║
+╚════════════════════════════════════════════════════════════════════════╝
+
+[?2004h]0;root@788047: /opt/sergeev-100root@788047:/opt/sergeev-100# 
+╔════════════════════════════════════════════════════════════════════════╗
+║ ШАГ 7: СОЗДАНИЕ НОВОГО APP DEPLOYMENT                                 ║
+╚════════════════════════════════════════════════════════════════════════╝
+
+bad flag "---": must be -i, -h, -s, -null, -0, -raw, -break, or --
+    while executing
+"send "---\r""
+    (file "/home/ubuntu/fix-k8s-deployment.exp" line 177)
