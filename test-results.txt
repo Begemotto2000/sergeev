@@ -1,0 +1,55 @@
+[19:56:37] Starting API tests...
+[19:56:37] API URL: http://46.8.255.137:3000
+
+[0;34m[Test 1] Server Health Check[0m
+[19:56:38] Server is responding (HTTP 200)
+[0;32m✓ PASSED[0m
+
+[0;34m[Test 2] GET /api/jobs - List all jobs[0m
+[19:56:39] Response: [{"id":"2f2eab21-fe0c-45c9-8aec-c56c5e3cc43b","filename":"test.zip","status":"completed","progress":...
+[0;32m✓ PASSED[0m
+
+[0;34m[Test 3] POST /api/upload - Upload ZIP file[0m
+[19:56:40] Upload successful. Job ID: c7c55f3c-6170-4be9-b223-4064301ef51c
+[0;32m✓ PASSED[0m
+
+[0;34m[Test 4] GET /api/job/:id - Get job status[0m
+[19:56:41] Job status: completed (Progress: 100%)
+[0;32m✓ PASSED[0m
+
+[0;34m[Test 5] Job Processing - Wait for completion[0m
+[19:56:42] Attempt 1/30 - Status: completed, Progress: 100%
+[0;32m✓ PASSED[0m
+
+[0;34m[Test 6] POST /api/search - Search functionality[0m
+/home/ubuntu/sergeev_digitization_system/test-api.sh: line 206: echo: write error: Broken pipe
+[19:56:43] Search returned response
+[0;32m✓ PASSED[0m
+
+[0;34m[Test 7] POST /api/upload - Invalid file handling[0m
+[19:56:44] Invalid file correctly rejected
+[0;32m✓ PASSED[0m
+
+[0;34m[Test 8] GET /api/job/:id - Nonexistent job handling[0m
+[19:56:45] Nonexistent job correctly handled
+[0;32m✓ PASSED[0m
+
+[0;34m[Test 9] Performance - Response time check[0m
+[19:56:46] Response time: 905ms (GOOD)
+[0;32m✓ PASSED[0m
+
+[0;34m[Test 10] Concurrent Requests - Multiple simultaneous requests[0m
+[19:56:46] Sending 5 concurrent requests...
+[19:56:47] Concurrent requests completed
+[0;32m✓ PASSED[0m
+
+===============================================
+[0;34m=== TEST REPORT ===[0m
+===============================================
+Total Tests: 10
+Passed: [0;32m10[0m
+Failed: [0;31m0[0m
+[0;32m✓ All tests passed![0m
+===============================================
+Log file: /tmp/api-tests-1778457397/test_results_20260510_195637.log
+
