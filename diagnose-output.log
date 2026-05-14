@@ -1,0 +1,402 @@
+╔════════════════════════════════════════════════════════════════════════╗
+║ ДИАГНОСТИКА: Почему не работает http://46.8.255.137/100             ║
+║ Дата: 2026-05-10                                                      ║
+╚════════════════════════════════════════════════════════════════════════╝
+
+🔗 Подключаюсь к серверу 46.8.255.137...
+spawn ssh -o StrictHostKeyChecking=no root@46.8.255.137
+root@46.8.255.137's password: 
+Welcome to Ubuntu 24.04.3 LTS (GNU/Linux 6.8.0-110-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/pro
+
+ System information as of Sun May 10 03:19:16 PM MSK 2026
+
+  System load:  3.77               Processes:             264
+  Usage of /:   27.3% of 98.34GB   Users logged in:       0
+  Memory usage: 23%                IPv4 address for ens3: 46.8.255.137
+  Swap usage:   0%                 IPv6 address for ens3: 2a0d:c580:1:7:197::1
+
+ * Strictly confined Kubernetes makes edge and IoT secure. Learn how MicroK8s
+   just raised the bar for easy, resilient and secure K8s cluster deployment.
+
+   https://ubuntu.com/engage/secure-kubernetes-at-the-edge
+
+Expanded Security Maintenance for Applications is not enabled.
+
+70 updates can be applied immediately.
+To see these additional updates run: apt list --upgradable
+
+14 additional security updates can be applied with ESM Apps.
+Learn more about enabling ESM Apps service at https://ubuntu.com/esm
+
+
+*** System restart required ***
+Last login: Sun May 10 16:48:13 2026 from 54.162.32.198
+[?2004h]0;root@788047: ~root@788047:~# ✅ Подключение успешно
+
+╔════════════════════════════════════════════════════════════════════════╗
+║ ШАГ 1: ПРОВЕРКА KUBERNETES СТАТУСА                                    ║
+╚════════════════════════════════════════════════════════════════════════╝
+
+echo '📍 K8s nodes:' && kubectl get nodes
+[?2004l📍 K8s nodes:
+NAME                  STATUS   ROLES           AGE   VERSION
+788047.cloud4box.ru   Ready    control-plane   32m   v1.35.4+k3s1
+[?2004h]0;root@788047: ~root@788047:~# echo '' && echo '📍 K8s namespaces:' && kubectl get namespaces
+[?2004l
+📍 K8s namespaces:
+NAME              STATUS   AGE
+default           Active   33m
+kb-system         Active   32m
+kube-node-lease   Active   33m
+kube-public       Active   33m
+kube-system       Active   33m
+[?2004h]0;root@788047: ~root@788047:~# echo '' && echo '📍 Pods в kb-system:' && kubectl get pods -n kb-system
+[?2004l
+📍 Pods в kb-system:
+NAME                          READY   STATUS             RESTARTS         AGE
+app-5c97c58479-d6wjh          0/1     ImagePullBackOff   0                31m
+app-5c97c58479-kmq4f          0/1     ImagePullBackOff   0                31m
+app-5c97c58479-zgrms          0/1     ImagePullBackOff   0                31m
+grafana-f98f6f84c-fjvwt       1/1     Running            0                13m
+postgres-0                    1/1     Running            0                31m
+prometheus-7f5b9497d6-p8jdj   1/1     Running            0                13m
+qdrant-0                      0/1     CrashLoopBackOff   11 (4m26s ago)   31m
+redis-0                       1/1     Running            0                31m
+[?2004h]0;root@788047: ~root@788047:~# echo '' && echo '📍 Pods в default:' && kubectl get pods -n default
+[?2004l
+📍 Pods в default:
+No resources found in default namespace.
+[?2004h]0;root@788047: ~root@788047:~# 
+╔════════════════════════════════════════════════════════════════════════╗
+║ ШАГ 2: ПРОВЕРКА СЕРВИСОВ                                              ║
+╚════════════════════════════════════════════════════════════════════════╝
+
+echo '📍 Services в kb-system:' && kubectl get services -n kb-system
+[?2004l📍 Services в kb-system:
+NAME         TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
+app          ClusterIP   10.43.160.230   <none>        3000/TCP   31m
+grafana      ClusterIP   10.43.43.110    <none>        3000/TCP   13m
+postgres     ClusterIP   None            <none>        5432/TCP   31m
+prometheus   ClusterIP   10.43.183.160   <none>        9090/TCP   13m
+qdrant       ClusterIP   None            <none>        6333/TCP   31m
+redis        ClusterIP   None            <none>        6379/TCP   31m
+[?2004h]0;root@788047: ~root@788047:~# echo '' && echo '📍 Services в default:' && kubectl get services -n default
+[?2004l
+📍 Services в default:
+NAME         TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
+kubernetes   ClusterIP   10.43.0.1    <none>        443/TCP   33m
+[?2004h]0;root@788047: ~root@788047:~# echo '' && echo '📍 Ingress:' && kubectl get ingress -n kb-system [A
+[?2004l
+📍 Ingress:
+NAME              CLASS    HOSTS                 ADDRESS        PORTS   AGE
+grafana-ingress   <none>   788047.cloud4box.ru   46.8.255.137   80      13m
+[?2004h]0;root@788047: ~root@788047:~# 
+╔════════════════════════════════════════════════════════════════════════╗
+║ ШАГ 3: ПРОВЕРКА ЛОГОВ ПРИЛОЖЕНИЯ                                      ║
+╚════════════════════════════════════════════════════════════════════════╝
+
+echo '📍 Логи приложения (последние 50 строк):' && kubectl logs -n kb-system -l app=app --tail=50 2>/dev/null || echo 'Нет логов'
+[?2004l📍 Логи приложения (последние 50 строк):
+Нет логов
+[?2004h]0;root@788047: ~root@788047:~# 
+╔════════════════════════════════════════════════════════════════════════╗
+║ ШАГ 4: ПРОВЕРКА ОПИСАНИЯ POD                                          ║
+╚════════════════════════════════════════════════════════════════════════╝
+
+echo '📍 Describe pod app:' && kubectl describe pod -n kb-system -l app=app 2>/dev/null | head -100 || echo 'Нет pod'
+[?2004l📍 Describe pod app:
+Name:             app-5c97c58479-d6wjh
+Namespace:        kb-system
+Priority:         0
+Service Account:  default
+Node:             788047.cloud4box.ru/46.8.255.137
+Start Time:       Sun, 10 May 2026 16:28:13 +0300
+Labels:           app=app
+                  pod-template-hash=5c97c58479
+Annotations:      <none>
+Status:           Pending
+IP:               10.42.0.9
+IPs:
+  IP:           10.42.0.9
+Controlled By:  ReplicaSet/app-5c97c58479
+Containers:
+  app:
+    Container ID:   
+    Image:          sergeev-app:latest
+    Image ID:       
+    Port:           3000/TCP
+    Host Port:      0/TCP
+    State:          Waiting
+      Reason:       ImagePullBackOff
+    Ready:          False
+    Restart Count:  0
+    Limits:
+      cpu:     500m
+      memory:  512Mi
+    Requests:
+      cpu:      250m
+      memory:   256Mi
+    Liveness:   http-get http://:3000/health delay=30s timeout=1s period=10s #success=1 #failure=3
+    Readiness:  http-get http://:3000/health delay=10s timeout=1s period=5s #success=1 #failure=3
+    Environment Variables from:
+      app-config   ConfigMap  Optional: false
+      app-secrets  Secret     Optional: false
+    Environment:   <none>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-6vz97 (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
+  Initialized                 True 
+  Ready                       False 
+  ContainersReady             False 
+  PodScheduled                True 
+Volumes:
+  kube-api-access-6vz97:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   Burstable
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type     Reason     Age                  From               Message
+  ----     ------     ----                 ----               -------
+  Normal   Scheduled  31m                  default-scheduler  Successfully assigned kb-system/app-5c97c58479-d6wjh to 788047.cloud4box.ru
+  Normal   Pulling    28m (x5 over 31m)    kubelet            spec.containers{app}: Pulling image "sergeev-app:latest"
+  Warning  Failed     28m (x5 over 31m)    kubelet            spec.containers{app}: Failed to pull image "sergeev-app:latest": failed to pull and unpack image "docker.io/library/sergeev-app:latest": failed to resolve reference "docker.io/library/sergeev-app:latest": pull access denied, repository does not exist or may require authorization: server message: insufficient_scope: authorization failed
+  Warning  Failed     28m (x5 over 31m)    kubelet            spec.containers{app}: Error: ErrImagePull
+  Normal   BackOff    61s (x128 over 31m)  kubelet            spec.containers{app}: Back-off pulling image "sergeev-app:latest"
+  Warning  Failed     61s (x128 over 31m)  kubelet            spec.containers{app}: Error: ImagePullBackOff
+
+╔════════════════════════════════════════════════════════════════════════╗
+║ ШАГ 5: ПРОВЕРКА ДОСТУПНОСТИ ПРИЛОЖЕНИЯ                                ║
+╚════════════════════════════════════════════════════════════════════════╝
+
+
+╔════════════════════════════════════════════════════════════════════════╗
+║ ШАГ 6: ПРОВЕРКА INGRESS КОНФИГУРАЦИИ                                   ║
+╚════════════════════════════════════════════════════════════════════════╝
+
+
+╔════════════════════════════════════════════════════════════════════════╗
+║ ШАГ 7: ПРОВЕРКА DOCKER КОНТЕЙНЕРОВ                                     ║
+╚════════════════════════════════════════════════════════════════════════╝
+
+
+
+Name:             app-5c97c58479-kmq4f
+Namespace:        kb-system
+Priority:         0
+Service Account:  default
+Node:             788047.cloud4box.ru/46.8.255.137
+Start Time:       Sun, 10 May 2026 16:28:13 +0300
+Labels:           app=app
+                  pod-template-hash=5c97c58479
+Annotations:      <none>
+Status:           Pending
+IP:               10.42.0.11
+IPs:
+  IP:           10.42.0.11
+Controlled By:  ReplicaSet/app-5c97c58479
+Containers:
+  app:
+    Container ID:   
+    Image:          sergeev-app:latest
+    Image ID:       
+    Port:           3000/TCP
+    Host Port:      0/TCP
+    State:          Waiting
+      Reason:       ImagePullBackOff
+    Ready:          False
+    Restart Count:  0
+    Limits:
+      cpu:     500m
+      memory:  512Mi
+    Requests:
+      cpu:      250m
+      memory:   256Mi
+    Liveness:   http-get http://:3000/health delay=30s timeout=1s period=10s #success=1 #failure=3
+
+╔════════════════════════════════════════════════════════════════════════╗
+║ ШАГ 8: ПРОВЕРКА ПОРТОВ                                                ║
+╚════════════════════════════════════════════════════════════════════════╝
+
+[?2004h]0;root@788047: ~root@788047:~# 
+╔════════════════════════════════════════════════════════════════════════╗
+║ ШАГ 9: ПРОВЕРКА NGINX КОНФИГУРАЦИИ                                     ║
+╚════════════════════════════════════════════════════════════════════════╝
+
+echo '📍 Проверка localhost:3000:' && curl -s http://localhost:3000/100 | head -20 || echo 'Ошибка подключения'
+[?2004l📍 Проверка localhost:3000:
+echo '📍 Открытые порты:' && netstat -tlnp 2>/dev/null | grep -E '3000|80|443' || echo 'netstat не установлен'
+echo '' && echo '📍 Проверка через ss:' && ss -tlnp 2>/dev/null | grep -E '3000|80|443' || echo 'ss не установлен'
+<!doctype html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+    <title>Sergeev Digitization System</title>    
+    <!-- THIS IS THE START OF A COMMENT BLOCK, BLOCK TO BE DELETED: Google Fonts here, example:
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    THIS IS THE END OF A COMMENT BLOCK, BLOCK TO BE DELETED -->
+    <script type="module" crossorigin src="/100/assets/index-HGnt2LXC.js"></script>
+    <link rel="stylesheet" crossorigin href="/100/assets/index-Duh-JVoj.css">
+  </head>
+
+  <body>
+    <script id="manus-runtime">window.__MANUS_HOST_DEV__ = false;
+[?2004h]0;root@788047: ~root@788047:~# echo '' && echo '📍 Проверка через service:' && curl -s http://app.kb-system.svc.cluster.local:3000/100 | head -20 || echo 'Ошибка подключения'
+[?2004l
+📍 Проверка через service:
+echo '📍 Nginx статус:' && systemctl status nginx 2>/dev/null || echo 'Nginx не установлен'
+[?2004h]0;root@788047: ~root@788047:~# 
+╔════════════════════════════════════════════════════════════════════════╗
+║ ДИАГНОСТИКА ЗАВЕРШЕНА                                                 ║
+╚════════════════════════════════════════════════════════════════════════╝
+
+📋 ВОЗМОЖНЫЕ ПРИЧИНЫ 404:
+  1. Приложение не развернуто в K8s
+  2. Ingress не настроен правильно
+  3. Service не работает
+  4. Приложение не слушает на /100 endpoint
+  5. Nginx не настроен для проксирования
+
+echo '📍 Ingress YAML:' && kubectl get ingress -n kb-system -o yaml
+[?2004l📍 Ingress YAML:
+echo '' && echo '📍 Nginx конфиг:' && cat /etc/nginx/nginx.conf 2>/dev/null | grep -A 20 'server' | head -30 || echo 'Nginx конфиг не найден'
+exit
+apiVersion: v1
+items:
+- apiVersion: networking.k8s.io/v1
+  kind: Ingress
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"networking.k8s.io/v1","kind":"Ingress","metadata":{"annotations":{"kubernetes.io/ingress.class":"traefik","traefik.ingress.kubernetes.io/router.entrypoints":"web"},"name":"grafana-ingress","namespace":"kb-system"},"spec":{"rules":[{"host":"788047.cloud4box.ru","http":{"paths":[{"backend":{"service":{"name":"grafana","port":{"number":3000}}},"path":"/grafana","pathType":"Prefix"}]}}]}}
+      kubernetes.io/ingress.class: traefik
+      traefik.ingress.kubernetes.io/router.entrypoints: web
+    creationTimestamp: "2026-05-10T13:45:58Z"
+    generation: 1
+    name: grafana-ingress
+    namespace: kb-system
+    resourceVersion: "1633"
+    uid: 9d7a9468-9e07-4a03-ad2a-fc8db1754e76
+  spec:
+    rules:
+    - host: 788047.cloud4box.ru
+      http:
+        paths:
+        - backend:
+            service:
+              name: grafana
+              port:
+                number: 3000
+          path: /grafana
+          pathType: Prefix
+  status:
+    loadBalancer:
+      ingress:
+      - ip: 46.8.255.137
+kind: List
+metadata:
+  resourceVersion: ""
+[?2004h]0;root@788047: ~root@788047:~# echo '📍 Docker контейнеры:' && docker ps | grep -E 'app|sergeev' || echo 'Нет контейнеров'
+[?2004l📍 Docker контейнеры:
+18571962b8e7   [01;31m[Ksergeev[m[K_digitization_system-[01;31m[Kapp[m[K   "dumb-init -- pnpm s…"   16 hours ago   Up 2 hours (healthy)   0.0.0.0:3000->3000/tcp, [::]:3000->3000/tcp                       [01;31m[Ksergeev[m[K_digitization_system-[01;31m[Kapp[m[K-1
+64ae37a7dce1   redis:7-alpine                    "docker-entrypoint.s…"   16 hours ago   Up 16 hours            6379/tcp                                                          [01;31m[Ksergeev[m[K_digitization_system-redis-1
+65f40268ec44   qdrant/qdrant:latest              "./entrypoint.sh"        16 hours ago   Up 16 hours            6333-6334/tcp                                                     [01;31m[Ksergeev[m[K_digitization_system-qdrant-1
+19b81d640ac2   mysql:8.0                         "docker-entrypoint.s…"   16 hours ago   Up 16 hours            3306/tcp, 33060/tcp                                               [01;31m[Ksergeev[m[K_digitization_system-mysql-1
+[?2004h]0;root@788047: ~root@788047:~# echo '📍 Открытые порты:' && netstat -tlnp 2>/dev/null | grep -E '3000|80|443' || echo 'netstat не установлен'
+[?2004l📍 Открытые порты:
+netstat не установлен
+[?2004h]0;root@788047: ~root@788047:~# echo '' && echo '📍 Проверка через ss:' && ss -tlnp 2>/dev/null | grep -E '3000|80|443' || echo 'ss не установлен'
+[?2004l
+📍 Проверка через ss:
+LISTEN 0      511          0.0.0.0:10[01;31m[K80[m[K       0.0.0.0:*    users:(("danted",pid=1116341,fd=8))                                                                                                                                                                                                                       
+LISTEN 0      511          0.0.0.0:[01;31m[K443[m[K        0.0.0.0:*    users:(("nginx",pid=320497,fd=9),("nginx",pid=320496,fd=9),("nginx",pid=320495,fd=9),("nginx",pid=320494,fd=9),("nginx",pid=320493,fd=9),("nginx",pid=320492,fd=9),("nginx",pid=320491,fd=9),("nginx",pid=320490,fd=9),("nginx",pid=179365,fd=9))         
+LISTEN 0      511          0.0.0.0:[01;31m[K80[m[K         0.0.0.0:*    users:(("nginx",pid=320497,fd=7),("nginx",pid=320496,fd=7),("nginx",pid=320495,fd=7),("nginx",pid=320494,fd=7),("nginx",pid=320493,fd=7),("nginx",pid=320492,fd=7),("nginx",pid=320491,fd=7),("nginx",pid=320490,fd=7),("nginx",pid=179365,fd=7))         
+LISTEN 0      4096         0.0.0.0:[01;31m[K3000[m[K       0.0.0.0:*    users:(("docker-proxy",pid=306087,fd=8))                                                                                                                                                                                                                  
+LISTEN 0      4096               *:6[01;31m[K443[m[K             *:*    users:(("k3s-server",pid=525316,fd=12))                                                                                                                                                                                                                   
+LISTEN 0      511             [::]:[01;31m[K443[m[K           [::]:*    users:(("nginx",pid=320497,fd=10),("nginx",pid=320496,fd=10),("nginx",pid=320495,fd=10),("nginx",pid=320494,fd=10),("nginx",pid=320493,fd=10),("nginx",pid=320492,fd=10),("nginx",pid=320491,fd=10),("nginx",pid=320490,fd=10),("nginx",pid=179365,fd=10))
+LISTEN 0      511             [::]:[01;31m[K80[m[K            [::]:*    users:(("nginx",pid=320497,fd=8),("nginx",pid=320496,fd=8),("nginx",pid=320495,fd=8),("nginx",pid=320494,fd=8),("nginx",pid=320493,fd=8),("nginx",pid=320492,fd=8),("nginx",pid=320491,fd=8),("nginx",pid=320490,fd=8),("nginx",pid=179365,fd=8))         
+LISTEN 0      4096            [::]:[01;31m[K3000[m[K          [::]:*    users:(("docker-proxy",pid=306094,fd=8))                                                                                                                                                                                                                  
+[?2004h]0;root@788047: ~root@788047:~# echo '📍 Nginx статус:' && systemctl status nginx 2>/dev/null || echo 'Nginx не установлен'
+[?2004l📍 Nginx статус:
+● nginx.service - A high performance web server and a reverse proxy server
+     Loaded: loaded (/usr/lib/systemd/system/nginx.service; enabled; preset: enabled)
+     Active: active (running) since Sun 2026-05-10 14:46:38 MSK; 2h 12min ago
+       Docs: man:nginx(8)
+   Main PID: 179365 (nginx)
+      Tasks: 10 (limit: 38310)
+     Memory: 12.5M (peak: 19.4M)
+        CPU: 695ms
+     CGroup: /system.slice/nginx.service
+             ├─179365 "nginx: master process /usr/sbin/nginx -g daemon on; master_process on;"
+             ├─320490 "nginx: worker process"
+             ├─320491 "nginx: worker process"
+             ├─320492 "nginx: worker process"
+             ├─320493 "nginx: worker process"
+             ├─320494 "nginx: worker process"
+             ├─320495 "nginx: worker process"
+             ├─320496 "nginx: worker process"
+             ├─320497 "nginx: worker process"
+             └─320498 "nginx: cache manager process"
+
+May 10 14:46:38 788047.cloud4box.ru systemd[1]: Starting nginx.service - A high performance web server and a reverse proxy server...
+May 10 14:46:38 788047.cloud4box.ru systemd[1]: Started nginx.service - A high performance web server and a reverse proxy server.
+May 10 15:25:54 788047.cloud4box.ru systemd[1]: Reloading nginx.service - A high performance web server and a reverse proxy server...
+May 10 15:25:54 788047.cloud4box.ru nginx[320488]: 2026/05/10 15:25:54 [warn] 320488#320488: "ssl_stapling" ignored, no OCSP responder URL in the certificate "/etc/letsencrypt/live/788047.cloud4box.ru/fullchain.pem"
+May 10 15:25:54 788047.cloud4box.ru nginx[320488]: 2026/05/10 15:25:54 [warn] 320488#320488: conflicting server name "788047.cloud4box.ru" on 0.0.0.0:80, ignored
+May 10 15:25:54 788047.cloud4box.ru nginx[320488]: 2026/05/10 15:25:54 [warn] 320488#320488: conflicting server name "788047.cloud4box.ru" on 0.0.0.0:443, ignored
+May 10 15:25:54 788047.cloud4box.ru nginx[320488]: 2026/05/10 15:25:54 [notice] 320488#320488: signal process started
+May 10 15:25:54 788047.cloud4box.ru systemd[1]: Reloaded nginx.service - A high performance web server and a reverse proxy server.
+[?2004h]0;root@788047: ~root@788047:~# echo '' && echo '📍 Nginx конфиг:' && cat /etc/nginx/nginx.conf 2>/dev/null | grep -A 20 'server' | head -30 || echo 'Nginx конфиг не найден'
+[?2004l
+📍 Nginx конфиг:
+	# server_tokens off;
+
+	# server_names_hash_bucket_size 64;
+	# server_name_in_redirect off;
+
+	include /etc/nginx/mime.types;
+	default_type application/octet-stream;
+
+	##
+	# SSL Settings
+	##
+
+	ssl_protocols TLSv1 TLSv1.1 TLSv1.2 TLSv1.3; # Dropping SSLv3, ref: POODLE
+	ssl_prefer_server_ciphers on;
+
+	##
+	# Logging Settings
+	##
+
+	access_log /var/log/nginx/access.log;
+
+	##
+	# Gzip Settings
+	##
+
+	gzip on;
+
+	# gzip_vary on;
+	# gzip_proxied any;
+	# gzip_comp_level 6;
+[?2004h]0;root@788047: ~root@788047:~# exit
+[?2004llogout
+Connection to 46.8.255.137 closed.
+✅ Диагностика завершена
