@@ -1,0 +1,205 @@
+╔════════════════════════════════════════════════════════════════════════╗
+║ ИСПРАВЛЕНИЕ: Настройка Nginx для приложения                           ║
+║ Дата: 2026-05-10                                                      ║
+╚════════════════════════════════════════════════════════════════════════╝
+
+🔗 Подключаюсь к серверу 46.8.255.137...
+spawn ssh -o StrictHostKeyChecking=no root@46.8.255.137
+root@46.8.255.137's password: 
+Welcome to Ubuntu 24.04.3 LTS (GNU/Linux 6.8.0-110-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/pro
+
+ System information as of Sun May 10 03:19:16 PM MSK 2026
+
+  System load:  3.77               Processes:             264
+  Usage of /:   27.3% of 98.34GB   Users logged in:       0
+  Memory usage: 23%                IPv4 address for ens3: 46.8.255.137
+  Swap usage:   0%                 IPv6 address for ens3: 2a0d:c580:1:7:197::1
+
+ * Strictly confined Kubernetes makes edge and IoT secure. Learn how MicroK8s
+   just raised the bar for easy, resilient and secure K8s cluster deployment.
+
+   https://ubuntu.com/engage/secure-kubernetes-at-the-edge
+
+Expanded Security Maintenance for Applications is not enabled.
+
+70 updates can be applied immediately.
+To see these additional updates run: apt list --upgradable
+
+14 additional security updates can be applied with ESM Apps.
+Learn more about enabling ESM Apps service at https://ubuntu.com/esm
+
+
+*** System restart required ***
+Last login: Sun May 10 16:59:15 2026 from 54.197.15.158
+[?2004h]0;root@788047: ~root@788047:~# ✅ Подключение успешно
+
+╔════════════════════════════════════════════════════════════════════════╗
+║ ШАГ 1: СОЗДАНИЕ NGINX КОНФИГУРАЦИИ                                    ║
+╚════════════════════════════════════════════════════════════════════════╝
+
+cat > /etc/nginx/conf.d/app.conf << 'NGINX_CONFIG'
+[?2004l[?2004h> upstream app_backend {
+[?2004l[?2004h>     server localhost:3000;
+[?2004l[?2004h>     keepalive 32;
+[?2004l[?2004h> }
+[?2004l[?2004h> 
+[?2004l[?2004h> server {
+[?2004l[?2004h>     listen 80;
+[?2004l[?2004h>     listen [::]:80;
+[?2004l[?2004h>     server_name 788047.cloud4box.ru 46.8.255.137;
+[?2004l[?2004h> 
+[?2004l[?2004h>     location /100 {
+[?2004l[?2004h>         proxy_pass http://app_backend;
+[?2004l[?2004h>         proxy_http_version 1.1;
+[?2004l[?2004h>         proxy_set_header Upgrade $http_upgrade;
+[?2004l[?2004h>         proxy_set_header Connection 'upgrade';
+[?2004l[?2004h>         proxy_set_header Host $host;
+[?2004l[?2004h>         proxy_set_header X-Real-IP $remote_addr;
+[?2004l[?2004h>         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+[?2004l[?2004h>         proxy_set_header X-Forwarded-Proto $scheme;
+[?2004l[?2004h>         proxy_cache_bypass $http_upgrade;
+[?2004l[?2004h>     }
+[?2004l[?2004h> 
+[?2004l[?2004h>     location /api {
+[?2004l[?2004h>         proxy_pass http://app_backend;
+[?2004l[?2004h>         proxy_http_version 1.1;
+[?2004l[?2004h>         proxy_set_header Upgrade $http_upgrade;
+[?2004l[?2004h>         proxy_set_header Connection 'upgrade';
+[?2004l[?2004h>         proxy_set_header Host $host;
+[?2004l[?2004h>         proxy_set_header X-Real-IP $remote_addr;
+[?2004l[?2004h>         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+[?2004l[?2004h>         proxy_set_header X-Forwarded-Proto $scheme;
+[?2004l[?2004h>         proxy_cache_bypass $http_upgrade;
+[?2004l[?2004h>     }
+[?2004l[?2004h> 
+[?2004l[?2004h>     location / {
+[?2004l[?2004h>         proxy_pass http://app_backend;
+[?2004l[?2004h>         proxy_http_version 1.1;
+[?2004l[?2004h>         proxy_set_header Upgrade $http_upgrade;
+[?2004l[?2004h>         proxy_set_header Connection 'upgrade';
+[?2004l[?2004h>         proxy_set_header Host $host;
+[?2004l[?2004h>         proxy_set_header X-Real-IP $remote_addr;
+[?2004l[?2004h>         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+[?2004l[?2004h>         proxy_set_header X-Forwarded-Proto $scheme;
+[?2004l[?2004h>         proxy_cache_bypass $http_upgrade;
+[?2004l[?2004h>     }
+[?2004l[?2004h> }
+[?2004l[?2004h> NGINX_CONFIG
+[?2004l[?2004h]0;root@788047: ~root@788047:~# ✅ Nginx конфигурация создана
+
+╔════════════════════════════════════════════════════════════════════════╗
+║ ШАГ 2: ПРОВЕРКА СИНТАКСИСА NGINX                                      ║
+╚════════════════════════════════════════════════════════════════════════╝
+
+echo '📍 Проверка синтаксиса:' && nginx -t
+[?2004l📍 Проверка синтаксиса:
+2026/05/10 16:59:41 [warn] 640736#640736: "ssl_stapling" ignored, no OCSP responder URL in the certificate "/etc/letsencrypt/live/788047.cloud4box.ru/fullchain.pem"
+
+╔════════════════════════════════════════════════════════════════════════╗
+║ ШАГ 3: ПЕРЕЗАГРУЗКА NGINX                                             ║
+╚════════════════════════════════════════════════════════════════════════╝
+
+2026/05/10 16:59:41 [warn] 640736#640736: conflicting server name "788047.cloud4box.ru" on 0.0.0.0:80, ignored
+2026/05/10 16:59:41 [warn] 640736#640736: conflicting server name "788047.cloud4box.ru" on 0.0.0.0:80, ignored
+2026/05/10 16:59:41 [warn] 640736#640736: conflicting server name "788047.cloud4box.ru" on [::]:80, ignored
+
+╔════════════════════════════════════════════════════════════════════════╗
+║ ШАГ 4: ПРОВЕРКА ДОСТУПНОСТИ ПРИЛОЖЕНИЯ                                ║
+╚════════════════════════════════════════════════════════════════════════╝
+
+
+╔════════════════════════════════════════════════════════════════════════╗
+║ ШАГ 5: ПРОВЕРКА ЛОГОВ NGINX                                           ║
+╚════════════════════════════════════════════════════════════════════════╝
+
+2026/05/10 16:59:41 [warn] 640736#640736: conflicting server name "788047.cloud4box.ru" on 0.0.0.0:443, ignored
+nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
+nginx: configuration file /etc/nginx/nginx.conf test is successful
+[?2004h]0;root@788047: ~root@788047:~# 
+╔════════════════════════════════════════════════════════════════════════╗
+║ ✅ ИСПРАВЛЕНИЕ ЗАВЕРШЕНО                                              ║
+╚════════════════════════════════════════════════════════════════════════╝
+
+📊 РЕЗУЛЬТАТЫ:
+  ✅ Nginx конфигурация создана
+  ✅ Синтаксис проверен
+  ✅ Nginx перезагружен
+  ✅ Приложение должно быть доступно
+
+🌐 ДОСТУП:
+  - http://46.8.255.137/100
+  - http://788047.cloud4box.ru/100
+
+echo '📍 Перезагружаю Nginx...' && systemctl reload nginx && echo '✅ Nginx перезагружен'
+[?2004l📍 Перезагружаю Nginx...
+echo '📍 Проверка http://localhost/100:' && curl -s http://localhost/100 | head -20
+echo '' && echo '📍 Проверка http://localhost:3000/100:' && curl -s http://localhost:3000/100 | head -20
+echo '📍 Последние логи Nginx (access):' && tail -10 /var/log/nginx/access.log
+echo '' && echo '📍 Последние логи Nginx (error):' && tail -10 /var/log/nginx/error.log
+exit
+✅ Nginx перезагружен
+[?2004h]0;root@788047: ~root@788047:~# echo '📍 Проверка http://localhost/100:' && curl -s http://localhost/100 | head -20
+[?2004l📍 Проверка http://localhost/100:
+<html>
+<head><title>301 Moved Permanently</title></head>
+<body>
+<center><h1>301 Moved Permanently</h1></center>
+<hr><center>nginx/1.24.0 (Ubuntu)</center>
+</body>
+</html>
+[?2004h]0;root@788047: ~root@788047:~# echo '' && echo '📍 Проверка http://localhost:3000/100:' && curl -s http://localhost:3000/100 | head -20
+[?2004l
+📍 Проверка http://localhost:3000/100:
+<!doctype html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+    <title>Sergeev Digitization System</title>    
+    <!-- THIS IS THE START OF A COMMENT BLOCK, BLOCK TO BE DELETED: Google Fonts here, example:
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    THIS IS THE END OF A COMMENT BLOCK, BLOCK TO BE DELETED -->
+    <script type="module" crossorigin src="/100/assets/index-HGnt2LXC.js"></script>
+    <link rel="stylesheet" crossorigin href="/100/assets/index-Duh-JVoj.css">
+  </head>
+
+  <body>
+    <script id="manus-runtime">window.__MANUS_HOST_DEV__ = false;
+[?2004h]0;root@788047: ~root@788047:~# echo '📍 Последние логи Nginx (access):' && tail -10 /var/log/nginx/access.log
+[?2004l📍 Последние логи Nginx (access):
+34.219.155.212 - - [10/May/2026:16:18:22 +0300] "GET / HTTP/1.1" 301 178 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36"
+204.76.203.18 - - [10/May/2026:16:20:26 +0300] "GET /rondo.i486 HTTP/1.1" 301 178 "-" "-"
+204.76.203.18 - - [10/May/2026:16:20:35 +0300] "GET /rondo.i486 HTTP/1.1" 301 178 "-" "-"
+204.76.203.18 - - [10/May/2026:16:21:06 +0300] "GET /rondo.powerpc HTTP/1.1" 301 178 "-" "-"
+204.76.203.18 - - [10/May/2026:16:21:59 +0300] "GET /rondo.armv4l HTTP/1.1" 301 178 "-" "-"
+204.76.203.18 - - [10/May/2026:16:22:16 +0300] "GET /rondo.fbsdi386 HTTP/1.1" 301 178 "-" "-"
+204.76.203.18 - - [10/May/2026:16:23:17 +0300] "GET /rondo.m68k HTTP/1.1" 301 178 "-" "-"
+204.76.203.18 - - [10/May/2026:16:23:42 +0300] "GET /rondo.arc700 HTTP/1.1" 301 178 "-" "-"
+204.76.203.18 - - [10/May/2026:16:25:25 +0300] "GET /rondo.x86_64 HTTP/1.1" 301 178 "-" "-"
+::1 - - [10/May/2026:16:59:41 +0300] "GET /100 HTTP/1.1" 301 178 "-" "curl/8.5.0"
+[?2004h]0;root@788047: ~root@788047:~# echo '' && echo '📍 Последние логи Nginx (error):' && tail -10 /var/log/nginx/error.log
+[?2004l
+📍 Последние логи Nginx (error):
+2026/05/09 22:52:15 [error] 3750923#3750923: *177 connect() failed (111: Connection refused) while connecting to upstream, client: 186.53.251.228, server: _, request: "GET /api/trpc/auth.me?batch=1&input=%7B%220%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%7D%7D%7D HTTP/1.1", upstream: "http://127.0.0.1:8000/api/trpc/auth.me?batch=1&input=%7B%220%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%7D%7D%7D", host: "46.8.255.137", referrer: "http://46.8.255.137/100"
+2026/05/09 22:52:17 [error] 3750923#3750923: *177 connect() failed (111: Connection refused) while connecting to upstream, client: 186.53.251.228, server: _, request: "GET /api/trpc/auth.me?batch=1&input=%7B%220%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%7D%7D%7D HTTP/1.1", upstream: "http://127.0.0.1:8000/api/trpc/auth.me?batch=1&input=%7B%220%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%7D%7D%7D", host: "46.8.255.137", referrer: "http://46.8.255.137/100"
+2026/05/09 22:52:19 [error] 3750923#3750923: *177 connect() failed (111: Connection refused) while connecting to upstream, client: 186.53.251.228, server: _, request: "GET /api/trpc/auth.me?batch=1&input=%7B%220%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%7D%7D%7D HTTP/1.1", upstream: "http://127.0.0.1:8000/api/trpc/auth.me?batch=1&input=%7B%220%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%7D%7D%7D", host: "46.8.255.137", referrer: "http://46.8.255.137/100"
+2026/05/09 22:52:23 [error] 3750923#3750923: *177 connect() failed (111: Connection refused) while connecting to upstream, client: 186.53.251.228, server: _, request: "GET /api/trpc/auth.me?batch=1&input=%7B%220%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%7D%7D%7D HTTP/1.1", upstream: "http://127.0.0.1:8000/api/trpc/auth.me?batch=1&input=%7B%220%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%7D%7D%7D", host: "46.8.255.137", referrer: "http://46.8.255.137/100"
+2026/05/09 22:53:07 [error] 3750923#3750923: *189 connect() failed (111: Connection refused) while connecting to upstream, client: 185.91.127.80, server: _, request: "GET /api/trpc/auth.me?batch=1&input=%7B%220%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%7D%7D%7D HTTP/1.1", upstream: "http://127.0.0.1:8000/api/trpc/auth.me?batch=1&input=%7B%220%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%7D%7D%7D", host: "46.8.255.137", referrer: "http://46.8.255.137/100"
+2026/05/09 22:55:15 [error] 3750923#3750923: *193 connect() failed (111: Connection refused) while connecting to upstream, client: 45.148.10.67, server: _, request: "GET / HTTP/1.1", upstream: "http://127.0.0.1:8000/", host: "46.8.255.137:80"
+2026/05/09 22:57:00 [error] 3750923#3750923: *195 connect() failed (111: Connection refused) while connecting to upstream, client: 204.76.203.212, server: _, request: "GET / HTTP/1.1", upstream: "http://127.0.0.1:8000/", host: "46.8.255.137:80"
+2026/05/09 23:08:03 [error] 3750923#3750923: *208 connect() failed (111: Connection refused) while connecting to upstream, client: 66.249.66.40, server: _, request: "GET /robots.txt HTTP/1.1", upstream: "http://127.0.0.1:8000/robots.txt", host: "46.8.255.137"
+2026/05/09 23:12:28 [error] 3750923#3750923: *213 connect() failed (111: Connection refused) while connecting to upstream, client: 185.91.127.80, server: _, request: "GET /api/trpc/auth.me?batch=1&input=%7B%220%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%7D%7D%7D HTTP/1.1", upstream: "http://127.0.0.1:8000/api/trpc/auth.me?batch=1&input=%7B%220%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%7D%7D%7D", host: "46.8.255.137", referrer: "http://46.8.255.137/100"
+2026/05/09 23:15:31 [error] 3750925#3750925: *223 connect() failed (111: Connection refused) while connecting to upstream, client: 127.0.0.1, server: _, request: "GET /api/trpc/auth.me HTTP/1.1", upstream: "http://127.0.0.1:8000/api/trpc/auth.me", host: "localhost"
+[?2004h]0;root@788047: ~root@788047:~# exit
+[?2004llogout
+Connection to 46.8.255.137 closed.
+✅ Исправление завершено
