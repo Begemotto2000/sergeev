@@ -1,0 +1,87 @@
+╔════════════════════════════════════════════════════════════════════════╗
+║ ИСПРАВЛЕНИЕ: Docker Image для K8s                                     ║
+║ Дата: 2026-05-10                                                      ║
+╚════════════════════════════════════════════════════════════════════════╝
+
+🔗 Подключаюсь к серверу 46.8.255.137...
+spawn ssh -o StrictHostKeyChecking=no root@46.8.255.137
+root@46.8.255.137's password: 
+Welcome to Ubuntu 24.04.3 LTS (GNU/Linux 6.8.0-110-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/pro
+
+ System information as of Sun May 10 03:19:16 PM MSK 2026
+
+  System load:  3.77               Processes:             264
+  Usage of /:   27.3% of 98.34GB   Users logged in:       0
+  Memory usage: 23%                IPv4 address for ens3: 46.8.255.137
+  Swap usage:   0%                 IPv6 address for ens3: 2a0d:c580:1:7:197::1
+
+ * Strictly confined Kubernetes makes edge and IoT secure. Learn how MicroK8s
+   just raised the bar for easy, resilient and secure K8s cluster deployment.
+
+   https://ubuntu.com/engage/secure-kubernetes-at-the-edge
+
+Expanded Security Maintenance for Applications is not enabled.
+
+70 updates can be applied immediately.
+To see these additional updates run: apt list --upgradable
+
+14 additional security updates can be applied with ESM Apps.
+Learn more about enabling ESM Apps service at https://ubuntu.com/esm
+
+
+*** System restart required ***
+Last login: Sun May 10 17:00:32 2026 from 54.89.63.78
+[?2004h]0;root@788047: ~root@788047:~# ✅ Подключение успешно
+
+╔════════════════════════════════════════════════════════════════════════╗
+║ ШАГ 1: ПОИСК DOCKER IMAGES                                            ║
+╚════════════════════════════════════════════════════════════════════════╝
+
+echo '📍 Все Docker images:' && docker images
+[?2004l📍 Все Docker images:
+                                                            [1m[106m[30mi[0m[0m [96mInfo → [0m[0m [38;5;0m[48;5;14m U [0m In Use
+[39m[1mIMAGE[0m                           [39m[1mID[0m             [39m[1mDISK USAGE[0m   [39m[1mCONTENT SIZE[0m   [39m[1mEXTRA[0m
+[34m[1mmysql:8.0[0m                       [39m7dcddc01f13b[0m        [39m1.1GB[0m          [39m249MB[0m   [38;5;0m[48;5;14m U [0m  
+[34m[1mnginx:alpine[0m                    [39m5616878291a2[0m       [39m93.5MB[0m         [39m26.9MB[0m        
+[34m[1mpostgres:16-alpine[0m              [39m4e6e670bb069[0m        [39m395MB[0m          [39m111MB[0m   [38;5;0m[48;5;14m U [0m  
+[34m[1mqdrant/qdrant:latest[0m            [39m94728574965d[0m        [39m285MB[0m           [39m79MB[0m   [38;5;0m[48;5;14m U [0m  
+[34m[1mredis:7-alpine[0m                  [39m286bd4264adb[0m       [39m57.8MB[0m         [39m16.8MB[0m   [38;5;0m[48;5;14m U [0m  
+[34m[1msergeev_digitization_system-app:latest[0m
+                                [39m1ce6026ddb13[0m       [39m1.42GB[0m          [39m257MB[0m   [38;5;0m[48;5;14m U [0m  
+[34m[1mubuntu/squid:latest[0m             [39m6a097f68bae7[0m        [39m303MB[0m         [39m70.3MB[0m   [38;5;0m[48;5;14m U [0m  
+[?2004h]0;root@788047: ~root@788047:~# 
+╔════════════════════════════════════════════════════════════════════════╗
+║ ШАГ 2: ПОИСК IMAGE ДЛЯ ПРИЛОЖЕНИЯ                                     ║
+╚════════════════════════════════════════════════════════════════════════╝
+
+echo '📍 Docker images для sergeev:' && docker images | grep -i sergeev
+[?2004l📍 Docker images для sergeev:
+WARNING: This output is designed for human readability. For machine-readable output, please use --format.
+[01;31m[Ksergeev[m[K_digitization_system-app:latest   1ce6026ddb13       1.42GB          257MB   U    
+[?2004h]0;root@788047: ~root@788047:~# echo '' && echo '📍 Docker images для app:' && docker images | grep -i app
+[?2004l
+📍 Docker images для app:
+WARNING: This output is designed for human readability. For machine-readable output, please use --format.
+sergeev_digitization_system-[01;31m[Kapp[m[K:latest   1ce6026ddb13       1.42GB          257MB   U    
+[?2004h]0;root@788047: ~root@788047:~# 
+╔════════════════════════════════════════════════════════════════════════╗
+║ ШАГ 3: ПОЛУЧЕНИЕ ID IMAGE                                             ║
+╚════════════════════════════════════════════════════════════════════════╝
+
+echo '📍 ID image для sergeev_digitization_system-app:' && docker images | grep 'sergeev_digitization_system-app' | awk '{print $3}'
+[?2004l📍 ID image для sergeev_digitization_system-app:
+WARNING: This output is designed for human readability. For machine-readable output, please use --format.
+1.42GB
+[?2004h]0;root@788047: ~root@788047:~# 
+╔════════════════════════════════════════════════════════════════════════╗
+║ ШАГ 4: СОЗДАНИЕ ТЕГА ДЛЯ IMAGE                                        ║
+╚════════════════════════════════════════════════════════════════════════╝
+
+can't read "3": no such variable
+    while executing
+"send "echo '������ Получаю ID image...' && IMAGE_ID=\\$(docker images | grep 'sergeev_digitization_system-app' | awk '{print \\$3}' | head -1) ..."
+    (file "/home/ubuntu/fix-docker-image.exp" line 87)
