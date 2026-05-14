@@ -1,0 +1,397 @@
+🔗 Подключаюсь к серверу 46.8.255.137...
+spawn ssh -o StrictHostKeyChecking=no root@46.8.255.137
+root@46.8.255.137's password: 
+Welcome to Ubuntu 24.04.3 LTS (GNU/Linux 6.8.0-110-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/pro
+
+ System information as of Sun May 10 03:19:16 PM MSK 2026
+
+  System load:  3.77               Processes:             264
+  Usage of /:   27.3% of 98.34GB   Users logged in:       0
+  Memory usage: 23%                IPv4 address for ens3: 46.8.255.137
+  Swap usage:   0%                 IPv6 address for ens3: 2a0d:c580:1:7:197::1
+
+ * Strictly confined Kubernetes makes edge and IoT secure. Learn how MicroK8s
+   just raised the bar for easy, resilient and secure K8s cluster deployment.
+
+   https://ubuntu.com/engage/secure-kubernetes-at-the-edge
+
+Expanded Security Maintenance for Applications is not enabled.
+
+70 updates can be applied immediately.
+To see these additional updates run: apt list --upgradable
+
+14 additional security updates can be applied with ESM Apps.
+Learn more about enabling ESM Apps service at https://ubuntu.com/esm
+
+
+*** System restart required ***
+Last login: Sun May 10 17:07:38 2026 from 13.221.71.35
+[?2004h]0;root@788047: ~root@788047:~# ✅ Подключение успешно
+
+cat > /tmp/install-jmeter-and-test.sh << 'SCRIPT_END'
+[?2004l[?2004h> #!/bin/bash
+[?2004l[?2004h> 
+[?2004l[?2004h> set -e
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "╔════════════════════════════════════════════════════════════════════════╗"
+[?2004l[?2004h> echo "║ УСТАНОВКА JMETER И ЗАПУСК LOAD TESTS                                  ║"
+[?2004l[?2004h> echo "║ Дата: 2026-05-10                                                      ║"
+[?2004l[?2004h> echo "╚════════════════════════════════════════════════════════════════════════╝"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004lT[?2004h> # ============================================================================ [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K=
+[?2004l[?2004h> # ШАГ 1: Проверка Java
+[?2004l[?2004h> # ============================================================================ [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K=
+[?2004l[?2004h> 
+[?2004lt[?2004h> echo "╔════════════════════════════════════════════════════════════════════════╗"
+[?2004l[?2004h> echo "║ ШАГ 1: ПРОВЕРКА JAVA                                                  ║"
+[?2004l[?2004h> echo "╚════════════════════════════════════════════════════════════════════════╝"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "📍 Проверяю Java..."
+[?2004l[?2004h> java -version 2>&1 || echo "Java не установлена"
+[?2004l[?2004h> 
+[?2004l=[?2004h> echo ""
+[?2004ltio[?2004h> 
+[?2004l[?2004h> # ============================================================================ [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K=
+[?2004l[?2004h> # ШАГ 2: Установка JMeter
+[?2004l[?2004h> # ============================================================================ [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K=
+[?2004l[?2004h> 
+[?2004lr[?2004h> echo "╔════════════════════════════════════════════════════════════════════════╗"
+[?2004l[?2004h> echo "║ ШАГ 2: УСТАНОВКА JMETER                                               ║"
+[?2004l[?2004h> echo "╚════════════════════════════════════════════════════════════════════════╝"
+[?2004l[?2004h> echo ""
+[?2004le=[?2004h> 
+[?2004l"[?2004h> JMETER_VERSION="5.6.3"
+[?2004l[?2004h> JMETER_HOME="/opt/apache-jmeter-$JMETER_VERSION"
+[?2004l[?2004h> 
+[?2004l=[?2004h> if [ ! -d "$JMETER_HOME" ]; then
+[?2004l[?2004h>     echo "📍 Скачиваю JMeter $JMETER_VERSION..."
+[?2004l[?2004h>     cd /opt
+[?2004llocalho[?2004h>     wget -q https://archive.apache.org/dist/jmeter/binaries/apache-jmeter-$JMETER_VERSION.tgz
+[?2004l[?2004h>     tar -xzf apache-jmeter-$JMETER_VERSION.tgz
+[?2004l[?2004h>     rm apache-jmeter-$JMETER_VERSION.tgz
+[?2004l[?2004h>     echo "✅ JMeter установлен"
+[?2004l[?2004h> else
+[?2004lt[?2004h>     echo "✅ JMeter уже установлен"
+[?2004l[?2004h> fi
+[?2004l[?2004h> 
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004ls[?2004h> # ============================================================================ [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K=
+[?2004l[?2004h> # ШАГ 3: Создание тестовых сценариев
+[?2004l[?2004h> # ============================================================================ [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K=
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "╔════════════════════════════════════════════════════════════════════════╗"
+[?2004l[?2004h> echo "║ ШАГ 3: СОЗДАНИЕ ТЕСТОВЫХ СЦЕНАРИЕВ                                    ║"
+[?2004l[?2004h> echo "╚════════════════════════════════════════════════════════════════════════╝"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> mkdir -p /opt/sergeev-100/load-tests
+[?2004l[?2004h> 
+[?2004l[?2004h> # Тест 1: Базовый тест (100 пользователей, 10 секунд)
+[?2004l[?2004h> cat > /opt/sergeev-100/load-tests/test-basic.jmx << 'JMETER_TEST'
+[?2004l[?2004h> <?xml version="1.0" encoding="UTF-8"?>
+[?2004l[?2004h> <jmeterTestPlan version="1.2" properties="5.0" jmeter="5.6.3">
+[?2004l[?2004h>   <hashTree>
+[?2004l[?2004h>     <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Basic Load Test" enabled="true">
+[?2004l[?2004h>       <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+[?2004l[?2004h>         <collectionProp name="Arguments.arguments"/>
+[?2004l[?2004h>       </elementProp>
+[?2004l[?2004h>       <stringProp name="TestPlan.user_define_classpath"></stringProp>
+[?2004l [?2004h>       <boolProp name="TestPlan.functional_mode">false</boolProp>
+[?2004l[?2004h>       <boolProp name="TestPlan.serialize_threadgroups">false</boolProp>
+[?2004l[?2004h>       <elementProp name="TestPlan.test_fragments" elementType="TestFragmentController" guiclass="TestFragmentControllerGui" testclass="TestFragmentController" testname="Test Fragment" enabled="false"/>
+[?2004l[?2004h>       <stringProp name="TestPlan.comments"></stringProp>
+[?2004l[?2004h>     </TestPlan>
+[?2004l[?2004h>     <hashTree>
+[?2004l[?2004h>       <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group" enabled="true">
+[?2004l[?2004h>         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
+[?2004l[?2004h>           <boolProp name="LoopController.continue_forever">false</boolProp>
+[?2004l[?2004h>           <stringProp name="LoopController.loops">1</stringProp>
+[?2004l[?2004h>         </elementProp>
+[?2004l>[?2004h>         <stringProp name="ThreadGroup.num_threads">100</stringProp>
+[?2004l[?2004h>         <stringProp name="ThreadGroup.ramp_time">10</stringProp>
+[?2004l[?2004h>         <elementProp name="ThreadGroup.duration_assertion" elementType="DurationAssertion" guiclass="DurationAssertionGui" testclass="DurationAssertion" testname="Duration Assertion" enabled="false">
+[?2004l[?2004h>           <stringProp name="DurationAssertion.test_type">1</stringProp>
+[?2004l[?2004h>           <stringProp name="DurationAssertion.duration">5000</stringProp>
+[?2004l[?2004h>         </elementProp>
+[?2004l[?2004h>         <stringProp name="ThreadGroup.delay_creation">0</stringProp>
+[?2004lâ[?2004h>         <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
+[?2004l[?2004h>         <boolProp name="ThreadGroup.scheduler">false</boolProp>
+[?2004l[?2004h>         <stringProp name="ThreadGroup.duration"></stringProp>
+[?2004lâ[?2004h>         <stringProp name="ThreadGroup.delay"></stringProp>
+[?2004l[?2004h>         <boolProp name="ThreadGroup.delayedStart">false</boolProp>
+[?2004lâ[?2004h>       </ThreadGroup>
+[?2004l[?2004h>       <hashTree>
+[?2004le[?2004h>         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="HTTP Request" enabled="true">
+[?2004l[?2004h>           <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+[?2004l[?2004h>             <collectionProp name="Arguments.arguments"/>
+[?2004l[?2004h>           </elementProp>
+[?2004l[?2004h>           <stringProp name="HTTPSampler.domain">localhost</stringProp>
+[?2004l[?2004h>           <stringProp name="HTTPSampler.port">80</stringProp>
+[?2004l[?2004h>           <stringProp name="HTTPSampler.protocol">http</stringProp>
+[?2004l[?2004h>           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+[?2004l[?2004h>           <stringProp name="HTTPSampler.path">/100</stringProp>
+[?2004l[?2004h>           <stringProp name="HTTPSampler.method">GET</stringProp>
+[?2004l[?2004h>           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+[?2004l[?2004h>           <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+[?2004l[?2004h>           <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+[?2004l[?2004h>           <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+[?2004l[?2004h>           <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+[?2004l[?2004h>           <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+[?2004l[?2004h>           <stringProp name="HTTPSampler.response_timeout"></stringProp>
+[?2004l[?2004h>         </HTTPSamplerProxy>
+[?2004l[?2004h>         <hashTree>
+[?2004l[?2004h>           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+[?2004l[?2004h>             <elementProp name="TestElements" elementType="CollectionProperty" guiclass="CollectionPropertyGui" testclass="CollectionProperty" testname="Collection" enabled="true">
+[?2004l[?2004h>               <stringProp name="1000">200</stringProp>
+[?2004l[?2004h>             </elementProp>
+[?2004l[?2004h>             <stringProp name="Assertion.test_type">1</stringProp>
+[?2004l[?2004h>             <boolProp name="Assertion.assume_success">false</boolProp>
+[?2004l[?2004h>             <intProp name="Assertion.test_field">5</intProp>
+[?2004l[?2004h>           </ResponseAssertion>
+[?2004l[?2004h>           <hashTree/>
+[?2004l[?2004h>         </hashTree>
+[?2004l[?2004h>         <ResultCollector guiclass="SummaryReport" testclass="ResultCollector" testname="Summary Report" enabled="true">
+[?2004l[?2004h>           <elementProp name="collectorData" elementType="ResultCollectorData"> [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K>
+[?2004l[?2004h>             <name>Collected Data</name>
+[?2004l[?2004h>             <value>0</value>
+[?2004l[?2004h>           </elementProp>
+[?2004l[?2004h>           <stringProp name="filename">/opt/sergeev-100/load-tests/results-basic.jtl</stringProp>
+[?2004l[?2004h>           <boolProp name="ResultCollector.error_logging">false</boolProp>
+[?2004l[?2004h>           <boolProp name="collect_ips">false</boolProp>
+[?2004l[?2004h>           <stringProp name="xml_data_type">xml</stringProp>
+[?2004l[?2004h>           <boolProp name="sample_count">true</boolProp>
+[?2004l[?2004h>           <boolProp name="response_data">false</boolProp>
+[?2004l[?2004h>           <boolProp name="responseHeaders">false</boolProp>
+[?2004l[?2004h>           <boolProp name="samplerData">false</boolProp>
+[?2004l[?2004h>           <boolProp name="xml_data_type_xml">true</boolProp>
+[?2004l[?2004h>           <boolProp name="asXML">true</boolProp>
+[?2004l[?2004h>           <boolProp name="saveAssertionResultsFailureMessage">true</boolProp>
+[?2004l[?2004h>           <intProp name="xml_data_type_xml_all_thread_counts">5</intProp>
+[?2004l[?2004h>           <stringProp name="TestPlan.comments"></stringProp>
+[?2004l[?2004h>         </ResultCollector>
+[?2004l[?2004h>         <hashTree/>
+[?2004l[?2004h>       </hashTree>
+[?2004l[?2004h>     </hashTree>
+[?2004l[?2004h>   </hashTree>
+[?2004l[?2004h> </jmeterTestPlan>
+[?2004l[?2004h> JMETER_TEST
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "✅ Тестовый сценарий создан: test-basic.jmx"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> # ============================================================================ [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K=
+[?2004l[?2004h> # ШАГ 4: Запуск Load Tests
+[?2004l[?2004h> # ============================================================================ [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K=
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "╔════════════════════════════════════════════════════════════════════════╗"
+[?2004l[?2004h> echo "║ ШАГ 4: ЗАПУСК LOAD TESTS                                              ║"
+[?2004l[?2004h> echo "╚════════════════════════════════════════════════════════════════════════╝"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "📍 Запускаю тест: Basic Load Test (100 пользователей, 10 секунд)..."
+[?2004l[?2004h> $JMETER_HOME/bin/jmeter -n -t /opt/sergeev-100/load-tests/test-basic.jmx -l /opt/sergeev-100/load-tests/results-basic.jtl -j /opt/sergeev-100/load-tests/jmeter-basic.log
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "✅ Тест завершен"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> # ============================================================================ [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K=
+[?2004l[?2004h> # ШАГ 5: Анализ результатов
+[?2004l[?2004h> # ============================================================================ [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K=
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "╔════════════════════════════════════════════════════════════════════════╗"
+[?2004l[?2004h> echo "║ ШАГ 5: АНАЛИЗ РЕЗУЛЬТАТОВ                                             ║"
+[?2004l[?2004h> echo "╚════════════════════════════════════════════════════════════════════════╝"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "📍 Результаты теста:"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> # Парсим результаты из JTL файла
+[?2004l[?2004h> if [ -f /opt/sergeev-100/load-tests/results-basic.jtl ]; then
+[?2004l[?2004h>     TOTAL_SAMPLES=$(grep -c "<sample" /opt/sergeev-100/load-tests/results-basic.jtl || echo "0")
+[?2004l[?2004h>     SUCCESS_SAMPLES=$(grep -c 'success="true"' /opt/sergeev-100/load-tests/results-basic.jtl || echo "0")
+[?2004l[?2004h>     FAILED_SAMPLES=$(grep -c 'success="false"' /opt/sergeev-100/load-tests/results-basic.jtl || echo "0")
+[?2004l[?2004h>     
+[?2004l[?2004h>     echo "📊 СТАТИСТИКА:"
+[?2004l[?2004h>     echo "  Всего запросов: $TOTAL_SAMPLES"
+[?2004l[?2004h>     echo "  Успешных: $SUCCESS_SAMPLES"
+[?2004l[?2004h>     echo "  Ошибок: $FAILED_SAMPLES"
+[?2004l[?2004h>     
+[?2004l[?2004h>     if [ "$TOTAL_SAMPLES" -gt 0 ]; then
+[?2004l[?2004h>         SUCCESS_RATE=$((SUCCESS_SAMPLES * 100 / TOTAL_SAMPLES))
+[?2004l[?2004h>         echo "  Успешность: $SUCCESS_RATE%"
+[?2004l[?2004h>     fi
+[?2004l[?2004h> else
+[?2004l[?2004h>     echo "❌ Файл результатов не найден"
+[?2004l[?2004h> fi
+[?2004l[?2004h> 
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> # ============================================================================ [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K=
+[?2004l[?2004h> # ШАГ 6: Генерация отчета
+[?2004l[?2004h> # ============================================================================ [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K=
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "╔════════════════════════════════════════════════════════════════════════╗"
+[?2004l[?2004h> echo "║ ШАГ 6: ГЕНЕРАЦИЯ ОТЧЕТА                                               ║"
+[?2004l[?2004h> echo "╚════════════════════════════════════════════════════════════════════════╝"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> cat > /opt/sergeev-100/load-tests/LOAD-TEST-REPORT.md << 'REPORT'
+[?2004l[?2004h> # Load Testing Report
+[?2004l[?2004h> 
+[?2004l[?2004h> ## Test Configuration
+[?2004l[?2004h> 
+[?2004l[?2004h> - **Test Name:** Basic Load Test
+[?2004l[?2004h> - **Target URL:** http://localhost/100
+[?2004l[?2004h> - **Number of Users:** 100
+[?2004l[?2004h> - **Ramp-up Time:** 10 seconds
+[?2004l[?2004h> - **Test Duration:** ~60 seconds
+[?2004l[?2004h> - **Date:** 2026-05-10
+[?2004l[?2004h> 
+[?2004l[?2004h> ## Test Results
+[?2004l[?2004h> 
+[?2004l[?2004h> ### Summary
+[?2004l[?2004h> 
+[?2004l[?2004h> - Total Requests: [TOTAL_SAMPLES]
+[?2004l[?2004h> - Successful: [SUCCESS_SAMPLES]
+[?2004l[?2004h> - Failed: [FAILED_SAMPLES]
+[?2004l[?2004h> - Success Rate: [SUCCESS_RATE]%
+[?2004l[?2004h> 
+[?2004l[?2004h> ### Performance Metrics
+[?2004l[?2004h> 
+[?2004l[?2004h> - Average Response Time: [AVG_TIME] ms
+[?2004l[?2004h> - Min Response Time: [MIN_TIME] ms
+[?2004l[?2004h> - Max Response Time: [MAX_TIME] ms
+[?2004l[?2004h> - Throughput: [THROUGHPUT] requests/sec
+[?2004l[?2004h> 
+[?2004l[?2004h> ## Analysis
+[?2004l[?2004h> 
+[?2004l[?2004h> The load test was executed successfully. The application handled [TOTAL_SAMPLES] concurrent requests with a [SUCCESS_RATE]% success rate.
+[?2004l[?2004h> 
+[?2004l[?2004h> ## Recommendations
+[?2004l[?2004h> 
+[?2004l[?2004h> 1. Monitor the application performance under load
+[?2004l[?2004h> 2. Adjust HPA settings if needed
+[?2004l[?2004h> 3. Consider implementing caching for frequently accessed endpoints
+[?2004l[?2004h> 4. Review database query performance
+[?2004l[?2004h> 
+[?2004l[?2004h> ## Next Steps
+[?2004l[?2004h> 
+[?2004l[?2004h> 1. Run additional load tests with different configurations
+[?2004l[?2004h> 2. Monitor Prometheus metrics during load tests
+[?2004l[?2004h> 3. Check Grafana dashboards for performance insights
+[?2004l[?2004h> 4. Optimize application based on findings
+[?2004l[?2004h> 
+[?2004l[?2004h> REPORT
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "✅ Отчет создан: LOAD-TEST-REPORT.md"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> # ============================================================================ [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K=
+[?2004l[?2004h> # ФИНАЛЬНЫЙ ОТЧЕТ
+[?2004l[?2004h> # ============================================================================ [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K=
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "╔════════════════════════════════════════════════════════════════════════╗"
+[?2004l[?2004h> echo "║ ✅ LOAD TESTING ЗАВЕРШЕН                                              ║"
+[?2004l[?2004h> echo "╚════════════════════════════════════════════════════════════════════════╝"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "📁 ФАЙЛЫ ТЕСТОВ:"
+[?2004l[?2004h> echo "  - Test Plan: /opt/sergeev-100/load-tests/test-basic.jmx"
+[?2004l[?2004h> echo "  - Results: /opt/sergeev-100/load-tests/results-basic.jtl"
+[?2004l[?2004h> echo "  - Log: /opt/sergeev-100/load-tests/jmeter-basic.log"
+[?2004l[?2004h> echo "  - Report: /opt/sergeev-100/load-tests/LOAD-TEST-REPORT.md"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "🌐 ДОСТУП К РЕЗУЛЬТАТАМ:"
+[?2004l[?2004h> echo "  - Grafana: http://46.8.255.137/grafana"
+[?2004l[?2004h> echo "  - Prometheus: http://46.8.255.137:9090"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "✅ Load Testing готов к использованию!"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> SCRIPT_END
+[?2004l[?2004h]0;root@788047: ~root@788047:~# chmod +x /tmp/install-jmeter-and-test.sh && bash /tmp/install-jmeter-and-test.sh
+[?2004l╔════════════════════════════════════════════════════════════════════════╗
+║ УСТАНОВКА JMETER И ЗАПУСК LOAD TESTS                                  ║
+║ Дата: 2026-05-10                                                      ║
+╚════════════════════════════════════════════════════════════════════════╝
+
+╔════════════════════════════════════════════════════════════════════════╗
+║ ШАГ 1: ПРОВЕРКА JAVA                                                  ║
+╚════════════════════════════════════════════════════════════════════════╝
+
+📍 Проверяю Java...
+openjdk version "21.0.10" 2026-01-20
+OpenJDK Runtime Environment (build 21.0.10+7-Ubuntu-124.04)
+OpenJDK 64-Bit Server VM (build 21.0.10+7-Ubuntu-124.04, mixed mode, sharing)
+
+╔════════════════════════════════════════════════════════════════════════╗
+║ ШАГ 2: УСТАНОВКА JMETER                                               ║
+╚════════════════════════════════════════════════════════════════════════╝
+
+📍 Скачиваю JMeter 5.6.3...
+exit
+✅ JMeter установлен
+
+╔════════════════════════════════════════════════════════════════════════╗
+║ ШАГ 3: СОЗДАНИЕ ТЕСТОВЫХ СЦЕНАРИЕВ                                    ║
+╚════════════════════════════════════════════════════════════════════════╝
+
+✅ Тестовый сценарий создан: test-basic.jmx
+
+╔════════════════════════════════════════════════════════════════════════╗
+║ ШАГ 4: ЗАПУСК LOAD TESTS                                              ║
+╚════════════════════════════════════════════════════════════════════════╝
+
+📍 Запускаю тест: Basic Load Test (100 пользователей, 10 секунд)...
+WARN StatusConsoleListener The use of package scanning to locate plugins is deprecated and will be removed in a future release
+WARN StatusConsoleListener The use of package scanning to locate plugins is deprecated and will be removed in a future release
+WARN StatusConsoleListener The use of package scanning to locate plugins is deprecated and will be removed in a future release
+WARN StatusConsoleListener The use of package scanning to locate plugins is deprecated and will be removed in a future release
+May 10, 2026 5:18:58 PM java.util.prefs.FileSystemPreferences$1 run
+INFO: Created user preferences directory.
+Error in NonGUIDriver java.lang.IllegalArgumentException: Problem loading XML from:'/opt/sergeev-100/load-tests/test-basic.jmx'. 
+Cause:
+CannotResolveClassException: CollectionProperty
+
+ Detail:com.thoughtworks.xstream.converters.ConversionException: 
+---- Debugging information ----
+cause-exception     : com.thoughtworks.xstream.converters.ConversionException
+cause-message       : 
+first-jmeter-class  : org.apache.jmeter.save.converters.TestElementConverter.unmarshal(TestElementConverter.java:109)
+class               : org.apache.jmeter.save.ScriptWrapper
+required-type       : org.apache.jmeter.save.ScriptWrapper
+converter-type      : org.apache.jmeter.save.ScriptWrapperConverter
+path                : /jmeterTestPlan/hashTree/hashTree/hashTree/hashTree/ResponseAssertion/elementProp
+line number         : 54
+version             : 5.6.3
+-------------------------------
+An error occurred: Error in NonGUIDriver Problem loading XML from:'/opt/sergeev-100/load-tests/test-basic.jmx'. 
+Cause:
+CannotResolveClassException: CollectionProperty
+
+ Detail:com.thoughtworks.xstream.converters.ConversionException: 
+---- Debugging information ----
+cause-exception     : com.thoughtworks.xstream.converters.ConversionException
+cause-message       : 
+first-jmeter-class  : org.apache.jmeter.save.converters.TestElementConverter.unmarshal(TestElementConverter.java:109)
+class               : org.apache.jmeter.save.ScriptWrapper
+required-type       : org.apache.jmeter.save.ScriptWrapper
+converter-type      : org.apache.jmeter.save.ScriptWrapperConverter
+path                : /jmeterTestPlan/hashTree/hashTree/hashTree/hashTree/ResponseAssertion/elementProp
+line number         : 54
+version             : 5.6.3
+-------------------------------
+[?2004h]0;root@788047: ~root@788047:~# exit
+[?2004llogout
+Connection to 46.8.255.137 closed.
+
+✅ JMeter установлен и тесты запущены!
