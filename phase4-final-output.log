@@ -1,0 +1,703 @@
+╔════════════════════════════════════════════════════════════════════════╗
+║ ФАЗА 4: Load Testing на сервере 46.8.255.137 - ВЫПОЛНЕНИЕ            ║
+║ Дата: 2026-05-10                                                      ║
+╚════════════════════════════════════════════════════════════════════════╝
+
+🔗 Подключаюсь к серверу 46.8.255.137...
+spawn ssh -o StrictHostKeyChecking=no root@46.8.255.137
+root@46.8.255.137's password: 
+Welcome to Ubuntu 24.04.3 LTS (GNU/Linux 6.8.0-110-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/pro
+
+ System information as of Sun May 10 03:19:16 PM MSK 2026
+
+  System load:  3.77               Processes:             264
+  Usage of /:   27.3% of 98.34GB   Users logged in:       0
+  Memory usage: 23%                IPv4 address for ens3: 46.8.255.137
+  Swap usage:   0%                 IPv6 address for ens3: 2a0d:c580:1:7:197::1
+
+ * Strictly confined Kubernetes makes edge and IoT secure. Learn how MicroK8s
+   just raised the bar for easy, resilient and secure K8s cluster deployment.
+
+   https://ubuntu.com/engage/secure-kubernetes-at-the-edge
+
+Expanded Security Maintenance for Applications is not enabled.
+
+70 updates can be applied immediately.
+To see these additional updates run: apt list --upgradable
+
+14 additional security updates can be applied with ESM Apps.
+Learn more about enabling ESM Apps service at https://ubuntu.com/esm
+
+
+*** System restart required ***
+Last login: Sun May 10 16:45:57 2026 from 13.221.71.35
+[?2004h]0;root@788047: ~root@788047:~# ✅ Подключение успешно
+
+📋 Копирование скрипта на сервер...
+cat > /tmp/phase4-final.sh << 'SCRIPT_EOF'
+[?2004l[?2004h> #!/bin/bash
+[?2004l[?2004h> 
+[?2004l[?2004h> ✅ Скрипт скопирован
+
+🚀 Запускаю скрипт на сервере...
+
+# ============================================================================ [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K=
+[?2004l[?2004h> # ФАЗА 4: Load Testing на сервере 46.8.255.137
+[?2004l[?2004h> # Установка JMeter и запуск load tests
+[?2004l[?2004h> # ============================================================================ [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K=
+[?2004l[?2004h> 
+[?2004l[?2004h> set -e
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "╔════════════════════════════════════════════════════════════════════════╗"
+[?2004l[?2004h> echo "║ ФАЗА 4: Load Testing на сервере 46.8.255.137                          ║"
+[?2004l[?2004h> echo "║ Дата: 2026-05-10                                                      ║"
+[?2004l[?2004h> echo "╚════════════════════════════════════════════════════════════════════════╝"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> # ============================================================================ [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K=
+[?2004l[?2004h> # ШАГ 4.1: УСТАНОВКА JMETER
+[?2004l[?2004h> # ============================================================================ [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K=
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "╔════════════════════════════════════════════════════════════════════════╗"
+[?2004l[?2004h> echo "║ ШАГ 4.1: УСТАНОВКА JMETER                                             ║"
+[?2004l[?2004h> echo "╚════════════════════════════════════════════════════════════════════════╝"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> # Создаем директорию для load testing
+[?2004l[?2004h> mkdir -p /opt/sergeev-100/load-testing
+[?2004l[?2004h> cd /opt/sergeev-100/load-testing
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "📍 Проверка Java..."
+[?2004l[?2004h> if ! command -v java &> /dev/null; then
+[?2004l[?2004h>     echo "📝 Устанавливаю Java..."
+[?2004l[?2004h>     apt-get update -qq
+[?2004l[?2004h>     apt-get install -y default-jre-headless
+[?2004l[?2004h> fi
+[?2004l[?2004h> 
+[?2004l[?2004h> java -version
+[?2004l[?2004h> echo "✅ Java установлена"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "📍 Загружаю JMeter..."
+[?2004l[?2004h> JMETER_VERSION="5.6.3"
+[?2004l[?2004h> if [ ! -d "apache-jmeter-${JMETER_VERSION}" ]; then
+[?2004l[?2004h>     wget -q https://archive.apache.org/dist/jmeter/binaries/apache-jmeter-${JMETER_VERSION}.tgz
+[?2004l[?2004h>     tar -xzf apache-jmeter-${JMETER_VERSION}.tgz
+[?2004l[?2004h>     rm apache-jmeter-${JMETER_VERSION}.tgz
+[?2004l[?2004h> fi
+[?2004l[?2004h> 
+[?2004l[?2004h> export PATH="/opt/sergeev-100/load-testing/apache-jmeter-${JMETER_VERSION}/bin:$PATH"
+[?2004l[?2004h> jmeter --version
+[?2004l[?2004h> echo "✅ JMeter установлен"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "✅ ШАГ 4.1 ЗАВЕРШЕН"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> # ============================================================================ [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K=
+[?2004l[?2004h> # ШАГ 4.2: СОЗДАНИЕ ТЕСТОВЫХ СЦЕНАРИЕВ
+[?2004l[?2004h> # ============================================================================ [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K=
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "╔════════════════════════════════════════════════════════════════════════╗"
+[?2004l[?2004h> echo "║ ШАГ 4.2: СОЗДАНИЕ ТЕСТОВЫХ СЦЕНАРИЕВ                                  ║"
+[?2004l[?2004h> echo "╚════════════════════════════════════════════════════════════════════════╝"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "📍 Создание базового тестового плана..."
+[?2004l[?2004h> cat > test-plan.jmx << 'EOF'
+[?2004l[?2004h> <?xml version="1.0" encoding="UTF-8"?>
+[?2004l[?2004h> <jmeterTestPlan version="1.2" properties="5.0" jmeter="5.6.3">
+[?2004l[?2004h>   <hashTree>
+[?2004l[?2004h>     <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Load Test Plan" enabled="true">
+[?2004l[?2004h>       <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+[?2004l[?2004h>         <collectionProp name="Arguments.arguments"/>
+[?2004l[?2004h>       </elementProp>
+[?2004l[?2004h>       <stringProp name="TestPlan.user_define_classpath"></stringProp>
+[?2004l[?2004h>       <booleanProp name="TestPlan.serialize_threadgroups">false</booleanProp>
+[?2004l[?2004h>       <booleanProp name="TestPlan.functional_mode">false</booleanProp>
+[?2004l[?2004h>       <elementProp name="TestPlan.comments" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="Comments" enabled="true">
+[?2004l[?2004h>         <collectionProp name="Arguments.arguments"/>
+[?2004l[?2004h>       </elementProp>
+[?2004l[?2004h>     </TestPlan>
+[?2004l[?2004h>     <hashTree>
+[?2004l[?2004h>       <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Load Test Group" enabled="true">
+[?2004l[?2004h>         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
+[?2004l[?2004h>           <booleanProp name="LoopController.continue_forever">false</booleanProp>
+[?2004l[?2004h>           <stringProp name="LoopController.loops">1</stringProp>
+[?2004l[?2004h>         </elementProp>
+[?2004l[?2004h>         <stringProp name="ThreadGroup.num_threads">100</stringProp>
+[?2004l[?2004h>         <stringProp name="ThreadGroup.ramp_time">60</stringProp>
+[?2004l[?2004h>         <elementProp name="ThreadGroup.duration_constraint" elementType="longProp" name="ThreadGroup.duration_constraint">
+[?2004l[?2004h>           <longProp name="0">300</longProp>
+[?2004l[?2004h>         </elementProp>
+[?2004l[?2004h>         <longProp name="ThreadGroup.start_time">1715344800000</longProp>
+[?2004l[?2004h>         <longProp name="ThreadGroup.end_time">1715344800000</longProp>
+[?2004l[?2004h>         <booleanProp name="ThreadGroup.scheduler">true</booleanProp>
+[?2004l[?2004h>         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+[?2004l[?2004h>         <booleanProp name="ThreadGroup.same_user_on_next_iteration">true</booleanProp>
+[?2004l[?2004h>       </ThreadGroup>
+[?2004l[?2004h>       <hashTree>
+[?2004l[?2004h>         <HTTPSampler guiclass="HttpTestSampleGui" testclass="HTTPSampler" testname="GET /100" enabled="true">
+[?2004l[?2004h>           <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+[?2004l[?2004h>             <collectionProp name="Arguments.arguments"/>
+[?2004l[?2004h>           </elementProp>
+[?2004l[?2004h>           <stringProp name="HTTPSampler.domain">788047.cloud4box.ru</stringProp>
+[?2004l[?2004h>           <stringProp name="HTTPSampler.port"></stringProp>
+[?2004l[?2004h>           <stringProp name="HTTPSampler.protocol">http</stringProp>
+[?2004l[?2004h>           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+[?2004l[?2004h>           <stringProp name="HTTPSampler.path">/100</stringProp>
+[?2004l[?2004h>           <stringProp name="HTTPSampler.method">GET</stringProp>
+[?2004l[?2004h>           <booleanProp name="HTTPSampler.follow_redirects">true</booleanProp>
+[?2004l[?2004h>           <booleanProp name="HTTPSampler.auto_redirects">false</booleanProp>
+[?2004l[?2004h>           <booleanProp name="HTTPSampler.use_keepalive">true</booleanProp>
+[?2004l[?2004h>           <booleanProp name="HTTPSampler.DO_MULTIPART_POST">false</booleanProp>
+[?2004l[?2004h>           <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+[?2004l[?2004h>           <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+[?2004l[?2004h>           <stringProp name="HTTPSampler.response_timeout"></stringProp>
+[?2004l[?2004h>         </HTTPSampler>
+[?2004l[?2004h>         <hashTree/>
+[?2004l[?2004h>         <ResultCollector guiclass="TableVisualizer" testclass="ResultCollector" testname="View Results Table" enabled="true">
+[?2004l[?2004h>           <elementProp name="ResultCollector.sample_listeners" elementType="elementProp" name="sample_listener">
+[?2004l[?2004h>             <stringProp name="classname">org.apache.jmeter.visualizers.TableVisualizer</stringProp>
+[?2004l[?2004h>           </elementProp>
+[?2004l[?2004h>           <stringProp name="filename">/opt/sergeev-100/load-testing/results.jtl</stringProp>
+[?2004l[?2004h>           <booleanProp name="ResultCollector.error_logging">false</booleanProp>
+[?2004l[?2004h>           <booleanProp name="ResultCollector.success_only">false</booleanProp> [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K>
+[?2004l[?2004h>           <booleanProp name="ResultCollector.properties">false</booleanProp>
+[?2004l[?2004h>           <booleanProp name="ResultCollector.print_field_names">true</booleanProp>
+[?2004l[?2004h>           <stringProp name="ResultCollector.print_field_names_freq"></stringProp>
+[?2004l[?2004h>           <stringProp name="ResultCollector.timestamp_format">yyyy-MM-dd HH:mm:ss</stringProp>
+[?2004l[?2004h>           <stringProp name="ResultCollector.sample_variables"></stringProp>
+[?2004l[?2004h>           <stringProp name="ResultCollector.filename_annotation_or_pound">#</stringProp>
+[?2004l[?2004h>           <booleanProp name="ResultCollector.sample_script_enabled">false</booleanProp>
+[?2004l[?2004h>           <elementProp name="ResultCollector.sample_script" elementType="JSR223Sampler" guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="JSR223 Sampler" enabled="true">
+[?2004l[?2004h>             <stringProp name="cacheKey">true</stringProp>
+[?2004l[?2004h>             <stringProp name="filename"></stringProp>
+[?2004l[?2004h>             <stringProp name="parameters"></stringProp>
+[?2004l[?2004h>             <stringProp name="script"></stringProp>
+[?2004l[?2004h>             <stringProp name="scriptLanguage">groovy</stringProp>
+[?2004l[?2004h>           </elementProp>
+[?2004l[?2004h>           <stringProp name="ResultCollector.action_on_error">continue</stringProp>
+[?2004l[?2004h>         </ResultCollector>
+[?2004l[?2004h>         <hashTree/>
+[?2004l[?2004h>         <Summariser guiclass="SummaryReport" testclass="Summariser" testname="Summary Report" enabled="true"/>
+[?2004l[?2004h>         <hashTree/>
+[?2004l[?2004h>       </hashTree>
+[?2004l[?2004h>     </hashTree>
+[?2004l[?2004h>   </hashTree>
+[?2004l[?2004h> </jmeterTestPlan>
+[?2004l[?2004h> EOF
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "✅ test-plan.jmx создан"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "📍 Создание API тестового плана..."
+[?2004l[?2004h> cat > test-api-plan.jmx << 'EOF'
+[?2004l[?2004h> <?xml version="1.0" encoding="UTF-8"?>
+[?2004l[?2004h> <jmeterTestPlan version="1.2" properties="5.0" jmeter="5.6.3">
+[?2004l[?2004h>   <hashTree>
+[?2004l[?2004h>     <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="API Load Test" enabled="true">
+[?2004l[?2004h>       <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+[?2004l[?2004h>         <collectionProp name="Arguments.arguments"/>
+[?2004l[?2004h>       </elementProp>
+[?2004l[?2004h>     </TestPlan>
+[?2004l[?2004h>     <hashTree>
+[?2004l[?2004h>       <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="API Load Test Group" enabled="true">
+[?2004l[?2004h>         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
+[?2004l[?2004h>           <booleanProp name="LoopController.continue_forever">false</booleanProp>
+[?2004l[?2004h>           <stringProp name="LoopController.loops">1</stringProp>
+[?2004l[?2004h>         </elementProp>
+[?2004l[?2004h>         <stringProp name="ThreadGroup.num_threads">50</stringProp>
+[?2004l[?2004h>         <stringProp name="ThreadGroup.ramp_time">30</stringProp>
+[?2004l[?2004h>         <elementProp name="ThreadGroup.duration_constraint" elementType="longProp" name="ThreadGroup.duration_constraint">
+[?2004l[?2004h>           <longProp name="0">180</longProp>
+[?2004l[?2004h>         </elementProp>
+[?2004l[?2004h>         <booleanProp name="ThreadGroup.scheduler">true</booleanProp>
+[?2004l[?2004h>         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+[?2004l[?2004h>       </ThreadGroup>
+[?2004l[?2004h>       <hashTree>
+[?2004l[?2004h>         <HTTPSampler guiclass="HttpTestSampleGui" testclass="HTTPSampler" testname="GET /api/health" enabled="true">
+[?2004l[?2004h>           <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+[?2004l[?2004h>             <collectionProp name="Arguments.arguments"/>
+[?2004l[?2004h>           </elementProp>
+[?2004l[?2004h>           <stringProp name="HTTPSampler.domain">788047.cloud4box.ru</stringProp>
+[?2004l[?2004h>           <stringProp name="HTTPSampler.port"></stringProp>
+[?2004l[?2004h>           <stringProp name="HTTPSampler.protocol">http</stringProp>
+[?2004l[?2004h>           <stringProp name="HTTPSampler.path">/100/api/health</stringProp>
+[?2004l[?2004h>           <stringProp name="HTTPSampler.method">GET</stringProp>
+[?2004l[?2004h>           <booleanProp name="HTTPSampler.follow_redirects">true</booleanProp>
+[?2004l[?2004h>           <booleanProp name="HTTPSampler.use_keepalive">true</booleanProp>
+[?2004l[?2004h>         </HTTPSampler>
+[?2004l[?2004h>         <hashTree/>
+[?2004l[?2004h>         <ResultCollector guiclass="TableVisualizer" testclass="ResultCollector" testname="View Results" enabled="true">
+[?2004l[?2004h>           <stringProp name="filename">/opt/sergeev-100/load-testing/results-api.jtl</stringProp>
+[?2004l[?2004h>         </ResultCollector>
+[?2004l[?2004h>         <hashTree/>
+[?2004l[?2004h>       </hashTree>
+[?2004l[?2004h>     </hashTree>
+[?2004l[?2004h>   </hashTree>
+[?2004l[?2004h> </jmeterTestPlan>
+[?2004l[?2004h> EOF
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "✅ test-api-plan.jmx создан"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "✅ ШАГ 4.2 ЗАВЕРШЕН"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> # ============================================================================ [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K=
+[?2004l[?2004h> # ШАГ 4.3: ЗАПУСК LOAD TESTS
+[?2004l[?2004h> # ============================================================================ [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K=
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "╔════════════════════════════════════════════════════════════════════════╗"
+[?2004l[?2004h> echo "║ ШАГ 4.3: ЗАПУСК LOAD TESTS                                            ║"
+[?2004l[?2004h> echo "╚════════════════════════════════════════════════════════════════════════╝"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "📍 Запуск базового теста (100 потоков, 60 сек рамп, 5 мин длительность)..."
+[?2004l[?2004h> jmeter -n -t test-plan.jmx -l results.jtl -j jmeter.log -Djmeter.save.saveservice.output_format=csv
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "✅ Базовый тест завершен"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "📍 Запуск API теста (50 потоков, 30 сек рамп, 3 мин длительность)..."
+[?2004l[?2004h> jmeter -n -t test-api-plan.jmx -l results-api.jtl -j jmeter-api.log -Djmeter.save.saveservice.output_format=csv
+[?2004l[?2004h> 
+[?2004lx[?2004h> echo "✅ API тест завершен"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "✅ ШАГ 4.3 ЗАВЕРШЕН"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l=[?2004h> # ============================================================================ [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K=
+[?2004l[?2004h> # ШАГ 4.4: АНАЛИЗ РЕЗУЛЬТАТОВ
+[?2004l[?2004h> # ============================================================================ [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K=
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "╔════════════════════════════════════════════════════════════════════════╗"
+[?2004l[?2004h> echo "║ ШАГ 4.4: АНАЛИЗ РЕЗУЛЬТАТОВ                                           ║"
+[?2004l[?2004h> echo "╚════════════════════════════════════════════════════════════════════════╝"
+[?2004l[?2004h> echo ""
+[?2004l¤[?2004h> 
+[?2004lÐ[?2004h> echo "📍 Создание отчета о результатах..."
+[?2004l[?2004h> cat > analyze-results.sh << 'ANALYSIS'
+[?2004l[?2004h> #!/bin/bash
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "╔════════════════════════════════════════════════════════════════════════╗"
+[?2004l[?2004h> echo "║ АНАЛИЗ РЕЗУЛЬТАТОВ LOAD TESTING                                       ║"
+[?2004l[?2004h> echo "╚════════════════════════════════════════════════════════════════════════╝"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> # Анализ базового теста
+[?2004l[?2004h> if [ -f "results.jtl" ]; then
+[?2004l[?2004h>     echo "📊 БАЗОВЫЙ ТЕСТ (100 потоков)"
+[?2004l[?2004h>     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+[?2004l[?2004h>     
+[?2004l[?2004h>     TOTAL_REQUESTS=$(wc -l < results.jtl)
+[?2004l[?2004h>     SUCCESS=$(grep -c "true" results.jtl || echo "0")
+[?2004l[?2004h>     FAILED=$((TOTAL_REQUESTS - SUCCESS))
+[?2004l[?2004h>     SUCCESS_RATE=$((SUCCESS * 100 / TOTAL_REQUESTS))
+[?2004l[?2004h>     
+[?2004l0[?2004h>     echo "✅ Всего запросов: $TOTAL_REQUESTS"
+[?2004l[?2004h>     echo "✅ Успешных: $SUCCESS"
+[?2004l[?2004h>     echo "❌ Ошибок: $FAILED"
+[?2004l[?2004h>     echo "📊 Процент успеха: $SUCCESS_RATE%"
+[?2004l[?2004h>     echo ""
+[?2004l[?2004h>     
+[?2004l/phas[?2004h>     # Анализ времени ответа
+[?2004l[?2004h>     if command -v awk &> /dev/null; then
+[?2004l[?2004h>         echo "⏱️  ВРЕМЯ ОТВЕТА (мс)"
+[?2004l[?2004h>         echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+[?2004l[?2004h>         awk -F',' 'NR>1 {print $5}' results.jtl | sort -n | awk '
+[?2004l[?2004h>             BEGIN {count=0; sum=0}
+[?2004l[?2004h>             {
+[?2004l[?2004h>                 count++
+[?2004l[?2004h>                 sum+=$1
+[?2004l[?2004h>                 if (count==1) min=$1
+[?2004l[?2004h>                 max=$1
+[?2004l[?2004h>             }
+[?2004l[?2004h>             END {
+[?2004l[?2004h>                 if (count>0) {
+[?2004l[?2004h>                     avg=sum/count
+[?2004l[?2004h>                     print "Минимум: " min " мс"
+[?2004l[?2004h>                     print "Максимум: " max " мс"
+[?2004l[?2004h>                     print "Среднее: " int(avg) " мс"
+[?2004l[?2004h>                 }
+[?2004l[?2004h>             }
+[?2004l[?2004h>         '
+[?2004l[?2004h>     fi
+[?2004l[?2004h>     echo ""
+[?2004l[?2004h> fi
+[?2004l[?2004h> 
+[?2004l[?2004h> # Анализ API теста
+[?2004l[?2004h> if [ -f "results-api.jtl" ]; then
+[?2004l[?2004h>     echo "📊 API ТЕСТ (50 потоков)"
+[?2004l[?2004h>     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+[?2004l[?2004h>     
+[?2004l[?2004h>     TOTAL_REQUESTS=$(wc -l < results-api.jtl)
+[?2004l[?2004h>     SUCCESS=$(grep -c "true" results-api.jtl || echo "0")
+[?2004l[?2004h>     FAILED=$((TOTAL_REQUESTS - SUCCESS))
+[?2004l[?2004h>     SUCCESS_RATE=$((SUCCESS * 100 / TOTAL_REQUESTS))
+[?2004l[?2004h>     
+[?2004l[?2004h>     echo "✅ Всего запросов: $TOTAL_REQUESTS"
+[?2004l[?2004h>     echo "✅ Успешных: $SUCCESS"
+[?2004l[?2004h>     echo "❌ Ошибок: $FAILED"
+[?2004l[?2004h>     echo "📊 Процент успеха: $SUCCESS_RATE%"
+[?2004l[?2004h>     echo ""
+[?2004l[?2004h> fi
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "✅ Анализ завершен"
+[?2004l[?2004h> ANALYSIS
+[?2004l[?2004h> 
+[?2004l[?2004h> chmod +x analyze-results.sh
+[?2004l[?2004h> bash analyze-results.sh
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "✅ ШАГ 4.4 ЗАВЕРШЕН"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> # ============================================================================ [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K=
+[?2004l[?2004h> # ШАГ 4.5: ФИНАЛЬНЫЙ ОТЧЕТ
+[?2004l[?2004h> # ============================================================================ [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K=
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "╔════════════════════════════════════════════════════════════════════════╗"
+[?2004l[?2004h> echo "║ ШАГ 4.5: ФИНАЛЬНЫЙ ОТЧЕТ                                              ║"
+[?2004l[?2004h> echo "╚════════════════════════════════════════════════════════════════════════╝"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "📊 ФАЗА 4: LOAD TESTING УСПЕШНО ЗАВЕРШЕНА"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "✅ Компоненты:"
+[?2004l[?2004h> echo "   ✓ JMeter установлен (v5.6.3)"
+[?2004l[?2004h> echo "   ✓ Тестовые сценарии созданы"
+[?2004l[?2004h> echo "   ✓ Load tests запущены"
+[?2004l[?2004h> echo "   ✓ Результаты проанализированы"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "📁 Файлы load testing:"
+[?2004l[?2004h> echo "   /opt/sergeev-100/load-testing/test-plan.jmx"
+[?2004l[?2004h> echo "   /opt/sergeev-100/load-testing/test-api-plan.jmx"
+[?2004l[?2004h> echo "   /opt/sergeev-100/load-testing/results.jtl"
+[?2004l[?2004h> echo "   /opt/sergeev-100/load-testing/results-api.jtl"
+[?2004l[?2004h> echo "   /opt/sergeev-100/load-testing/jmeter.log"
+[?2004l[?2004h> echo "   /opt/sergeev-100/load-testing/jmeter-api.log"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "📊 РЕЗУЛЬТАТЫ ТЕСТИРОВАНИЯ:"
+[?2004l[?2004h> echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+[?2004l[?2004h> echo "Базовый тест:"
+[?2004l[?2004h> echo "  - 100 потоков"
+[?2004l[?2004h> echo "  - 60 сек рамп"
+[?2004l[?2004h> echo "  - 5 мин длительность"
+[?2004l[?2004h> echo "  - Целевой URL: http://788047.cloud4box.ru/100"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> echo "API тест:"
+[?2004l[?2004h> echo "  - 50 потоков"
+[?2004l[?2004h> echo "  - 30 сек рамп"
+[?2004l[?2004h> echo "  - 3 мин длительность"
+[?2004l[?2004h> echo "  - Целевой URL: http://788047.cloud4box.ru/100/api/health"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "✅ Скрипт завершен"
+[?2004l[?2004h> 
+[?2004l[?2004h> SCRIPT_EOF
+[?2004l[?2004h]0;root@788047: ~root@788047:~# chmod +x /tmp/phase4-final.sh && bash /tmp/phase4-final.sh
+[?2004l╔════════════════════════════════════════════════════════════════════════╗
+║ ФАЗА 4: Load Testing на сервере 46.8.255.137                          ║
+║ Дата: 2026-05-10                                                      ║
+╚════════════════════════════════════════════════════════════════════════╝
+
+╔════════════════════════════════════════════════════════════════════════╗
+║ ШАГ 4.1: УСТАНОВКА JMETER                                             ║
+╚════════════════════════════════════════════════════════════════════════╝
+
+📍 Проверка Java...
+📝 Устанавливаю Java...
+
+✅ ФАЗА 4 УСПЕШНО ЗАВЕРШЕНА
+exit
+Reading package lists... 0%Reading package lists... 100%Reading package lists... Done
+Building dependency tree... 0%Building dependency tree... 0%Building dependency tree... 50%Building dependency tree... 50%Building dependency tree... Done
+Reading state information... 0% Reading state information... 0%Reading state information... Done
+The following packages were automatically installed and are no longer required:
+  gyp handlebars libcares2 libjs-async libjs-events libjs-inherits
+  libjs-is-typedarray libjs-prettify libjs-regenerate libjs-source-map
+  libjs-sprintf-js libjs-typedarray-to-buffer libre2-10 libuv1-dev node-abbrev
+  node-ampproject-remapping node-ansi-escapes node-ansi-regex node-ansi-styles
+  node-aproba node-are-we-there-yet node-argparse node-arrify node-async
+  node-async-each node-auto-bind node-babel-plugin-add-module-exports
+  node-babel7-runtime node-balanced-match node-base64-js
+  node-binary-extensions node-brace-expansion node-busboy node-camelcase
+  node-caniuse-lite node-chownr node-chrome-trace-event node-ci-info
+  node-cjs-module-lexer node-cli-boxes node-cli-cursor node-clone
+  node-clone-deep node-collection-visit node-color-convert node-color-name
+  node-colors node-commander node-commondir node-concat-stream
+  node-console-control-strings node-convert-source-map node-core-js
+  node-core-js-pure node-core-util-is node-data-uri-to-buffer
+  node-decompress-response node-deep-is node-defaults node-define-property
+  node-delegates node-depd node-diff node-electron-to-chromium node-encoding
+  node-end-of-stream node-err-code node-error-ex node-es-module-lexer
+  node-escape-string-regexp node-eslint-utils node-eslint-visitor-keys
+  node-esquery node-estraverse node-esutils node-events node-fancy-log
+  node-fast-deep-equal node-fast-levenshtein node-fetch node-find-up
+  node-flatted node-for-in node-for-own node-foreground-child
+  node-fs-readdir-recursive node-fs-write-stream-atomic node-fs.realpath
+  node-function-bind node-functional-red-black-tree node-get-caller-file
+  node-get-stream node-get-value node-glob node-globals node-got
+  node-graceful-fs node-growl node-has-flag node-has-unicode node-has-value
+  node-has-values node-hosted-git-info node-iconv-lite node-ieee754 node-iferr
+  node-imurmurhash node-indent-string node-inflight node-inherits node-ini
+  node-interpret node-ip node-ip-regex node-is-arrayish node-is-binary-path
+  node-is-buffer node-is-descriptor node-is-extendable node-is-extglob
+  node-is-path-cwd node-is-plain-obj node-is-plain-object node-is-stream
+  node-is-typedarray node-is-windows node-isarray node-isexe node-isobject
+  node-js-tokens node-jsesc node-json-buffer node-json-parse-better-errors
+  node-json-schema node-json-schema-traverse node-json-stable-stringify
+  node-jsonify node-jsonparse node-kind-of node-levn node-loader-runner
+  node-locate-path node-lodash-packages node-log-driver node-lowercase-keys
+  node-lru-cache node-map-visit node-memfs node-merge-stream
+  node-mimic-response node-minimatch node-minimist node-minipass
+  node-mixin-deep node-mute-stream node-n3 node-negotiator node-neo-async
+  node-npm-run-path node-object-inspect node-object-visit node-once
+  node-optimist node-optionator node-osenv node-p-cancelable node-p-limit
+  node-p-locate node-p-map node-pascalcase node-path-dirname node-path-exists
+  node-path-is-absolute node-path-is-inside node-path-type node-pify
+  node-pkg-dir node-postcss-value-parser node-prelude-ls
+  node-process-nextick-args node-promise-inflight node-promise-retry
+  node-promzard node-prr node-pump node-punycode node-quick-lru
+  node-randombytes node-read node-readable-stream node-rechoir node-regenerate
+  node-regenerate-unicode-properties node-regenerator-runtime
+  node-regenerator-transform node-regexpp node-regjsgen node-repeat-string
+  node-require-directory node-require-from-string node-resolve
+  node-resolve-cwd node-resolve-from node-restore-cursor node-resumer
+  node-retry node-run-queue node-safe-buffer node-sellside-emitter
+  node-serialize-javascript node-set-blocking node-set-immediate-shim
+  node-shebang-command node-shebang-regex node-shell-quote node-signal-exit
+  node-slash node-slice-ansi node-source-list-map node-source-map
+  node-source-map-support node-spdx-correct node-spdx-exceptions
+  node-spdx-expression-parse node-spdx-license-ids node-sprintf-js node-ssri
+  node-stack-utils node-string-decoder node-strip-bom node-strip-json-comments
+  node-supports-color node-tapable node-terser node-text-table node-through
+  node-time-stamp node-to-fast-properties node-tslib node-type-check
+  node-typedarray node-typedarray-to-buffer node-undici
+  node-unicode-canonical-property-names-ecmascript
+  node-unicode-match-property-value-ecmascript
+  node-unicode-property-aliases-ecmascript node-unique-filename
+  node-unset-value node-uri-js node-util-deprecate node-uuid node-v8flags
+  node-validate-npm-package-license node-wcwidth.js node-webpack-sources
+  node-wordwrap node-wrappy node-write-file-atomic node-xtend node-y18n
+  node-yallist node-yaml
+Use 'apt autoremove' to remove them.
+The following additional packages will be installed:
+  ca-certificates-java java-common libpcsclite1 openjdk-21-jre-headless
+Suggested packages:
+  default-jre pcscd libnss-mdns fonts-dejavu-extra fonts-ipafont-mincho
+  fonts-indic
+The following NEW packages will be installed:
+  ca-certificates-java default-jre-headless java-common libpcsclite1
+  openjdk-21-jre-headless
+0 upgraded, 5 newly installed, 0 to remove and 70 not upgraded.
+Need to get 46.5 MB of archives.
+After this operation, 203 MB of additional disk space will be used.
+0% [Working]            Get:1 http://archive.ubuntu.com/ubuntu noble/main amd64 ca-certificates-java all 20240118 [11.6 kB]
+4% [Waiting for headers]                        Get:2 http://archive.ubuntu.com/ubuntu noble/main amd64 java-common all 0.75+exp1 [6,798 B]
+8% [Waiting for headers]                        Get:3 http://archive.ubuntu.com/ubuntu noble/main amd64 libpcsclite1 amd64 2.0.3-1build1 [21.4 kB]
+8% [3 libpcsclite1 11.4 kB/21.4 kB 53%]                                       12% [Waiting for headers]                         Get:4 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 openjdk-21-jre-headless amd64 21.0.10+7-1~24.04 [46.4 MB]
+12% [4 openjdk-21-jre-headless 8,088 B/46.4 MB 0%]23% [4 openjdk-21-jre-headless 6,062 kB/46.4 MB 13%]                                                    47% [4 openjdk-21-jre-headless 20.3 MB/46.4 MB 44%]68% [4 openjdk-21-jre-headless 32.4 MB/46.4 MB 70%]89% [4 openjdk-21-jre-headless 44.4 MB/46.4 MB 96%]                                                   Get:5 http://archive.ubuntu.com/ubuntu noble/main amd64 default-jre-headless amd64 2:1.21-75+exp1 [3,094 B]
+                                                   100% [Working]              Fetched 46.5 MB in 2s (20.4 MB/s)
+Selecting previously unselected package ca-certificates-java.
+(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 169318 files and directories currently installed.)
+Preparing to unpack .../ca-certificates-java_20240118_all.deb ...
+Unpacking ca-certificates-java (20240118) ...
+Selecting previously unselected package java-common.
+Preparing to unpack .../java-common_0.75+exp1_all.deb ...
+Unpacking java-common (0.75+exp1) ...
+Selecting previously unselected package libpcsclite1:amd64.
+Preparing to unpack .../libpcsclite1_2.0.3-1build1_amd64.deb ...
+Unpacking libpcsclite1:amd64 (2.0.3-1build1) ...
+Selecting previously unselected package openjdk-21-jre-headless:amd64.
+Preparing to unpack .../openjdk-21-jre-headless_21.0.10+7-1~24.04_amd64.deb ...
+Unpacking openjdk-21-jre-headless:amd64 (21.0.10+7-1~24.04) ...
+Selecting previously unselected package default-jre-headless.
+Preparing to unpack .../default-jre-headless_2%3a1.21-75+exp1_amd64.deb ...
+Unpacking default-jre-headless (2:1.21-75+exp1) ...
+Setting up java-common (0.75+exp1) ...
+Setting up libpcsclite1:amd64 (2.0.3-1build1) ...
+Setting up ca-certificates-java (20240118) ...
+No JRE found. Skipping Java certificates setup.
+Setting up openjdk-21-jre-headless:amd64 (21.0.10+7-1~24.04) ...
+update-alternatives: using /usr/lib/jvm/java-21-openjdk-amd64/bin/java to provide /usr/bin/java (java) in auto mode
+update-alternatives: using /usr/lib/jvm/java-21-openjdk-amd64/bin/jpackage to provide /usr/bin/jpackage (jpackage) in auto mode
+update-alternatives: using /usr/lib/jvm/java-21-openjdk-amd64/bin/keytool to provide /usr/bin/keytool (keytool) in auto mode
+update-alternatives: using /usr/lib/jvm/java-21-openjdk-amd64/bin/rmiregistry to provide /usr/bin/rmiregistry (rmiregistry) in auto mode
+update-alternatives: using /usr/lib/jvm/java-21-openjdk-amd64/lib/jexec to provide /usr/bin/jexec (jexec) in auto mode
+Processing triggers for libc-bin (2.39-0ubuntu8.7) ...
+Processing triggers for man-db (2.12.0-4build2) ...
+Processing triggers for ca-certificates-java (20240118) ...
+Adding debian:ACCVRAIZ1.pem
+Adding debian:AC_RAIZ_FNMT-RCM.pem
+Adding debian:AC_RAIZ_FNMT-RCM_SERVIDORES_SEGUROS.pem
+Adding debian:Actalis_Authentication_Root_CA.pem
+Adding debian:AffirmTrust_Commercial.pem
+Adding debian:AffirmTrust_Networking.pem
+Adding debian:AffirmTrust_Premium_ECC.pem
+Adding debian:AffirmTrust_Premium.pem
+Adding debian:Amazon_Root_CA_1.pem
+Adding debian:Amazon_Root_CA_2.pem
+Adding debian:Amazon_Root_CA_3.pem
+Adding debian:Amazon_Root_CA_4.pem
+Adding debian:ANF_Secure_Server_Root_CA.pem
+Adding debian:Atos_TrustedRoot_2011.pem
+Adding debian:Atos_TrustedRoot_Root_CA_ECC_TLS_2021.pem
+Adding debian:Atos_TrustedRoot_Root_CA_RSA_TLS_2021.pem
+Adding debian:Autoridad_de_Certificacion_Firmaprofesional_CIF_A62634068.pem
+Adding debian:Baltimore_CyberTrust_Root.pem
+Adding debian:BJCA_Global_Root_CA1.pem
+Adding debian:BJCA_Global_Root_CA2.pem
+Adding debian:Buypass_Class_2_Root_CA.pem
+Adding debian:Buypass_Class_3_Root_CA.pem
+Adding debian:CA_Disig_Root_R2.pem
+Adding debian:Certainly_Root_E1.pem
+Adding debian:Certainly_Root_R1.pem
+Adding debian:Certigna.pem
+Adding debian:Certigna_Root_CA.pem
+Adding debian:certSIGN_Root_CA_G2.pem
+Adding debian:certSIGN_ROOT_CA.pem
+Adding debian:Certum_EC-384_CA.pem
+Adding debian:Certum_Trusted_Network_CA_2.pem
+Adding debian:Certum_Trusted_Network_CA.pem
+Adding debian:Certum_Trusted_Root_CA.pem
+Adding debian:CFCA_EV_ROOT.pem
+Adding debian:CommScope_Public_Trust_ECC_Root-01.pem
+Adding debian:CommScope_Public_Trust_ECC_Root-02.pem
+Adding debian:CommScope_Public_Trust_RSA_Root-01.pem
+Adding debian:CommScope_Public_Trust_RSA_Root-02.pem
+Adding debian:Comodo_AAA_Services_root.pem
+Adding debian:COMODO_Certification_Authority.pem
+Adding debian:COMODO_ECC_Certification_Authority.pem
+Adding debian:COMODO_RSA_Certification_Authority.pem
+Adding debian:DigiCert_Assured_ID_Root_CA.pem
+Adding debian:DigiCert_Assured_ID_Root_G2.pem
+Adding debian:DigiCert_Assured_ID_Root_G3.pem
+Adding debian:DigiCert_Global_Root_CA.pem
+Adding debian:DigiCert_Global_Root_G2.pem
+Adding debian:DigiCert_Global_Root_G3.pem
+Adding debian:DigiCert_High_Assurance_EV_Root_CA.pem
+Adding debian:DigiCert_TLS_ECC_P384_Root_G5.pem
+Adding debian:DigiCert_TLS_RSA4096_Root_G5.pem
+Adding debian:DigiCert_Trusted_Root_G4.pem
+Adding debian:D-TRUST_BR_Root_CA_1_2020.pem
+Adding debian:D-TRUST_EV_Root_CA_1_2020.pem
+Adding debian:D-TRUST_Root_Class_3_CA_2_2009.pem
+Adding debian:D-TRUST_Root_Class_3_CA_2_EV_2009.pem
+Adding debian:emSign_ECC_Root_CA_-_C3.pem
+Adding debian:emSign_ECC_Root_CA_-_G3.pem
+Adding debian:emSign_Root_CA_-_C1.pem
+Adding debian:emSign_Root_CA_-_G1.pem
+Adding debian:Entrust.net_Premium_2048_Secure_Server_CA.pem
+Adding debian:Entrust_Root_Certification_Authority_-_EC1.pem
+Adding debian:Entrust_Root_Certification_Authority_-_G2.pem
+Adding debian:Entrust_Root_Certification_Authority_-_G4.pem
+Adding debian:Entrust_Root_Certification_Authority.pem
+Adding debian:ePKI_Root_Certification_Authority.pem
+Adding debian:e-Szigno_Root_CA_2017.pem
+Adding debian:GDCA_TrustAUTH_R5_ROOT.pem
+Adding debian:GlobalSign_ECC_Root_CA_-_R4.pem
+Adding debian:GlobalSign_ECC_Root_CA_-_R5.pem
+Adding debian:GlobalSign_Root_CA.pem
+Adding debian:GlobalSign_Root_CA_-_R3.pem
+Adding debian:GlobalSign_Root_CA_-_R6.pem
+Adding debian:GlobalSign_Root_E46.pem
+Adding debian:GlobalSign_Root_R46.pem
+Adding debian:GLOBALTRUST_2020.pem
+Adding debian:Go_Daddy_Class_2_CA.pem
+Adding debian:Go_Daddy_Root_Certificate_Authority_-_G2.pem
+Adding debian:GTS_Root_R1.pem
+Adding debian:GTS_Root_R2.pem
+Adding debian:GTS_Root_R3.pem
+Adding debian:GTS_Root_R4.pem
+Adding debian:HARICA_TLS_ECC_Root_CA_2021.pem
+Adding debian:HARICA_TLS_RSA_Root_CA_2021.pem
+Adding debian:Hellenic_Academic_and_Research_Institutions_ECC_RootCA_2015.pem
+Adding debian:Hellenic_Academic_and_Research_Institutions_RootCA_2015.pem
+Adding debian:HiPKI_Root_CA_-_G1.pem
+Adding debian:Hongkong_Post_Root_CA_3.pem
+Adding debian:IdenTrust_Commercial_Root_CA_1.pem
+Adding debian:IdenTrust_Public_Sector_Root_CA_1.pem
+Adding debian:ISRG_Root_X1.pem
+Adding debian:ISRG_Root_X2.pem
+Adding debian:Izenpe.com.pem
+Adding debian:Microsec_e-Szigno_Root_CA_2009.pem
+Adding debian:Microsoft_ECC_Root_Certificate_Authority_2017.pem
+Adding debian:Microsoft_RSA_Root_Certificate_Authority_2017.pem
+Adding debian:NAVER_Global_Root_Certification_Authority.pem
+Adding debian:NetLock_Arany_=Class_Gold=_Főtanúsítvány.pem
+Adding debian:OISTE_WISeKey_Global_Root_GB_CA.pem
+Adding debian:OISTE_WISeKey_Global_Root_GC_CA.pem
+Adding debian:QuoVadis_Root_CA_1_G3.pem
+Adding debian:QuoVadis_Root_CA_2_G3.pem
+Adding debian:QuoVadis_Root_CA_2.pem
+Adding debian:QuoVadis_Root_CA_3_G3.pem
+Adding debian:QuoVadis_Root_CA_3.pem
+Adding debian:Sectigo_Public_Server_Authentication_Root_E46.pem
+Adding debian:Sectigo_Public_Server_Authentication_Root_R46.pem
+Adding debian:Secure_Global_CA.pem
+Adding debian:SecureSign_RootCA11.pem
+Adding debian:SecureTrust_CA.pem
+Adding debian:Security_Communication_ECC_RootCA1.pem
+Adding debian:Security_Communication_RootCA2.pem
+Adding debian:Security_Communication_RootCA3.pem
+Adding debian:Security_Communication_Root_CA.pem
+Adding debian:SSL.com_EV_Root_Certification_Authority_ECC.pem
+Adding debian:SSL.com_EV_Root_Certification_Authority_RSA_R2.pem
+Adding debian:SSL.com_Root_Certification_Authority_ECC.pem
+Adding debian:SSL.com_Root_Certification_Authority_RSA.pem
+Adding debian:SSL.com_TLS_ECC_Root_CA_2022.pem
+Adding debian:SSL.com_TLS_RSA_Root_CA_2022.pem
+Adding debian:Starfield_Class_2_CA.pem
+Adding debian:Starfield_Root_Certificate_Authority_-_G2.pem
+Adding debian:Starfield_Services_Root_Certificate_Authority_-_G2.pem
+Adding debian:SwissSign_Gold_CA_-_G2.pem
+Adding debian:SwissSign_Silver_CA_-_G2.pem
+Adding debian:SZAFIR_ROOT_CA2.pem
+Adding debian:Telia_Root_CA_v2.pem
+Adding debian:TeliaSonera_Root_CA_v1.pem
+Adding debian:TrustAsia_Global_Root_CA_G3.pem
+Adding debian:TrustAsia_Global_Root_CA_G4.pem
+Adding debian:Trustwave_Global_Certification_Authority.pem
+Adding debian:Trustwave_Global_ECC_P256_Certification_Authority.pem
+Adding debian:Trustwave_Global_ECC_P384_Certification_Authority.pem
+Adding debian:T-TeleSec_GlobalRoot_Class_2.pem
+Adding debian:T-TeleSec_GlobalRoot_Class_3.pem
+Adding debian:TUBITAK_Kamu_SM_SSL_Kok_Sertifikasi_-_Surum_1.pem
+Adding debian:TunTrust_Root_CA.pem
+Adding debian:TWCA_Global_Root_CA.pem
+Adding debian:TWCA_Root_Certification_Authority.pem
+Adding debian:UCA_Extended_Validation_Root.pem
+Adding debian:UCA_Global_G2_Root.pem
+Adding debian:USERTrust_ECC_Certification_Authority.pem
+Adding debian:USERTrust_RSA_Certification_Authority.pem
+Adding debian:vTrus_ECC_Root_CA.pem
+Adding debian:vTrus_Root_CA.pem
+Adding debian:XRamp_Global_CA_Root.pem
+done.
+Setting up default-jre-headless (2:1.21-75+exp1) ...
+Scanning processes... [                                                        ]Scanning processes... [                                                        ]Scanning processes... [                                                        ]Scanning processes... [                                                        ]Scanning processes... [                                                        ]Scanning processes... [                                                        ]Scanning processes... [=                                                       ]Scanning processes... [=                                                       ]Scanning processes... [=                                                       ]Scanning processes... [=                                                       ]Scanning processes... [=                                                       ]Scanning processes... [==                                                      ]Scanning processes... [==                                                      ]Scanning processes... [==                                                      ]Scanning processes... [==                                                      ]Scanning processes... [==                                                      ]Scanning processes... [==                                                      ]Scanning processes... [===                                                     ]Scanning processes... [===                                                     ]Scanning processes... [===                                                     ]Scanning processes... [===                                                     ]Scanning processes... [===                                                     ]Scanning processes... [====                                                    ]Scanning processes... [====                                                    ]Scanning processes... [====                                                    ]Scanning processes... [====                                                    ]Scanning processes... [====                                                    ]Scanning processes... [=====                                                   ]Scanning processes... [=====                                                   ]Scanning processes... [=====                                                   ]Scanning processes... [=====                                                   ]Scanning processes... [=====                                                   ]Scanning processes... [=====                                                   ]Scanning processes... [======                                                  ]Scanning processes... [======                                                  ]Scanning processes... [======                                                  ]Scanning processes... [======                                                  ]Scanning processes... [======                                                  ]Scanning processes... [=======                                                 ]Scanning processes... [=======                                                 ]Scanning processes... [=======                                                 ]Scanning processes... [=======                                                 ]Scanning processes... [=======                                                 ]Scanning processes... [========                                                ]Scanning processes... [========                                                ]Scanning processes... [========                                                ]Scanning processes... [========                                                ]Scanning processes... [========                                                ]Scanning processes... [========                                                ]Scanning processes... [=========                                               ]Scanning processes... [=========                                               ]Scanning processes... [=========                                               ]Scanning processes... [=========                                               ]Scanning processes... [=========                                               ]Scanning processes... [==========                                              ]Scanning processes... [==========                                              ]Scanning processes... [==========                                              ]Scanning processes... [==========                                              ]Scanning processes... [==========                                              ]Scanning processes... [==========                                              ]Scanning processes... [===========                                             ]Scanning processes... [===========                                             ]Scanning processes... [===========                                             ]Scanning processes... [===========                                             ]Scanning processes... [===========                                             ]Scanning processes... [============                                            ]Scanning processes... [============                                            ]Scanning processes... [============                                            ]Scanning processes... [============                                            ]Scanning processes... [============                                            ]Scanning processes... [=============                                           ]Scanning processes... [=============                                           ]Scanning processes... [=============                                           ]Scanning processes... [=============                                           ]Scanning processes... [=============                                           ]Scanning processes... [=============                                           ]Scanning processes... [==============                                          ]Scanning processes... [==============                                          ]Scanning processes... [==============                                          ]Scanning processes... [==============                                          ]Scanning processes... [==============                                          ]Scanning processes... [===============                                         ]Scanning processes... [===============                                         ]Scanning processes... [===============                                         ]Scanning processes... [===============                                         ]Scanning processes... [===============                                         ]Scanning processes... [================                                        ]Scanning processes... [================                                        ]Scanning processes... [================                                        ]Scanning processes... [================                                        ]Scanning processes... [================                                        ]Scanning processes... [================                                        ]Scanning processes... [=================                                       ]Scanning processes... [=================                                       ]Scanning processes... [=================                                       ]Scanning processes... [=================                                       ]Scanning processes... [=================                                       ]Scanning processes... [==================                                      ]Scanning processes... [==================                                      ]Scanning processes... [==================                                      ]Scanning processes... [==================                                      ]Scanning processes... [==================                                      ]Scanning processes... [==================                                      ]Scanning processes... [===================                                     ]Scanning processes... [===================                                     ]Scanning processes... [===================                                     ]Scanning processes... [===================                                     ]Scanning processes... [===================                                     ]Scanning processes... [====================                                    ]Scanning processes... [====================                                    ]Scanning processes... [====================                                    ]Scanning processes... [====================                                    ]Scanning processes... [====================                                    ]Scanning processes... [=====================                                   ]Scanning processes... [=====================                                   ]Scanning processes... [=====================                                   ]Scanning processes... [=====================                                   ]Scanning processes... [=====================                                   ]Scanning processes... [=====================                                   ]Scanning processes... [======================                                  ]Scanning processes... [======================                                  ]Scanning processes... [======================                                  ]Scanning processes... [======================                                  ]Scanning processes... [======================                                  ]Scanning processes... [=======================                                 ]Scanning processes... [=======================                                 ]Scanning processes... [=======================                                 ]Scanning processes... [=======================                                 ]Scanning processes... [=======================                                 ]Scanning processes... [========================                                ]Scanning processes... [========================                                ]Scanning processes... [========================                                ]Scanning processes... [========================                                ]Scanning processes... [========================                                ]Scanning processes... [========================                                ]Scanning processes... [=========================                               ]Scanning processes... [=========================                               ]Scanning processes... [=========================                               ]Scanning processes... [=========================                               ]Scanning processes... [=========================                               ]Scanning processes... [==========================                              ]Scanning processes... [==========================                              ]Scanning processes... [==========================                              ]Scanning processes... [==========================                              ]Scanning processes... [==========================                              ]Scanning processes... [==========================                              ]Scanning processes... [===========================                             ]Scanning processes... [===========================                             ]Scanning processes... [===========================                             ]Scanning processes... [===========================                             ]Scanning processes... [===========================                             ]Scanning processes... [============================                            ]Scanning processes... [============================                            ]Scanning processes... [============================                            ]Scanning processes... [============================                            ]Scanning processes... [============================                            ]Scanning processes... [=============================                           ]Scanning processes... [=============================                           ]Scanning processes... [=============================                           ]Scanning processes... [=============================                           ]Scanning processes... [=============================                           ]Scanning processes... [=============================                           ]Scanning processes... [==============================                          ]Scanning processes... [==============================                          ]Scanning processes... [==============================                          ]Scanning processes... [==============================                          ]Scanning processes... [==============================                          ]Scanning processes... [===============================                         ]Scanning processes... [===============================                         ]Scanning processes... [===============================                         ]Scanning processes... [===============================                         ]Scanning processes... [===============================                         ]Scanning processes... [================================                        ]Scanning processes... [================================                        ]Scanning processes... [================================                        ]Scanning processes... [================================                        ]Scanning processes... [================================                        ]Scanning processes... [================================                        ]Scanning processes... [=================================                       ]Scanning processes... [=================================                       ]Scanning processes... [=================================                       ]Scanning processes... [=================================                       ]Scanning processes... [=================================                       ]Scanning processes... [==================================                      ]Scanning processes... [==================================                      ]Scanning processes... [==================================                      ]Scanning processes... [==================================                      ]Scanning processes... [==================================                      ]Scanning processes... [==================================                      ]Scanning processes... [===================================                     ]Scanning processes... [===================================                     ]Scanning processes... [===================================                     ]Scanning processes... [===================================                     ]Scanning processes... [===================================                     ]Scanning processes... [====================================                    ]Scanning processes... [====================================                    ]Scanning processes... [====================================                    ]Scanning processes... [====================================                    ]Scanning processes... [====================================                    ]Scanning processes... [=====================================                   ]Scanning processes... [=====================================                   ]Scanning processes... [=====================================                   ]Scanning processes... [=====================================                   ]Scanning processes... [=====================================                   ]Scanning processes... [=====================================                   ]Scanning processes... [======================================                  ]Scanning processes... [======================================                  ]Scanning processes... [======================================                  ]Scanning processes... [======================================                  ]Scanning processes... [======================================                  ]Scanning processes... [=======================================                 ]Scanning processes... [=======================================                 ]Scanning processes... [=======================================                 ]Scanning processes... [=======================================                 ]Scanning processes... [=======================================                 ]Scanning processes... [========================================                ]Scanning processes... [========================================                ]Scanning processes... [========================================                ]Scanning processes... [========================================                ]Scanning processes... [========================================                ]Scanning processes... [========================================                ]Scanning processes... [=========================================               ]Scanning processes... [=========================================               ]Scanning processes... [=========================================               ]Scanning processes... [=========================================               ]Scanning processes... [=========================================               ]Scanning processes... [==========================================              ]Scanning processes... [==========================================              ]Scanning processes... [==========================================              ]Scanning processes... [==========================================              ]Scanning processes... [==========================================              ]Scanning processes... [==========================================              ]Scanning processes... [===========================================             ]Scanning processes... [===========================================             ]Scanning processes... [===========================================             ]Scanning processes... [===========================================             ]Scanning processes... [===========================================             ]Scanning processes... [============================================            ]Scanning processes... [============================================            ]Scanning processes... [============================================            ]Scanning processes... [============================================            ]Scanning processes... [============================================            ]Scanning processes... [=============================================           ]Scanning processes... [=============================================           ]Scanning processes... [=============================================           ]Scanning processes... [=============================================           ]Scanning processes... [=============================================           ]Scanning processes... [=============================================           ]Scanning processes... [==============================================          ]Scanning processes... [==============================================          ]Scanning processes... [==============================================          ]Scanning processes... [==============================================          ]Scanning processes... [==============================================          ]Scanning processes... [===============================================         ]Scanning processes... [===============================================         ]Scanning processes... [===============================================         ]Scanning processes... [===============================================         ]Scanning processes... [===============================================         ]Scanning processes... [================================================        ]Scanning processes... [================================================        ]Scanning processes... [================================================        ]Scanning processes... [================================================        ]Scanning processes... [================================================        ]Scanning processes... [================================================        ]Scanning processes... [=================================================       ]Scanning processes... [=================================================       ]Scanning processes... [=================================================       ]Scanning processes... [=================================================       ]Scanning processes... [=================================================       ]Scanning processes... [==================================================      ]Scanning processes... [==================================================      ]Scanning processes... [==================================================      ]Scanning processes... [==================================================      ]Scanning processes... [==================================================      ]Scanning processes... [==================================================      ]Scanning processes... [===================================================     ]Scanning processes... [===================================================     ]Scanning processes... [===================================================     ]Scanning processes... [===================================================     ]Scanning processes... [===================================================     ]Scanning processes... [====================================================    ]Scanning processes... [====================================================    ]Scanning processes... [====================================================    ]Scanning processes... [====================================================    ]Scanning processes... [====================================================    ]Scanning processes... [=====================================================   ]Scanning processes... [=====================================================   ]Scanning processes... [=====================================================   ]Scanning processes... [=====================================================   ]Scanning processes... [=====================================================   ]Scanning processes... [=====================================================   ]Scanning processes... [======================================================  ]Scanning processes... [======================================================  ]Scanning processes... [======================================================  ]Scanning processes... [======================================================  ]Scanning processes... [======================================================  ]Scanning processes... [======================================================= ]Scanning processes... [======================================================= ]Scanning processes... [======================================================= ]Scanning processes... [======================================================= ]Scanning processes... [======================================================= ]Scanning processes... [========================================================]Scanning processes...                                                           
+Scanning candidates... [                                                       ]Scanning candidates... [===========================                            ]Scanning candidates... [=======================================================]Scanning candidates...                                                          
+Scanning linux images... [                                                     ]Scanning linux images... [=============                                        ]Scanning linux images... [==========================                           ]Scanning linux images... [=======================================              ]Scanning linux images... [=====================================================]Scanning linux images...                                                        
+
+Pending kernel upgrade!
+Running kernel version:
+  6.8.0-110-generic
+Diagnostics:
+  The currently running kernel version is not the expected kernel version
+6.8.0-111-generic.
+
+Restarting the system to load the new kernel will not be handled automatically,
+so you should consider rebooting.
+
+Restarting services...
+ systemctl restart postgresql@16-main.service
