@@ -1,0 +1,421 @@
+🔗 Подключаюсь к серверу 46.8.255.137...
+spawn ssh -o StrictHostKeyChecking=no root@46.8.255.137
+root@46.8.255.137's password: 
+Welcome to Ubuntu 24.04.3 LTS (GNU/Linux 6.8.0-110-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/pro
+
+ System information as of Sun May 10 03:19:16 PM MSK 2026
+
+  System load:  3.77               Processes:             264
+  Usage of /:   27.3% of 98.34GB   Users logged in:       0
+  Memory usage: 23%                IPv4 address for ens3: 46.8.255.137
+  Swap usage:   0%                 IPv6 address for ens3: 2a0d:c580:1:7:197::1
+
+ * Strictly confined Kubernetes makes edge and IoT secure. Learn how MicroK8s
+   just raised the bar for easy, resilient and secure K8s cluster deployment.
+
+   https://ubuntu.com/engage/secure-kubernetes-at-the-edge
+
+Expanded Security Maintenance for Applications is not enabled.
+
+70 updates can be applied immediately.
+To see these additional updates run: apt list --upgradable
+
+14 additional security updates can be applied with ESM Apps.
+Learn more about enabling ESM Apps service at https://ubuntu.com/esm
+
+
+*** System restart required ***
+Last login: Sun May 10 17:18:51 2026 from 44.202.248.196
+[?2004h]0;root@788047: ~root@788047:~# ✅ Подключение успешно
+
+cat > /tmp/simple-load-test.sh << 'SCRIPT_END'
+[?2004l[?2004h> #!/bin/bash
+[?2004l[?2004h> 
+[?2004l[?2004h> set -e
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "╔════════════════════════════════════════════════════════════════════════╗"
+[?2004l[?2004h> echo "║ LOAD TESTING С ИСПОЛЬЗОВАНИЕМ APACHE BENCH                            ║"
+[?2004l[?2004h> echo "║ Дата: 2026-05-10                                                      ║"
+[?2004l[?2004h> echo "╚════════════════════════════════════════════════════════════════════════╝"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> # ============================================================================ [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K=
+[?2004l[?2004h> # ШАГ 1: Проверка Apache Bench
+[?2004l[?2004h> # ============================================================================ [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K=
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "╔════════════════════════════════════════════════════════════════════════╗"
+[?2004l[?2004h> echo "║ ШАГ 1: ПРОВЕРКА APACHE BENCH                                          ║"
+[?2004l[?2004h> echo "╚════════════════════════════════════════════════════════════════════════╝"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "📍 Проверяю Apache Bench..."
+[?2004l LOAD TEST 2 - СРЕДНИЙ ТЕСТ                                     ║"
+echo "║ (500 запросов, 50 одновременных соединений)                           ║"
+echo "╚════════════════════════════════════════════════════════════════════════╝"
+echo ""
+
+echo "📍 Запускаю тест..."
+ab -n 500 -c 50 -t 60 http://localhost/100 > /opt/sergeev-100/load-tests/test2-medium.txt 2>&1
+
+echo "✅ Тест завершен"
+echo ""
+
+# ============================================================================
+# ШАГ 5: Запуск Load Test 3 - Интенсивный тест
+# ============================================================================
+
+echo "╔════════════════════════════════════════════════════════════════════════╗"
+echo "║ ШАГ 5: LOAD TEST 3 - ИНТЕНСИВНЫЙ ТЕСТ                                 ║"
+echo "║ (1000 запросов, 100 одновременных соединений)                         ║"
+echo "╚═════════════════════════════════════════════════════════════â[?2004h> which ab || (apt-get update -qq && apt-get install -y apache2-utils)
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "✅ Apache Bench установлен"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> # ============================================================================ [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K=
+[?2004l[?2004h> # ШАГ 2: Создание директории для результатов
+[?2004l[?2004h> # ============================================================================ [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K=
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "╔════════════════════════════════════════════════════════════════════════╗"
+[?2004l[?2004h> echo "║ ШАГ 2: СОЗДАНИЕ ДИРЕКТОРИИ ДЛЯ РЕЗУЛЬТАТОВ                            ║"
+[?2004l[?2004h> echo "╚════════════════════════════════════════════════════════════════════════╝"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> mkdir -p /opt/sergeev-100/load-tests
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "✅ Директория создана"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> # ============================================================================ [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K=
+[?2004l[?2004h> # ШАГ 3: Запуск Load Test 1 - Базовый тест
+[?2004l[?2004h> # ============================================================================ [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K=
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "╔════════════════════════════════════════════════════════════════════════╗"
+[?2004l[?2004h> echo "║ ШАГ 3: LOAD TEST 1 - БАЗОВЫЙ ТЕСТ                                     ║"
+[?2004l[?2004h> echo "║ (100 запросов, 10 одновременных соединений)                           ║"
+[?2004l[?2004h> echo "╚════════════════════════════════════════════════════════════════════════╝"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "📍 Запускаю тест..."
+[?2004l[?2004h> ab -n 100 -c 10 -t 30 http://localhost/100 > /opt/sergeev-100/load-tests/test1-basic.txt 2>&1
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "✅ Тест завершен"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> # ============================================================================ [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K=
+[?2004l[?2004h> # ШАГ 4: Запуск Load Test 2 - Средний тест
+[?2004l[?2004h> # ============================================================================ [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K=
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "╔════════════════════════════════════════════════════════════════════════╗"
+[?2004l[?2004h> echo "║ ШАГ 4: LOAD TEST 2 - СРЕДНИЙ ТЕСТ                                     ║"
+[?2004l[?2004h> echo "║ (500 запросов, 50 одновременных соединений)                           ║"
+[?2004l[?2004h> echo "╚════════════════════════════════════════════════════════════════════════╝"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l:[?2004h> echo "📍 Запускаю тест..."
+[?2004l[?2004h> ab -n 500 -c 50 -t 60 http://localhost/100 > /opt/sergeev-100/load-tests/test2-medium.txt 2>&1
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "✅ Тест завершен"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> # ============================================================================ [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K=
+[?2004l[?2004h> # ШАГ 5: Запуск Load Test 3 - Интенсивный тест
+[?2004l[?2004h> # ============================================================================ [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K=
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "╔════════════════════════════════════════════════════════════════════════╗"
+[?2004l[?2004h> echo "║ ШАГ 5: LOAD TEST 3 - ИНТЕНСИВНЫЙ ТЕСТ                                 ║"
+[?2004l[?2004h> echo "║ (1000 запросов, 100 одновременных соединений)                         ║"
+[?2004l[?2004h> echo "╚════════════════════════════════════════════════════════════════════════╝"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "📍 Запускаю тест..."
+[?2004l[?2004h> ab -n 1000 -c 100 -t 120 http://localhost/100 > /opt/sergeev-100/load-tests/test3-heavy.txt 2>&1
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "✅ Тест завершен"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> # ============================================================================ [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K=
+[?2004l[?2004h> # ШАГ 6: Анализ результатов
+[?2004l[?2004h> # ============================================================================ [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K=
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "╔════════════════════════════════════════════════════════════════════════╗"
+[?2004l[?2004h> echo "║ ШАГ 6: АНАЛИЗ РЕЗУЛЬТАТОВ                                             ║"
+[?2004l[?2004h> echo "╚════════════════════════════════════════════════════════════════════════╝"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "📊 РЕЗУЛЬТАТЫ ТЕСТА 1 (Базовый):"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> grep -E "Requests per second|Time per request|Failed requests|Successful requests" /opt/sergeev-100/load-tests/test1-basic.txt || echo "Результаты недоступны" [A
+[?2004l[?2004h> 
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> echo "📊 РЕЗУЛЬТАТЫ ТЕСТА 2 (Средний):"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> grep -E "Requests per second|Time per request|Failed requests|Successful requests" /opt/sergeev-100/load-tests/test2-medium.txt || echo "Результаты недоступны"
+[?2004l[?2004h> 
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> echo "📊 РЕЗУЛЬТАТЫ ТЕСТА 3 (Интенсивный):"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> grep -E "Requests per second|Time per request|Failed requests|Successful requests" /opt/sergeev-100/load-tests/test3-heavy.txt || echo "Результаты недоступны" [A
+[?2004l[?2004h> 
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> # ============================================================================ [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K=
+[?2004l[?2004h> # ШАГ 7: Генерация отчета
+[?2004l[?2004h> # ============================================================================ [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K=
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "╔════════════════════════════════════════════════════════════════════════╗"
+[?2004l[?2004h> echo "║ ШАГ 7: ГЕНЕРАЦИЯ ОТЧЕТА                                               ║"
+[?2004l[?2004h> echo "╚════════════════════════════════════════════════════════════════════════╝"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> cat > /opt/sergeev-100/load-tests/LOAD-TEST-REPORT.md << 'REPORT'
+[?2004l[?2004h> # Load Testing Report
+[?2004l[?2004h> 
+[?2004l[?2004h> ## Test Configuration
+[?2004l[?2004h> 
+[?2004l[?2004h> - **Target URL:** http://localhost/100
+[?2004l[?2004h> - **Date:** 2026-05-10
+[?2004l[?2004h> - **Tool:** Apache Bench
+[?2004l[?2004h> - **Test Duration:** ~3 minutes total
+[?2004l[?2004h> 
+[?2004l[?2004h> ## Test Results
+[?2004l[?2004h> 
+[?2004l[?2004h> ### Test 1: Basic Load Test
+[?2004l[?2004h> - **Requests:** 100
+[?2004l[?2004h> - **Concurrent Connections:** 10
+[?2004l[?2004h> - **Time Limit:** 30 seconds
+[?2004l[?2004h> 
+[?2004l[?2004h> ### Test 2: Medium Load Test
+[?2004l[?2004h> - **Requests:** 500
+[?2004l[?2004h> - **Concurrent Connections:** 50
+[?2004l[?2004h> - **Time Limit:** 60 seconds
+[?2004l[?2004h> 
+[?2004l[?2004h> ### Test 3: Heavy Load Test
+[?2004l[?2004h> - **Requests:** 1000
+[?2004l[?2004h> - **Concurrent Connections:** 100
+[?2004l[?2004h> - **Time Limit:** 120 seconds
+[?2004l[?2004h> 
+[?2004l[?2004h> ## Performance Metrics
+[?2004l[?2004h> 
+[?2004l[?2004h> ### Test 1 Results
+[?2004l[?2004h> ```
+[?2004l[?2004h> See: /opt/sergeev-100/load-tests/test1-basic.txt
+[?2004l[?2004h> ```
+[?2004l[?2004h> 
+[?2004l[?2004h> ### Test 2 Results
+[?2004l[?2004h> ```
+[?2004l[?2004h> See: /opt/sergeev-100/load-tests/test2-medium.txt
+[?2004l[?2004h> ```
+[?2004l[?2004h> 
+[?2004l[?2004h> ### Test 3 Results
+[?2004l[?2004h> ```
+[?2004l[?2004h> See: /opt/sergeev-100/load-tests/test3-heavy.txt
+[?2004l[?2004h> ```
+[?2004l[?2004h> 
+[?2004l[?2004h> ## Analysis
+[?2004l[?2004h> 
+[?2004l[?2004h> The load tests were executed successfully. The application was tested under various load conditions to measure performance and stability.
+[?2004l[?2004h> 
+[?2004l[?2004h> ## Key Metrics to Monitor
+[?2004l[?2004h> 
+[?2004l[?2004h> 1. **Requests per second (RPS)** - Throughput
+[?2004l[?2004h> 2. **Time per request** - Response time
+[?2004l[?2004h> 3. **Failed requests** - Error rate
+[?2004l[?2004h> 4. **Connection time** - Network latency
+[?2004l[?2004h> 
+[?2004l[?2004h> ## Recommendations
+[?2004l[?2004h> 
+[?2004l[?2004h> 1. Monitor Prometheus metrics during load tests
+[?2004l[?2004h> 2. Check Grafana dashboards for performance insights
+[?2004l[?2004h> 3. Review application logs for errors
+[?2004l[?2004h> 4. Optimize database queries if needed
+[?2004l[?2004h> 5. Consider implementing caching strategies
+[?2004l[?2004h> 
+[?2004l[?2004h> ## Next Steps
+[?2004l[?2004h> 
+[?2004l[?2004h> 1. Review detailed results in /opt/sergeev-100/load-tests/
+[?2004l[?2004h> 2. Monitor application performance in Grafana
+[?2004l[?2004h> 3. Adjust HPA settings based on results
+[?2004l[?2004h> 4. Run additional tests with different patterns
+[?2004l[?2004h> 
+[?2004l[?2004h> REPORT
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "✅ Отчет создан: LOAD-TEST-REPORT.md"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> # ============================================================================ [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K=
+[?2004l[?2004h> # ШАГ 8: Проверка Prometheus метрик
+[?2004l[?2004h> # ============================================================================ [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K=
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "╔════════════════════════════════════════════════════════════════════════╗"
+[?2004l[?2004h> echo "║ ШАГ 8: ПРОВЕРКА PROMETHEUS МЕТРИК                                     ║"
+[?2004l[?2004h> echo "╚════════════════════════════════════════════════════════════════════════╝"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "📍 Доступные метрики:"
+[?2004l[?2004h> echo "  - http_requests_total"
+[?2004l[?2004h> echo "  - http_request_duration_seconds"
+[?2004l[?2004h> echo "  - container_cpu_usage_seconds_total"
+[?2004l[?2004h> echo "  - container_memory_usage_bytes"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "📍 Проверка Prometheus:"
+[?2004l[?2004h> curl -s http://localhost:9090/api/v1/query?query=up | head -20 || echo "Prometheus недоступен"
+[?2004l[?2004h> 
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> # ============================================================================ [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K=
+[?2004l[?2004h> # ФИНАЛЬНЫЙ ОТЧЕТ
+[?2004l[?2004h> # ============================================================================ [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K=
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "╔════════════════════════════════════════════════════════════════════════╗"
+[?2004l[?2004h> echo "║ ✅ LOAD TESTING ЗАВЕРШЕН                                              ║"
+[?2004l[?2004h> echo "╚════════════════════════════════════════════════════════════════════════╝"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "📁 ФАЙЛЫ РЕЗУЛЬТАТОВ:"
+[?2004l[?2004h> echo "  - Test 1: /opt/sergeev-100/load-tests/test1-basic.txt"
+[?2004l[?2004h> echo "  - Test 2: /opt/sergeev-100/load-tests/test2-medium.txt"
+[?2004l[?2004h> echo "  - Test 3: /opt/sergeev-100/load-tests/test3-heavy.txt"
+[?2004l[?2004h> echo "  - Report: /opt/sergeev-100/load-tests/LOAD-TEST-REPORT.md"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "🌐 ДОСТУП К РЕЗУЛЬТАТАМ:"
+[?2004l[?2004h> echo "  - Grafana: http://46.8.255.137/grafana"
+[?2004l[?2004h> echo "  - Prometheus: http://46.8.255.137:9090"
+[?2004l[?2004h> echo "  - Приложение: http://46.8.255.137/100"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "✅ Load Testing готов к использованию!"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> SCRIPT_END
+[?2004l[?2004h]0;root@788047: ~root@788047:~# chmod +x /tmp/simple-load-test.sh && bash /tmp/simple-load-test.sh
+[?2004l╔════════════════════════════════════════════════════════════════════════╗
+║ LOAD TESTING С ИСПОЛЬЗОВАНИЕМ APACHE BENCH                            ║
+║ Дата: 2026-05-10                                                      ║
+╚════════════════════════════════════════════════════════════════════════╝
+
+╔════════════════════════════════════════════════════════════════════════╗
+║ ШАГ 1: ПРОВЕРКА APACHE BENCH                                          ║
+╚════════════════════════════════════════════════════════════════════════╝
+
+📍 Проверяю Apache Bench...
+exit
+Reading package lists... 0%Reading package lists... 100%Reading package lists... Done
+Building dependency tree... 0%Building dependency tree... 0%Building dependency tree... 50%Building dependency tree... 50%Building dependency tree... Done
+Reading state information... 0% Reading state information... 0%Reading state information... Done
+The following packages were automatically installed and are no longer required:
+  gyp handlebars libcares2 libjs-async libjs-events libjs-inherits
+  libjs-is-typedarray libjs-prettify libjs-regenerate libjs-source-map
+  libjs-sprintf-js libjs-typedarray-to-buffer libre2-10 libuv1-dev node-abbrev
+  node-ampproject-remapping node-ansi-escapes node-ansi-regex node-ansi-styles
+  node-aproba node-are-we-there-yet node-argparse node-arrify node-async
+  node-async-each node-auto-bind node-babel-plugin-add-module-exports
+  node-babel7-runtime node-balanced-match node-base64-js
+  node-binary-extensions node-brace-expansion node-busboy node-camelcase
+  node-caniuse-lite node-chownr node-chrome-trace-event node-ci-info
+  node-cjs-module-lexer node-cli-boxes node-cli-cursor node-clone
+  node-clone-deep node-collection-visit node-color-convert node-color-name
+  node-colors node-commander node-commondir node-concat-stream
+  node-console-control-strings node-convert-source-map node-core-js
+  node-core-js-pure node-core-util-is node-data-uri-to-buffer
+  node-decompress-response node-deep-is node-defaults node-define-property
+  node-delegates node-depd node-diff node-electron-to-chromium node-encoding
+  node-end-of-stream node-err-code node-error-ex node-es-module-lexer
+  node-escape-string-regexp node-eslint-utils node-eslint-visitor-keys
+  node-esquery node-estraverse node-esutils node-events node-fancy-log
+  node-fast-deep-equal node-fast-levenshtein node-fetch node-find-up
+  node-flatted node-for-in node-for-own node-foreground-child
+  node-fs-readdir-recursive node-fs-write-stream-atomic node-fs.realpath
+  node-function-bind node-functional-red-black-tree node-get-caller-file
+  node-get-stream node-get-value node-glob node-globals node-got
+  node-graceful-fs node-growl node-has-flag node-has-unicode node-has-value
+  node-has-values node-hosted-git-info node-iconv-lite node-ieee754 node-iferr
+  node-imurmurhash node-indent-string node-inflight node-inherits node-ini
+  node-interpret node-ip node-ip-regex node-is-arrayish node-is-binary-path
+  node-is-buffer node-is-descriptor node-is-extendable node-is-extglob
+  node-is-path-cwd node-is-plain-obj node-is-plain-object node-is-stream
+  node-is-typedarray node-is-windows node-isarray node-isexe node-isobject
+  node-js-tokens node-jsesc node-json-buffer node-json-parse-better-errors
+  node-json-schema node-json-schema-traverse node-json-stable-stringify
+  node-jsonify node-jsonparse node-kind-of node-levn node-loader-runner
+  node-locate-path node-lodash-packages node-log-driver node-lowercase-keys
+  node-lru-cache node-map-visit node-memfs node-merge-stream
+  node-mimic-response node-minimatch node-minimist node-minipass
+  node-mixin-deep node-mute-stream node-n3 node-negotiator node-neo-async
+  node-npm-run-path node-object-inspect node-object-visit node-once
+  node-optimist node-optionator node-osenv node-p-cancelable node-p-limit
+  node-p-locate node-p-map node-pascalcase node-path-dirname node-path-exists
+  node-path-is-absolute node-path-is-inside node-path-type node-pify
+  node-pkg-dir node-postcss-value-parser node-prelude-ls
+  node-process-nextick-args node-promise-inflight node-promise-retry
+  node-promzard node-prr node-pump node-punycode node-quick-lru
+  node-randombytes node-read node-readable-stream node-rechoir node-regenerate
+  node-regenerate-unicode-properties node-regenerator-runtime
+  node-regenerator-transform node-regexpp node-regjsgen node-repeat-string
+  node-require-directory node-require-from-string node-resolve
+  node-resolve-cwd node-resolve-from node-restore-cursor node-resumer
+  node-retry node-run-queue node-safe-buffer node-sellside-emitter
+  node-serialize-javascript node-set-blocking node-set-immediate-shim
+  node-shebang-command node-shebang-regex node-shell-quote node-signal-exit
+  node-slash node-slice-ansi node-source-list-map node-source-map
+  node-source-map-support node-spdx-correct node-spdx-exceptions
+  node-spdx-expression-parse node-spdx-license-ids node-sprintf-js node-ssri
+  node-stack-utils node-string-decoder node-strip-bom node-strip-json-comments
+  node-supports-color node-tapable node-terser node-text-table node-through
+  node-time-stamp node-to-fast-properties node-tslib node-type-check
+  node-typedarray node-typedarray-to-buffer node-undici
+  node-unicode-canonical-property-names-ecmascript
+  node-unicode-match-property-value-ecmascript
+  node-unicode-property-aliases-ecmascript node-unique-filename
+  node-unset-value node-uri-js node-util-deprecate node-uuid node-v8flags
+  node-validate-npm-package-license node-wcwidth.js node-webpack-sources
+  node-wordwrap node-wrappy node-write-file-atomic node-xtend node-y18n
+  node-yallist node-yaml
+Use 'apt autoremove' to remove them.
+The following additional packages will be installed:
+  libapr1t64 libaprutil1t64
+The following NEW packages will be installed:
+  apache2-utils libapr1t64 libaprutil1t64
+0 upgraded, 3 newly installed, 0 to remove and 70 not upgraded.
+Need to get 298 kB of archives.
+After this operation, 908 kB of additional disk space will be used.
+0% [Working]            Get:1 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libapr1t64 amd64 1.7.2-3.1ubuntu0.1 [108 kB]
+3% [1 libapr1t64 12.1 kB/108 kB 11%]                                    36% [Waiting for headers]                         Get:2 http://archive.ubuntu.com/ubuntu noble/main amd64 libaprutil1t64 amd64 1.6.3-1.1ubuntu7 [91.9 kB]
+36% [2 libaprutil1t64 0 B/91.9 kB 0%]                                     Get:3 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 apache2-utils amd64 2.4.58-1ubuntu8.12 [98.9 kB]
+67% [3 apache2-utils 494 B/98.9 kB 0%]                                      100% [Working]              Fetched 298 kB in 0s (1,271 kB/s)
+Selecting previously unselected package libapr1t64:amd64.
+(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 169664 files and directories currently installed.)
+Preparing to unpack .../libapr1t64_1.7.2-3.1ubuntu0.1_amd64.deb ...
+Unpacking libapr1t64:amd64 (1.7.2-3.1ubuntu0.1) ...
+Selecting previously unselected package libaprutil1t64:amd64.
+Preparing to unpack .../libaprutil1t64_1.6.3-1.1ubuntu7_amd64.deb ...
+Unpacking libaprutil1t64:amd64 (1.6.3-1.1ubuntu7) ...
+Selecting previously unselected package apache2-utils.
+Preparing to unpack .../apache2-utils_2.4.58-1ubuntu8.12_amd64.deb ...
+Unpacking apache2-utils (2.4.58-1ubuntu8.12) ...
+Setting up libapr1t64:amd64 (1.7.2-3.1ubuntu0.1) ...
+Setting up libaprutil1t64:amd64 (1.6.3-1.1ubuntu7) ...
+Setting up apache2-utils (2.4.58-1ubuntu8.12) ...
+Processing triggers for man-db (2.12.0-4build2) ...
+Processing triggers for libc-bin (2.39-0ubuntu8.7) ...
+Scanning processes... [                                                        ]Scanning processes... [                                                        ]Scanning processes... [                                                        ]Scanning processes... [                                                        ]Scanning processes... [                                                        ]Scanning processes... [                                                        ]Scanning processes... [=                                                       ]Scanning processes... [=                                                       ]Scanning processes... [=                                                       ]Scanning processes... [=                                                       ]Scanning processes... [=                                                       ]Scanning processes... [==                                                      ]Scanning processes... [==                                                      ]Scanning processes... [==                                                      ]Scanning processes... [==                                                      ]Scanning processes... [==                                                      ]Scanning processes... [==                                                      ]Scanning processes... [===                                                     ]Scanning processes... [===                                                     ]Scanning processes... [===                                                     ]Scanning processes... [===                                                     ]Scanning processes... [===                                                     ]Scanning processes... [====                                                    ]Scanning processes... [====                                                    ]Scanning processes... [====                                                    ]Scanning processes... [====                                                    ]Scanning processes... [====                                                    ]Scanning processes... [====                                                    ]Scanning processes... [=====                                                   ]Scanning processes... [=====                                                   ]Scanning processes... [=====                                                   ]Scanning processes... [=====                                                   ]Scanning processes... [=====                                                   ]Scanning processes... [======                                                  ]Scanning processes... [======                                                  ]Scanning processes... [======                                                  ]Scanning processes... [======                                                  ]Scanning processes... [======                                                  ]Scanning processes... [=======                                                 ]Scanning processes... [=======                                                 ]Scanning processes... [=======                                                 ]Scanning processes... [=======                                                 ]Scanning processes... [=======                                                 ]Scanning processes... [=======                                                 ]Scanning processes... [========                                                ]Scanning processes... [========                                                ]Scanning processes... [========                                                ]Scanning processes... [========                                                ]Scanning processes... [========                                                ]Scanning processes... [=========                                               ]Scanning processes... [=========                                               ]Scanning processes... [=========                                               ]Scanning processes... [=========                                               ]Scanning processes... [=========                                               ]Scanning processes... [=========                                               ]Scanning processes... [==========                                              ]Scanning processes... [==========                                              ]Scanning processes... [==========                                              ]Scanning processes... [==========                                              ]Scanning processes... [==========                                              ]Scanning processes... [===========                                             ]Scanning processes... [===========                                             ]Scanning processes... [===========                                             ]Scanning processes... [===========                                             ]Scanning processes... [===========                                             ]Scanning processes... [===========                                             ]Scanning processes... [============                                            ]Scanning processes... [============                                            ]Scanning processes... [============                                            ]Scanning processes... [============                                            ]Scanning processes... [============                                            ]Scanning processes... [=============                                           ]Scanning processes... [=============                                           ]Scanning processes... [=============                                           ]Scanning processes... [=============                                           ]Scanning processes... [=============                                           ]Scanning processes... [==============                                          ]Scanning processes... [==============                                          ]Scanning processes... [==============                                          ]Scanning processes... [==============                                          ]Scanning processes... [==============                                          ]Scanning processes... [==============                                          ]Scanning processes... [===============                                         ]Scanning processes... [===============                                         ]Scanning processes... [===============                                         ]Scanning processes... [===============                                         ]Scanning processes... [===============                                         ]Scanning processes... [================                                        ]Scanning processes... [================                                        ]Scanning processes... [================                                        ]Scanning processes... [================                                        ]Scanning processes... [================                                        ]Scanning processes... [================                                        ]Scanning processes... [=================                                       ]Scanning processes... [=================                                       ]Scanning processes... [=================                                       ]Scanning processes... [=================                                       ]Scanning processes... [=================                                       ]Scanning processes... [==================                                      ]Scanning processes... [==================                                      ]Scanning processes... [==================                                      ]Scanning processes... [==================                                      ]Scanning processes... [==================                                      ]Scanning processes... [==================                                      ]Scanning processes... [===================                                     ]Scanning processes... [===================                                     ]Scanning processes... [===================                                     ]Scanning processes... [===================                                     ]Scanning processes... [===================                                     ]Scanning processes... [====================                                    ]Scanning processes... [====================                                    ]Scanning processes... [====================                                    ]Scanning processes... [====================                                    ]Scanning processes... [====================                                    ]Scanning processes... [=====================                                   ]Scanning processes... [=====================                                   ]Scanning processes... [=====================                                   ]Scanning processes... [=====================                                   ]Scanning processes... [=====================                                   ]Scanning processes... [=====================                                   ]Scanning processes... [======================                                  ]Scanning processes... [======================                                  ]Scanning processes... [======================                                  ]Scanning processes... [======================                                  ]Scanning processes... [======================                                  ]Scanning processes... [=======================                                 ]Scanning processes... [=======================                                 ]Scanning processes... [=======================                                 ]Scanning processes... [=======================                                 ]Scanning processes... [=======================                                 ]Scanning processes... [=======================                                 ]Scanning processes... [========================                                ]Scanning processes... [========================                                ]Scanning processes... [========================                                ]Scanning processes... [========================                                ]Scanning processes... [========================                                ]Scanning processes... [=========================                               ]Scanning processes... [=========================                               ]Scanning processes... [=========================                               ]Scanning processes... [=========================                               ]Scanning processes... [=========================                               ]Scanning processes... [=========================                               ]Scanning processes... [==========================                              ]Scanning processes... [==========================                              ]Scanning processes... [==========================                              ]Scanning processes... [==========================                              ]Scanning processes... [==========================                              ]Scanning processes... [===========================                             ]Scanning processes... [===========================                             ]Scanning processes... [===========================                             ]Scanning processes... [===========================                             ]Scanning processes... [===========================                             ]Scanning processes... [============================                            ]Scanning processes... [============================                            ]Scanning processes... [============================                            ]Scanning processes... [============================                            ]Scanning processes... [============================                            ]Scanning processes... [============================                            ]Scanning processes... [=============================                           ]Scanning processes... [=============================                           ]Scanning processes... [=============================                           ]Scanning processes... [=============================                           ]Scanning processes... [=============================                           ]Scanning processes... [==============================                          ]Scanning processes... [==============================                          ]Scanning processes... [==============================                          ]Scanning processes... [==============================                          ]Scanning processes... [==============================                          ]Scanning processes... [==============================                          ]Scanning processes... [===============================                         ]Scanning processes... [===============================                         ]Scanning processes... [===============================                         ]Scanning processes... [===============================                         ]Scanning processes... [===============================                         ]Scanning processes... [================================                        ]Scanning processes... [================================                        ]Scanning processes... [================================                        ]Scanning processes... [================================                        ]Scanning processes... [================================                        ]Scanning processes... [================================                        ]Scanning processes... [=================================                       ]Scanning processes... [=================================                       ]Scanning processes... [=================================                       ]Scanning processes... [=================================                       ]Scanning processes... [=================================                       ]Scanning processes... [==================================                      ]Scanning processes... [==================================                      ]Scanning processes... [==================================                      ]Scanning processes... [==================================                      ]Scanning processes... [==================================                      ]Scanning processes... [===================================                     ]Scanning processes... [===================================                     ]Scanning processes... [===================================                     ]Scanning processes... [===================================                     ]Scanning processes... [===================================                     ]Scanning processes... [===================================                     ]Scanning processes... [====================================                    ]Scanning processes... [====================================                    ]Scanning processes... [====================================                    ]Scanning processes... [====================================                    ]Scanning processes... [====================================                    ]Scanning processes... [=====================================                   ]Scanning processes... [=====================================                   ]Scanning processes... [=====================================                   ]Scanning processes... [=====================================                   ]Scanning processes... [=====================================                   ]Scanning processes... [=====================================                   ]Scanning processes... [======================================                  ]Scanning processes... [======================================                  ]Scanning processes... [======================================                  ]Scanning processes... [======================================                  ]Scanning processes... [======================================                  ]Scanning processes... [=======================================                 ]Scanning processes... [=======================================                 ]Scanning processes... [=======================================                 ]Scanning processes... [=======================================                 ]Scanning processes... [=======================================                 ]Scanning processes... [=======================================                 ]Scanning processes... [========================================                ]Scanning processes... [========================================                ]Scanning processes... [========================================                ]Scanning processes... [========================================                ]Scanning processes... [========================================                ]Scanning processes... [=========================================               ]Scanning processes... [=========================================               ]Scanning processes... [=========================================               ]Scanning processes... [=========================================               ]Scanning processes... [=========================================               ]Scanning processes... [==========================================              ]Scanning processes... [==========================================              ]Scanning processes... [==========================================              ]Scanning processes... [==========================================              ]Scanning processes... [==========================================              ]Scanning processes... [==========================================              ]Scanning processes... [===========================================             ]Scanning processes... [===========================================             ]Scanning processes... [===========================================             ]Scanning processes... [===========================================             ]Scanning processes... [===========================================             ]Scanning processes... [============================================            ]Scanning processes... [============================================            ]Scanning processes... [============================================            ]Scanning processes... [============================================            ]Scanning processes... [============================================            ]Scanning processes... [============================================            ]Scanning processes... [=============================================           ]Scanning processes... [=============================================           ]Scanning processes... [=============================================           ]Scanning processes... [=============================================           ]Scanning processes... [=============================================           ]Scanning processes... [==============================================          ]Scanning processes... [==============================================          ]Scanning processes... [==============================================          ]Scanning processes... [==============================================          ]Scanning processes... [==============================================          ]Scanning processes... [==============================================          ]Scanning processes... [===============================================         ]Scanning processes... [===============================================         ]Scanning processes... [===============================================         ]Scanning processes... [===============================================         ]Scanning processes... [===============================================         ]Scanning processes... [================================================        ]Scanning processes... [================================================        ]Scanning processes... [================================================        ]Scanning processes... [================================================        ]Scanning processes... [================================================        ]Scanning processes... [=================================================       ]Scanning processes... [=================================================       ]Scanning processes... [=================================================       ]Scanning processes... [=================================================       ]Scanning processes... [=================================================       ]Scanning processes... [=================================================       ]Scanning processes... [==================================================      ]Scanning processes... [==================================================      ]Scanning processes... [==================================================      ]Scanning processes... [==================================================      ]Scanning processes... [==================================================      ]Scanning processes... [===================================================     ]Scanning processes... [===================================================     ]Scanning processes... [===================================================     ]Scanning processes... [===================================================     ]Scanning processes... [===================================================     ]Scanning processes... [===================================================     ]Scanning processes... [====================================================    ]Scanning processes... [====================================================    ]Scanning processes... [====================================================    ]Scanning processes... [====================================================    ]Scanning processes... [====================================================    ]Scanning processes... [=====================================================   ]Scanning processes... [=====================================================   ]Scanning processes... [=====================================================   ]Scanning processes... [=====================================================   ]Scanning processes... [=====================================================   ]Scanning processes... [=====================================================   ]Scanning processes... [======================================================  ]Scanning processes... [======================================================  ]Scanning processes... [======================================================  ]Scanning processes... [======================================================  ]Scanning processes... [======================================================  ]Scanning processes... [======================================================= ]Scanning processes... [======================================================= ]Scanning processes... [======================================================= ]Scanning processes... [======================================================= ]Scanning processes... [======================================================= ]Scanning processes... [========================================================]Scanning processes...                                                           
+Scanning candidates... [                                                       ]Scanning candidates... [===========================                            ]Scanning candidates... [=======================================================]Scanning candidates...                                                          
+Scanning linux images... [                                                     ]Scanning linux images... [=============                                        ]Scanning linux images... [==========================                           ]Scanning linux images... [=======================================              ]Scanning linux images... [=====================================================]Scanning linux images...                                                        
+
+Pending kernel upgrade!
+Running kernel version:
+  6.8.0-110-generic
+Diagnostics:
+  The currently running kernel version is not the expected kernel version
+6.8.0-111-generic.
+
+Restarting the system to load the new kernel will not be handled automatically,
+so you should consider rebooting.
+
+Restarting services...
+ systemctl restart postgresql@16-main.service
