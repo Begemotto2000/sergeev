@@ -1,0 +1,24 @@
+  app.get('/api/search', async (req: Request, res: Response) => {
+    try {
+      const query = req.query.q as string;
+      const limit = parseInt(req.query.limit as string) || 10;
+
+      if (!query) {
+        return res.status(400).json({ error: 'Query parameter required' });
+      }
+
+      // Search in Qdrant
+      const qdrantUrl = process.env.QDRANT_URL || 'http://qdrant:6333';
+      const results = await searchChunks('lessons', query, limit, qdrantUrl);
+
+      res.json({
+        query,
+        results,
+        total: results.length,
+        message: results.length > 0 ? 'Search completed' : 'No results found'
+      });
+    } catch (error: any) {
+      console.error('Search error:', error);
+      res.status(500).json({ error: error.message });
+    }
+  });
