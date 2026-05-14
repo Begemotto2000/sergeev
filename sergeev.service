@@ -1,0 +1,16 @@
+[Unit]
+Description=Sergeev Digitization System
+After=network.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/opt/sergeev/app
+Environment="PORT=8100"
+Environment="NODE_ENV=production"
+ExecStart=/usr/bin/node /opt/sergeev/app/dist/index.js
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
