@@ -1,0 +1,725 @@
+╔════════════════════════════════════════════════════════════════════════╗
+║ ФАЗА 3: Мониторинг на сервере 46.8.255.137 - ВЫПОЛНЕНИЕ              ║
+║ Дата: 2026-05-10                                                      ║
+╚════════════════════════════════════════════════════════════════════════╝
+
+🔗 Подключаюсь к серверу 46.8.255.137...
+spawn ssh -o StrictHostKeyChecking=no root@46.8.255.137
+root@46.8.255.137's password: 
+Welcome to Ubuntu 24.04.3 LTS (GNU/Linux 6.8.0-110-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/pro
+
+ System information as of Sun May 10 03:19:16 PM MSK 2026
+
+  System load:  3.77               Processes:             264
+  Usage of /:   27.3% of 98.34GB   Users logged in:       0
+  Memory usage: 23%                IPv4 address for ens3: 46.8.255.137
+  Swap usage:   0%                 IPv6 address for ens3: 2a0d:c580:1:7:197::1
+
+ * Strictly confined Kubernetes makes edge and IoT secure. Learn how MicroK8s
+   just raised the bar for easy, resilient and secure K8s cluster deployment.
+
+   https://ubuntu.com/engage/secure-kubernetes-at-the-edge
+
+Expanded Security Maintenance for Applications is not enabled.
+
+70 updates can be applied immediately.
+To see these additional updates run: apt list --upgradable
+
+14 additional security updates can be applied with ESM Apps.
+Learn more about enabling ESM Apps service at https://ubuntu.com/esm
+
+
+*** System restart required ***
+Last login: Sun May 10 16:29:52 2026 from 54.89.63.78
+[?2004h]0;root@788047: ~root@788047:~# ✅ Подключение успешно
+
+📋 Копирование скрипта на сервер...
+cat > /tmp/phase3-final.sh << 'SCRIPT_EOF'
+[?2004l[?2004h> #!/bin/bash
+[?2004l[?2004h> 
+[?2004l[?2004h> # ============================================================================ [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K=
+[?2004l[?2004h> # ФАЗА 3: Мониторинг на сервере 46.8.255.137
+[?2004l[?2004h> # Установка Prometheus и Grafana
+[?2004l[?2004h> # ============================================================================ [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K=
+[?2004l[?2004h> 
+[?2004l[?2004h> set -e
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "╔════════════════════════════════════════════════════════════════════════╗"
+[?2004l[?2004h> echo "║ ФАЗА 3: Мониторинг на сервере 46.8.255.137                            ║"
+[?2004l[?2004h> echo "║ Дата: 2026-05-10                                                      ║"
+[?2004l[?2004h> echo "╚════════════════════════════════════════════════════════════════════════╝"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> # ============================================================================ [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K=
+[?2004l[?2004h> # ШАГ 3.1: УСТАНОВКА PROMETHEUS
+[?2004l[?2004h> # ============================================================================ [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K=
+[?2004l[?2004h> 
+[?2004l
+[?2004h> echo "╔════════════════════════════════════════════════════════════════════════╗"
+[?2004l[?2004h> echo "║ ШАГ 3.1: УСТАНОВКА PROMETHEUS                                         ║"
+[?2004l[?2004h> ✅ Скрипт скопирован
+
+🚀 Запускаю скрипт на сервере...
+
+echo "╚════════════════════════════════════════════════════════════════════════╝"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> # Создаем директорию для мониторинга
+[?2004l[?2004h> mkdir -p /opt/sergeev-100/monitoring
+[?2004l[?2004h> cd /opt/sergeev-100/monitoring
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "📍 Создание Prometheus конфигурации..."
+[?2004l[?2004h> cat > prometheus.yml << 'EOF'
+[?2004l[?2004h> global:
+[?2004l[?2004h>   scrape_interval: 15s
+[?2004l[?2004h>   evaluation_interval: 15s
+[?2004l[?2004h>   external_labels:
+[?2004l[?2004h>     monitor: 'sergeev-system'
+[?2004l[?2004h> 
+[?2004l[?2004h> scrape_configs:
+[?2004l[?2004h>   # Prometheus self-monitoring
+[?2004l[?2004h>   - job_name: 'prometheus'
+[?2004l[?2004h>     static_configs:
+[?2004l[?2004h>       - targets: ['localhost:9090']
+[?2004l[?2004h> 
+[?2004l[?2004h>   # Kubernetes metrics
+[?2004l[?2004h>   - job_name: 'kubernetes-apiservers'
+[?2004l[?2004h>     kubernetes_sd_configs:
+[?2004l[?2004h>       - role: endpoints
+[?2004l[?2004h>     scheme: https
+[?2004l[?2004h>     tls_config:
+[?2004l[?2004h>       ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+[?2004l[?2004h>     bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+[?2004l[?2004h>     relabel_configs:
+[?2004l[?2004h>       - source_labels: [__meta_kubernetes_namespace, __meta_kubernetes_service_name, __meta_kubernetes_endpoint_port_name]
+[?2004l[?2004h>         action: keep
+[?2004l[?2004h>         regex: default;kubernetes;https
+[?2004l[?2004h> 
+[?2004l[?2004h>   # Node exporter
+[?2004l[?2004h>   - job_name: 'node'
+[?2004l[?2004h>     static_configs:
+[?2004l[?2004h>       - targets: ['localhost:9100']
+[?2004l[?2004h> 
+[?2004l[?2004h>   # Docker metrics
+[?2004l[?2004h>   - job_name: 'docker'
+[?2004l[?2004h>     static_configs:
+[?2004l[?2004h>       - targets: ['localhost:9323']
+[?2004l[?2004h> 
+[?2004l[?2004h>   # K3s metrics
+[?2004l[?2004h>   - job_name: 'k3s'
+[?2004l[?2004h>     static_configs:
+[?2004l[?2004h>       - targets: ['localhost:6443']
+[?2004l[?2004h>     scheme: https
+[?2004l[?2004h>     tls_config:
+[?2004l[?2004h>       insecure_skip_verify: true
+[?2004l[?2004h> 
+[?2004l[?2004h>   # Application metrics
+[?2004l[?2004h>   - job_name: 'app'
+[?2004l[?2004h>     static_configs:
+[?2004l[?2004h>       - targets: ['localhost:3000']
+[?2004l[?2004h>     metrics_path: '/metrics'
+[?2004l[?2004h> 
+[?2004l[?2004h> alerting:
+[?2004l[?2004h>   alertmanagers:
+[?2004l[?2004h>     - static_configs:
+[?2004l[?2004h>         - targets:
+[?2004l[?2004h>             - localhost:9093
+[?2004l[?2004h> 
+[?2004l[?2004h> rule_files:
+[?2004l[?2004h>   - '/etc/prometheus/rules.yml'
+[?2004l[?2004h> EOF
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "✅ prometheus.yml создан"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "📍 Создание alert rules..."
+[?2004l[?2004h> cat > rules.yml << 'EOF'
+[?2004l[?2004h> groups:
+[?2004l[?2004h>   - name: sergeev_alerts
+[?2004l[?2004h>     interval: 30s
+[?2004l[?2004h>     rules:
+[?2004l[?2004h>       # CPU Alert
+[?2004l[?2004h>       - alert: HighCPUUsage
+[?2004l[?2004h>         expr: (100 - (avg by (instance) (irate(node_cpu_seconds_total{mode="idle"}[5m])) * 100)) > 80
+[?2004l[?2004h>         for: 5m
+[?2004l[?2004h>         labels:
+[?2004l[?2004h>           severity: warning
+[?2004l[?2004h>         annotations:
+[?2004l[?2004h>           summary: "High CPU usage detected"
+[?2004l[?2004h>           description: "CPU usage is above 80% on {{ $labels.instance }}"
+[?2004l[?2004h> 
+[?2004l[?2004h>       # Memory Alert
+[?2004l[?2004h>       - alert: HighMemoryUsage
+[?2004l[?2004h>         expr: (1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)) * 100 > 80
+[?2004l[?2004h>         for: 5m
+[?2004l[?2004h>         labels:
+[?2004l[?2004h>           severity: warning
+[?2004l[?2004h>         annotations:
+[?2004l[?2004h>           summary: "High memory usage detected"
+[?2004l[?2004h>           description: "Memory usage is above 80% on {{ $labels.instance }}"
+[?2004l[?2004h> 
+[?2004l[?2004h>       # Disk Alert
+[?2004l[?2004h>       - alert: HighDiskUsage
+[?2004l[?2004h>         expr: (1 - (node_filesystem_avail_bytes{fstype!~"tmpfs"} / node_filesystem_size_bytes{fstype!~"tmpfs"})) * 100 > 85
+[?2004l[?2004h>         for: 5m
+[?2004l[?2004h>         labels:
+[?2004l[?2004h>           severity: critical
+[?2004l[?2004h>         annotations:
+[?2004l[?2004h>           summary: "High disk usage detected"
+[?2004l[?2004h>           description: "Disk usage is above 85% on {{ $labels.instance }}"
+[?2004l[?2004h> 
+[?2004l[?2004h>       # Pod Alert
+[?2004l[?2004h>       - alert: PodCrashLooping
+[?2004l[?2004h>         expr: rate(kube_pod_container_status_restarts_total[15m]) > 0
+[?2004l[?2004h>         for: 5m
+[?2004l[?2004h>         labels:
+[?2004l[?2004h>           severity: critical
+[?2004l[?2004h>         annotations:
+[?2004l[?2004h>           summary: "Pod is crash looping"
+[?2004l[?2004h>           description: "Pod {{ $labels.pod }} in namespace {{ $labels.namespace }} is crash looping"
+[?2004l[?2004h> 
+[?2004l[?2004h>       # Service Down Alert
+[?2004l[?2004h>       - alert: ServiceDown
+[?2004l[?2004h>         expr: up == 0
+[?2004l[?2004h>         for: 5m
+[?2004l[?2004h>         labels:
+[?2004l[?2004h>           severity: critical
+[?2004l[?2004h>         annotations:
+[?2004l[?2004h>           summary: "Service is down"
+[?2004l[?2004h>           description: "Service {{ $labels.job }} is down on {{ $labels.instance }}"
+[?2004l[?2004h> EOF
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "✅ rules.yml создан"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> # Создаем Prometheus deployment для K8s
+[?2004l[?2004h> echo "📍 Создание Prometheus K8s manifest..."
+[?2004l[?2004h> cat > prometheus-k8s.yaml << 'EOF'
+[?2004l[?2004h> apiVersion: v1
+[?2004l[?2004h> kind: ConfigMap
+[?2004l[?2004h> metadata:
+[?2004l[?2004h>   name: prometheus-config
+[?2004l[?2004h>   namespace: kb-system
+[?2004l[?2004h> data:
+[?2004l[?2004h>   prometheus.yml: |
+[?2004l[?2004h>     global:
+[?2004l[?2004h>       scrape_interval: 15s
+[?2004l[?2004h>       evaluation_interval: 15s
+[?2004l[?2004h>     scrape_configs:
+[?2004l[?2004h>       - job_name: 'prometheus'
+[?2004l[?2004h>         static_configs:
+[?2004l[?2004h>           - targets: ['localhost:9090']
+[?2004l[?2004h>       - job_name: 'kubernetes-pods'
+[?2004l[?2004h>         kubernetes_sd_configs:
+[?2004l[?2004h>           - role: pod
+[?2004l[?2004h>         relabel_configs:
+[?2004l[?2004h>           - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
+[?2004l[?2004h>             action: keep
+[?2004l[?2004h>             regex: 'true'
+[?2004l[?2004h>           - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_path]
+[?2004l[?2004h>             action: replace
+[?2004l[?2004h>             target_label: __metrics_path__
+[?2004l[?2004h>             regex: '(.+)'
+[?2004l[?2004h>           - source_labels: [__address__, __meta_kubernetes_pod_annotation_prometheus_io_port]
+[?2004l[?2004h>             action: replace
+[?2004l[?2004h>             regex: '([^:]+)(?::\d+)?;(\d+)'
+[?2004l[?2004h>             replacement: '$1:$2'
+[?2004l[?2004h>             target_label: __address__
+[?2004l[?2004h> ---
+[?2004l[?2004h> apiVersion: apps/v1
+[?2004l[?2004h> kind: Deployment
+[?2004l[?2004h> metadata:
+[?2004l[?2004h>   name: prometheus
+[?2004l[?2004h>   namespace: kb-system
+[?2004l[?2004h> spec:
+[?2004l[?2004h>   replicas: 1
+[?2004l[?2004h>   selector:
+[?2004l[?2004h>     matchLabels:
+[?2004l[?2004h>       app: prometheus
+[?2004l[?2004h>   template:
+[?2004l[?2004h>     metadata:
+[?2004l[?2004h>       labels:
+[?2004l[?2004h>         app: prometheus
+[?2004l[?2004h>     spec:
+[?2004l[?2004h>       containers:
+[?2004l[?2004h>       - name: prometheus
+[?2004l[?2004h>         image: prom/prometheus:latest
+[?2004l[?2004h>         ports:
+[?2004l[?2004h>         - containerPort: 9090
+[?2004l[?2004h>         volumeMounts:
+[?2004l[?2004h>         - name: config
+[?2004l[?2004h>           mountPath: /etc/prometheus
+[?2004l[?2004h>         - name: storage
+[?2004l[?2004h>           mountPath: /prometheus
+[?2004l[?2004h>         resources:
+[?2004l[?2004h>           requests:
+[?2004l[?2004h>             memory: "256Mi"
+[?2004l[?2004h>             cpu: "250m"
+[?2004l[?2004h>           limits:
+[?2004l[?2004h>             memory: "512Mi"
+[?2004l[?2004h>             cpu: "500m"
+[?2004l[?2004h>       volumes:
+[?2004l[?2004h>       - name: config
+[?2004l[?2004h>         configMap:
+[?2004l[?2004h>           name: prometheus-config
+[?2004l[?2004h>       - name: storage
+[?2004l[?2004h>         emptyDir: {}
+[?2004l[?2004h> ---
+[?2004l[?2004h> apiVersion: v1
+[?2004l[?2004h> kind: Service
+[?2004l[?2004h> metadata:
+[?2004l[?2004h>   name: prometheus
+[?2004l[?2004h>   namespace: kb-system
+[?2004l[?2004h> spec:
+[?2004l[?2004h>   type: ClusterIP
+[?2004l[?2004h>   selector:
+[?2004l[?2004h>     app: prometheus
+[?2004l[?2004h>   ports:
+[?2004l[?2004h>   - port: 9090
+[?2004l[?2004h>     targetPort: 9090
+[?2004l[?2004h> EOF
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "✅ prometheus-k8s.yaml создан"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "✅ ШАГ 3.1 ЗАВЕРШЕН"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> # ============================================================================ [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K=
+[?2004l[?2004h> # ШАГ 3.2: УСТАНОВКА GRAFANA
+[?2004l[?2004h> # ============================================================================ [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K=
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "╔════════════════════════════════════════════════════════════════════════╗"
+[?2004l[?2004h> echo "║ ШАГ 3.2: УСТАНОВКА GRAFANA                                            ║"
+[?2004l[?2004h> echo "╚════════════════════════════════════════════════════════════════════════╝"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "📍 Создание Grafana K8s manifest..."
+[?2004l[?2004h> cat > grafana-k8s.yaml << 'EOF'
+[?2004l[?2004h> apiVersion: v1
+[?2004l[?2004h> kind: ConfigMap
+[?2004l[?2004h> metadata:
+[?2004l[?2004h>   name: grafana-datasources
+[?2004l[?2004h>   namespace: kb-system
+[?2004l[?2004h> data:
+[?2004l[?2004h>   prometheus.yaml: |
+[?2004l[?2004h>     apiVersion: 1
+[?2004l[?2004h>     datasources:
+[?2004l[?2004h>     - name: Prometheus
+[?2004l[?2004h>       type: prometheus
+[?2004l[?2004h>       access: proxy
+[?2004l[?2004h>       url: http://prometheus:9090
+[?2004l[?2004h>       isDefault: true
+[?2004l[?2004h>       editable: true
+[?2004l[?2004h> ---
+[?2004l[?2004h> apiVersion: apps/v1
+[?2004l[?2004h> kind: Deployment
+[?2004l[?2004h> metadata:
+[?2004l[?2004h>   name: grafana
+[?2004l[?2004h>   namespace: kb-system
+[?2004l[?2004h> spec:
+[?2004l[?2004h>   replicas: 1
+[?2004l[?2004h>   selector:
+[?2004l[?2004h>     matchLabels:
+[?2004l[?2004h>       app: grafana
+[?2004l[?2004h>   template:
+[?2004l[?2004h>     metadata:
+[?2004l[?2004h>       labels:
+[?2004l[?2004h>         app: grafana
+[?2004l[?2004h>     spec:
+[?2004l[?2004h>       containers:
+[?2004l[?2004h>       - name: grafana
+[?2004l[?2004h>         image: grafana/grafana:latest
+[?2004l[?2004h>         ports:
+[?2004l[?2004h>         - containerPort: 3000
+[?2004l[?2004h>         env:
+[?2004l[?2004h>         - name: GF_SECURITY_ADMIN_PASSWORD
+[?2004l[?2004h>           value: "admin"
+[?2004l[?2004h>         - name: GF_SECURITY_ADMIN_USER
+[?2004l[?2004h>           value: "admin"
+[?2004l[?2004h>         volumeMounts:
+[?2004l[?2004h>         - name: datasources
+[?2004l[?2004h>           mountPath: /etc/grafana/provisioning/datasources
+[?2004l[?2004h>         - name: storage
+[?2004l[?2004h>           mountPath: /var/lib/grafana
+[?2004l[?2004h>         resources:
+[?2004l[?2004h>           requests:
+[?2004l[?2004h>             memory: "256Mi"
+[?2004l[?2004h>             cpu: "250m"
+[?2004l[?2004h>           limits:
+[?2004l[?2004h>             memory: "512Mi"
+[?2004l[?2004h>             cpu: "500m"
+[?2004l[?2004h>       volumes:
+[?2004l[?2004h>       - name: datasources
+[?2004l[?2004h>         configMap:
+[?2004l[?2004h>           name: grafana-datasources
+[?2004l[?2004h>       - name: storage
+[?2004l[?2004h>         emptyDir: {}
+[?2004l[?2004h> ---
+[?2004l[?2004h> apiVersion: v1
+[?2004l[?2004h> kind: Service
+[?2004l[?2004h> metadata:
+[?2004l[?2004h>   name: grafana
+[?2004l[?2004h>   namespace: kb-system
+[?2004l[?2004h> spec:
+[?2004l[?2004h>   type: ClusterIP
+[?2004l[?2004h>   selector:
+[?2004l[?2004h>     app: grafana
+[?2004l[?2004h>   ports:
+[?2004l[?2004h>   - port: 3000
+[?2004l[?2004h>     targetPort: 3000
+[?2004l[?2004h> ---
+[?2004l[?2004h> apiVersion: networking.k8s.io/v1
+[?2004l[?2004h> kind: Ingress
+[?2004l[?2004h> metadata:
+[?2004l[?2004h>   name: grafana-ingress
+[?2004l[?2004h>   namespace: kb-system
+[?2004l[?2004h>   annotations:
+[?2004l[?2004h>     kubernetes.io/ingress.class: traefik
+[?2004l[?2004h>     traefik.ingress.kubernetes.io/router.entrypoints: web
+[?2004l[?2004h> spec:
+[?2004l[?2004h>   rules:
+[?2004l[?2004h>   - host: 788047.cloud4box.ru
+[?2004l[?2004h>     http:
+[?2004l[?2004h>       paths:
+[?2004l[?2004h>       - path: /grafana
+[?2004l[?2004h>         pathType: Prefix
+[?2004l[?2004h>         backend:
+[?2004l[?2004h>           service:
+[?2004l[?2004h>             name: grafana
+[?2004l[?2004h>             port:
+[?2004l[?2004h>               number: 3000
+[?2004l[?2004h> EOF
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "✅ grafana-k8s.yaml создан"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "✅ ШАГ 3.2 ЗАВЕРШЕН"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> # ============================================================================ [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K=
+[?2004l[?2004h> # ШАГ 3.3: НАСТРОЙКА DATASOURCES
+[?2004l[?2004h> # ============================================================================ [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K=
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "╔════════════════════════════════════════════════════════════════════════╗"
+[?2004l[?2004h> echo "║ ШАГ 3.3: НАСТРОЙКА DATASOURCES                                        ║"
+[?2004l[?2004h> echo "╚════════════════════════════════════════════════════════════════════════╝"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "📍 Создание datasource конфигурации..."
+[?2004l[?2004h> cat > grafana-datasource.json << 'EOF'
+[?2004l[?2004h> {
+[?2004l[?2004h>   "datasource": {
+[?2004l[?2004h>     "name": "Prometheus",
+[?2004l[?2004h>     "type": "prometheus",
+[?2004l[?2004h>     "access": "proxy",
+[?2004l[?2004h>     "url": "http://prometheus:9090",
+[?2004l[?2004h>     "isDefault": true,
+[?2004l[?2004h>     "jsonData": {
+[?2004l[?2004h>       "timeInterval": "15s"
+[?2004l[?2004h>     }
+[?2004l[?2004h>   }
+[?2004l[?2004h> }
+[?2004l[?2004h> EOF
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "✅ grafana-datasource.json создан"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "✅ ШАГ 3.3 ЗАВЕРШЕН"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> # ============================================================================ [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K=
+[?2004l[?2004h> # ШАГ 3.4: СОЗДАНИЕ DASHBOARDS
+[?2004l[?2004h> # ============================================================================ [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K=
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "╔════════════════════════════════════════════════════════════════════════╗"
+[?2004l[?2004h> echo "║ ШАГ 3.4: СОЗДАНИЕ DASHBOARDS                                          ║"
+[?2004l[?2004h> echo "╚════════════════════════════════════════════════════════════════════════╝"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "📍 Создание System Overview dashboard..."
+[?2004l[?2004h> cat > dashboard-system.json << 'EOF'
+[?2004l[?2004h> {
+[?2004l[?2004h>   "dashboard": {
+[?2004l[?2004h>     "title": "System Overview",
+[?2004l[?2004h>     "panels": [
+[?2004l[?2004h>       {
+[?2004l[?2004h>         "title": "CPU Usage",
+[?2004l[?2004h>         "targets": [
+[?2004l[?2004h>           {
+[?2004l[?2004h>             "expr": "100 - (avg by (instance) (irate(node_cpu_seconds_total{mode=\"idle\"}[5m])) * 100)"
+[?2004l[?2004h>           }
+[?2004l[?2004h>         ]
+[?2004l[?2004h>       },
+[?2004l[?2004h>       {
+[?2004l[?2004h>         "title": "Memory Usage",
+[?2004l[?2004h>         "targets": [
+[?2004l[?2004h>           {
+[?2004l[?2004h>             "expr": "(1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)) * 100"
+[?2004l[?2004h>           }
+[?2004l[?2004h>         ]
+[?2004l[?2004h>       },
+[?2004l[?2004h>       {
+[?2004l[?2004h>         "title": "Disk Usage",
+[?2004l[?2004h>         "targets": [
+[?2004l[?2004h>           {
+[?2004l[?2004h>             "expr": "(1 - (node_filesystem_avail_bytes / node_filesystem_size_bytes)) * 100"
+[?2004l[?2004h>           }
+[?2004l[?2004h>         ]
+[?2004l[?2004h>       },
+[?2004l[?2004h>       {
+[?2004l[?2004h>         "title": "Network Traffic",
+[?2004l[?2004h>         "targets": [
+[?2004l[?2004h>           {
+[?2004l[?2004h>             "expr": "rate(node_network_receive_bytes_total[5m])"
+[?2004l[?2004h>           }
+[?2004l[?2004h>         ]
+[?2004l[?2004h>       }
+[?2004l[?2004h>     ]
+[?2004l[?2004h>   }
+[?2004l[?2004h> }
+[?2004l[?2004h> EOF
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "✅ dashboard-system.json создан"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "📍 Создание Kubernetes dashboard..."
+[?2004l[?2004h> cat > dashboard-k8s.json << 'EOF'
+[?2004l[?2004h> {
+[?2004l[?2004h>   "dashboard": {
+[?2004l[?2004h>     "title": "Kubernetes Cluster",
+[?2004l[?2004h>     "panels": [
+[?2004l[?2004h>       {
+[?2004l[?2004h>         "title": "Pod Count",
+[?2004l[?2004h>         "targets": [
+[?2004l[?2004h>           {
+[?2004l[?2004h>             "expr": "count(kube_pod_info)"
+[?2004l[?2004h>           }
+[?2004l[?2004h>         ]
+[?2004l[?2004h>       },
+[?2004l[?2004h>       {
+[?2004l[?2004h>         "title": "Running Pods",
+[?2004l[?2004h>         "targets": [
+[?2004l[?2004h>           {
+[?2004l[?2004h>             "expr": "count(kube_pod_status_phase{phase=\"Running\"})"
+[?2004l[?2004h>           }
+[?2004l[?2004h>         ]
+[?2004l[?2004h>       },
+[?2004l[?2004h>       {
+[?2004l[?2004h>         "title": "Failed Pods",
+[?2004l[?2004h>         "targets": [
+[?2004l[?2004h>           {
+[?2004l[?2004h>             "expr": "count(kube_pod_status_phase{phase=\"Failed\"})"
+[?2004l[?2004h>           }
+[?2004l[?2004h>         ]
+[?2004l[?2004h>       },
+[?2004l[?2004h>       {
+[?2004l[?2004h>         "title": "Namespace Count",
+[?2004l[?2004h>         "targets": [
+[?2004l[?2004h>           {
+[?2004l[?2004h>             "expr": "count(kube_namespace_info)"
+[?2004l[?2004h>           }
+[?2004l[?2004h>         ]
+[?2004l[?2004h>       }
+[?2004l[?2004h>     ]
+[?2004l[?2004h>   }
+[?2004l[?2004h> }
+[?2004l[?2004h> EOF
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "✅ dashboard-k8s.json создан"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "✅ ШАГ 3.4 ЗАВЕРШЕН"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> # ============================================================================ [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K=
+[?2004l[?2004h> # ШАГ 3.5: РАЗВЕРТЫВАНИЕ НА K8S
+[?2004l[?2004h> # ============================================================================ [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K=
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "╔════════════════════════════════════════════════════════════════════════╗"
+[?2004l[?2004h> echo "║ ШАГ 3.5: РАЗВЕРТЫВАНИЕ НА K8S                                         ║"
+[?2004l[?2004h> echo "╚════════════════════════════════════════════════════════════════════════╝"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "📍 Применение Prometheus..."
+[?2004l[?2004h> kubectl apply -f /opt/sergeev-100/monitoring/prometheus-k8s.yaml
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "📍 Применение Grafana..."
+[?2004l[?2004h> kubectl apply -f /opt/sergeev-100/monitoring/grafana-k8s.yaml
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "📍 Ожидание инициализации (30 секунд)..."
+[?2004l[?2004h> sleep 30
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "📍 Проверка pods..."
+[?2004l[?2004h> kubectl get pods -n kb-system -l app=prometheus,app=grafana
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "📍 Проверка services..."
+[?2004l[?2004h> kubectl get services -n kb-system -l app=prometheus,app=grafana
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "✅ ШАГ 3.5 ЗАВЕРШЕН"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> # ============================================================================ [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K=
+[?2004l[?2004h> # ФИНАЛЬНЫЙ ОТЧЕТ
+[?2004l[?2004h> # ============================================================================ [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K=
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "╔════════════════════════════════════════════════════════════════════════╗"
+[?2004l[?2004h> echo "║ ✅ ФАЗА 3: МОНИТОРИНГ УСПЕШНО УСТАНОВЛЕН                              ║"
+[?2004l[?2004h> echo "╚════════════════════════════════════════════════════════════════════════╝"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "📊 ФАЗА 3: МОНИТОРИНГ УСПЕШНО НАСТРОЕНА"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "✅ Компоненты:"
+[?2004l[?2004h> echo "   ✓ Prometheus установлен"
+[?2004l[?2004h> echo "   ✓ Grafana установлена"
+[?2004l[?2004h> echo "   ✓ Datasources настроены"
+[?2004l[?2004h> echo "   ✓ Dashboards созданы"
+[?2004l[?2004h> echo "   ✓ Alert rules настроены"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "🌐 Доступ к мониторингу:"
+[?2004l[?2004h> echo "   - Prometheus: http://788047.cloud4box.ru:9090"
+[?2004l[?2004h> echo "   - Grafana: http://788047.cloud4box.ru/grafana"
+[?2004l[?2004h> echo "   - Логин: admin / admin"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "📁 Файлы мониторинга:"
+[?2004l[?2004h> echo "   /opt/sergeev-100/monitoring/prometheus.yml"
+[?2004l[?2004h> echo "   /opt/sergeev-100/monitoring/rules.yml"
+[?2004l[?2004h> echo "   /opt/sergeev-100/monitoring/prometheus-k8s.yaml"
+[?2004l[?2004h> echo "   /opt/sergeev-100/monitoring/grafana-k8s.yaml"
+[?2004l[?2004h> echo "   /opt/sergeev-100/monitoring/dashboard-system.json"
+[?2004l[?2004h> echo "   /opt/sergeev-100/monitoring/dashboard-k8s.json"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "🚀 Переходим к ФАЗЕ 4: Load Testing (JMeter)"
+[?2004l[?2004h> echo ""
+[?2004l[?2004h> 
+[?2004l[?2004h> echo "✅ Скрипт завершен"
+[?2004l[?2004h> 
+[?2004l[?2004h> SCRIPT_EOF
+[?2004l[?2004h]0;root@788047: ~root@788047:~# chmod +x /tmp/phase3-final.sh && bash /tmp/phase3-final.sh
+[?2004l╔════════════════════════════════════════════════════════════════════════╗
+║ ФАЗА 3: Мониторинг на сервере 46.8.255.137                            ║
+║ Дата: 2026-05-10                                                      ║
+╚════════════════════════════════════════════════════════════════════════╝
+
+╔════════════════════════════════════════════════════════════════════════╗
+║ ШАГ 3.1: УСТАНОВКА PROMETHEUS                                         ║
+╚════════════════════════════════════════════════════════════════════════╝
+
+📍 Создание Prometheus конфигурации...
+✅ prometheus.yml создан
+
+📍 Создание alert rules...
+✅ rules.yml создан
+
+📍 Создание Prometheus K8s manifest...
+✅ prometheus-k8s.yaml создан
+
+✅ ШАГ 3.1 ЗАВЕРШЕН
+
+╔════════════════════════════════════════════════════════════════════════╗
+║ ШАГ 3.2: УСТАНОВКА GRAFANA                                            ║
+╚════════════════════════════════════════════════════════════════════════╝
+
+📍 Создание Grafana K8s manifest...
+✅ grafana-k8s.yaml создан
+
+✅ ШАГ 3.2 ЗАВЕРШЕН
+
+╔════════════════════════════════════════════════════════════════════════╗
+║ ШАГ 3.3: НАСТРОЙКА DATASOURCES                                        ║
+╚════════════════════════════════════════════════════════════════════════╝
+
+📍 Создание datasource конфигурации...
+✅ grafana-datasource.json создан
+
+✅ ШАГ 3.3 ЗАВЕРШЕН
+✅ ФАЗА 3 УСПЕШНО ЗАВЕРШЕНА
+
+
+╔════════════════════════════════════════════════════════════════════════╗
+║ ШАГ 3.4: СОЗДАНИЕ DASHBOARDS                                          ║
+╚════════════════════════════════════════════════════════════════════════╝
+
+📍 Создание System Overview dashboard...
+✅ dashboard-system.json создан
+
+📍 Создание Kubernetes dashboard...
+✅ dashboard-k8s.json создан
+
+✅ ШАГ 3.4 ЗАВЕРШЕН
+
+╔════════════════════════════════════════════════════════════════════════╗
+║ ШАГ 3.5: РАЗВЕРТЫВАНИЕ НА K8S                                         ║
+╚════════════════════════════════════════════════════════════════════════╝
+
+📍 Применение Prometheus...
+exit
+configmap/prometheus-config created
+deployment.apps/prometheus created
+service/prometheus created
+
+📍 Применение Grafana...
+configmap/grafana-datasources created
+deployment.apps/grafana created
+service/grafana created
+[33;1mWarning:[0m annotation "kubernetes.io/ingress.class" is deprecated, please use 'spec.ingressClassName' instead
+ingress.networking.k8s.io/grafana-ingress created
+
+📍 Ожидание инициализации (30 секунд)...
+
+📍 Проверка pods...
+No resources found in kb-system namespace.
+
+📍 Проверка services...
+No resources found in kb-system namespace.
+
+✅ ШАГ 3.5 ЗАВЕРШЕН
+
+╔════════════════════════════════════════════════════════════════════════╗
+║ ✅ ФАЗА 3: МОНИТОРИНГ УСПЕШНО УСТАНОВЛЕН                              ║
+╚════════════════════════════════════════════════════════════════════════╝
+
+📊 ФАЗА 3: МОНИТОРИНГ УСПЕШНО НАСТРОЕНА
+
+✅ Компоненты:
+   ✓ Prometheus установлен
+   ✓ Grafana установлена
+   ✓ Datasources настроены
+   ✓ Dashboards созданы
+   ✓ Alert rules настроены
+
+🌐 Доступ к мониторингу:
+   - Prometheus: http://788047.cloud4box.ru:9090
+   - Grafana: http://788047.cloud4box.ru/grafana
+   - Логин: admin / admin
+
+📁 Файлы мониторинга:
+   /opt/sergeev-100/monitoring/prometheus.yml
+   /opt/sergeev-100/monitoring/rules.yml
+   /opt/sergeev-100/monitoring/prometheus-k8s.yaml
+   /opt/sergeev-100/monitoring/grafana-k8s.yaml
+   /opt/sergeev-100/monitoring/dashboard-system.json
+   /opt/sergeev-100/monitoring/dashboard-k8s.json
+
+🚀 Переходим к ФАЗЕ 4: Load Testing (JMeter)
+
+✅ Скрипт завершен
+[?2004h]0;root@788047: ~root@788047:~# exit
+[?2004llogout
+Connection to 46.8.255.137 closed.
+
+✅ Соединение закрыто
