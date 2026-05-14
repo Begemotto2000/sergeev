@@ -1,0 +1,289 @@
+╔════════════════════════════════════════════════════════════════════════╗
+║ ПОЛНОЕ ИСПРАВЛЕНИЕ: Nginx конфигурация                                ║
+║ Дата: 2026-05-10                                                      ║
+╚════════════════════════════════════════════════════════════════════════╝
+
+🔗 Подключаюсь к серверу 46.8.255.137...
+spawn ssh -o StrictHostKeyChecking=no root@46.8.255.137
+root@46.8.255.137's password: 
+Welcome to Ubuntu 24.04.3 LTS (GNU/Linux 6.8.0-110-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/pro
+
+ System information as of Sun May 10 03:19:16 PM MSK 2026
+
+  System load:  3.77               Processes:             264
+  Usage of /:   27.3% of 98.34GB   Users logged in:       0
+  Memory usage: 23%                IPv4 address for ens3: 46.8.255.137
+  Swap usage:   0%                 IPv6 address for ens3: 2a0d:c580:1:7:197::1
+
+ * Strictly confined Kubernetes makes edge and IoT secure. Learn how MicroK8s
+   just raised the bar for easy, resilient and secure K8s cluster deployment.
+
+   https://ubuntu.com/engage/secure-kubernetes-at-the-edge
+
+Expanded Security Maintenance for Applications is not enabled.
+
+70 updates can be applied immediately.
+To see these additional updates run: apt list --upgradable
+
+14 additional security updates can be applied with ESM Apps.
+Learn more about enabling ESM Apps service at https://ubuntu.com/esm
+
+
+*** System restart required ***
+Last login: Sun May 10 16:59:41 2026 from 3.237.87.14
+[?2004h]0;root@788047: ~root@788047:~# ✅ Подключение успешно
+
+╔════════════════════════════════════════════════════════════════════════╗
+║ ШАГ 1: УДАЛЕНИЕ СТАРОЙ КОНФИГУРАЦИИ                                   ║
+╚════════════════════════════════════════════════════════════════════════╝
+
+echo '📍 Удаляю старые конфиги...' && rm -f /etc/nginx/conf.d/*.conf && echo '✅ Старые конфиги удалены'
+[?2004l📍 Удаляю старые конфиги...
+✅ Старые конфиги удалены
+[?2004h]0;root@788047: ~root@788047:~# 
+╔════════════════════════════════════════════════════════════════════════╗
+║ ШАГ 2: СОЗДАНИЕ НОВОЙ КОНФИГУРАЦИИ                                    ║
+╚════════════════════════════════════════════════════════════════════════╝
+
+cat > /etc/nginx/conf.d/app.conf << 'NGINX_CONFIG'
+[?2004l[?2004h> # Upstream для приложения
+[?2004l[?2004h> upstream app_backend {
+[?2004l✅ Новая конфигурация создана
+
+╔════════════════════════════════════════════════════════════════════════╗
+║ ШАГ 3: ПРОВЕРКА СИНТАКСИСА NGINX                                      ║
+╚════════════════════════════════════════════════════════════════════════╝
+
+[?2004h>     server localhost:3000 max_fails=3 fail_timeout=30s;
+[?2004l[?2004h>     keepalive 32;
+[?2004l[?2004h> }
+[?2004l[?2004h> 
+[?2004l[?2004h> # HTTP server
+[?2004l[?2004h> server {
+[?2004l[?2004h>     listen 80 default_server;
+[?2004l[?2004h>     listen [::]:80 default_server;
+[?2004l[?2004h>     server_name _;
+[?2004l[?2004h> 
+[?2004l[?2004h>     # Логирование
+[?2004l[?2004h>     access_log /var/log/nginx/app_access.log;
+[?2004l[?2004h>     error_log /var/log/nginx/app_error.log;
+[?2004l[?2004h> 
+[?2004l[?2004h>     # Проксирование всех запросов на приложение
+[?2004l[?2004h>     location / {
+[?2004l[?2004h>         proxy_pass http://app_backend;
+[?2004l[?2004h>         proxy_http_version 1.1;
+[?2004l[?2004h>         proxy_set_header Upgrade $http_upgrade;
+[?2004l[?2004h>         proxy_set_header Connection 'upgrade';
+[?2004l[?2004h>         proxy_set_header Host $host;
+[?2004l[?2004h>         proxy_set_header X-Real-IP $remote_addr;
+[?2004l[?2004h>         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+[?2004l[?2004h>         proxy_set_header X-Forwarded-Proto $scheme;
+[?2004l[?2004h>         proxy_cache_bypass $http_upgrade;
+[?2004l[?2004h>         proxy_connect_timeout 60s;
+[?2004l[?2004h>         proxy_send_timeout 60s;
+[?2004l[?2004h>         proxy_read_timeout 60s;
+[?2004l[?2004h>     }
+[?2004l[?2004h> }
+[?2004l[?2004h> NGINX_CONFIG
+[?2004l[?2004h]0;root@788047: ~root@788047:~# 
+╔════════════════════════════════════════════════════════════════════════╗
+║ ШАГ 4: ПЕРЕЗАГРУЗКА NGINX                                             ║
+╚════════════════════════════════════════════════════════════════════════╝
+
+
+╔════════════════════════════════════════════════════════════════════════╗
+║ ШАГ 5: ПРОВЕРКА ПРИЛОЖЕНИЯ НА ПОРТЕ 3000                              ║
+╚════════════════════════════════════════════════════════════════════════╝
+
+
+╔════════════════════════════════════════════════════════════════════════╗
+║ ШАГ 6: ПРОВЕРКА ЧЕРЕЗ NGINX                                           ║
+╚════════════════════════════════════════════════════════════════════════╝
+
+echo '📍 Проверка синтаксиса:' && nginx -t
+[?2004l📍 Проверка синтаксиса:
+2026/05/10 17:00:05 [warn] 642058#642058: "ssl_stapling" ignored, no OCSP responder URL in the certificate "/etc/letsencrypt/live/788047.cloud4box.ru/fullchain.pem"
+2026/05/10 17:00:05 [warn] 642058#642058: conflicting server name "788047.cloud4box.ru" on 0.0.0.0:80, ignored
+2026/05/10 17:00:05 [warn] 642058#642058: conflicting server name "_" on 0.0.0.0:80, ignored
+2026/05/10 17:00:05 [warn] 642058#642058: conflicting server name "788047.cloud4box.ru" on 0.0.0.0:443, ignored
+╔════════════════════════════════════════════════════════════════════════╗
+║ ШАГ 7: ПРОВЕРКА DOCKER КОНТЕЙНЕРОВ                                     ║
+╚════════════════════════════════════════════════════════════════════════╝
+
+
+╔════════════════════════════════════════════════════════════════════════╗
+║ ШАГ 8: ПРОВЕРКА K8S PODS                                              ║
+╚════════════════════════════════════════════════════════════════════════╝
+
+
+╔════════════════════════════════════════════════════════════════════════╗
+║ ШАГ 9: ПРОВЕРКА ПОРТОВ                                                ║
+╚════════════════════════════════════════════════════════════════════════╝
+
+
+nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
+nginx: configuration file /etc/nginx/nginx.conf test is successful
+[?2004h]0;root@788047: ~root@788047:~# 
+╔════════════════════════════════════════════════════════════════════════╗
+║ ✅ ИСПРАВЛЕНИЕ ЗАВЕРШЕНО                                              ║
+╚════════════════════════════════════════════════════════════════════════╝
+
+📊 РЕЗУЛЬТАТЫ:
+  ✅ Старые конфиги удалены
+  ✅ Новая конфигурация создана
+  ✅ Синтаксис проверен
+  ✅ Nginx перезагружен
+  ✅ Приложение должно быть доступно
+
+🌐 ДОСТУП:
+  - http://46.8.255.137/
+  - http://46.8.255.137/100
+  - http://788047.cloud4box.ru/
+  - http://788047.cloud4box.ru/100
+
+📝 КОНФИГУРАЦИЯ:
+  /etc/nginx/conf.d/app.conf
+
+echo '📍 Перезагружаю Nginx...' && systemctl reload nginx && echo '✅ Nginx перезагружен'
+[?2004l📍 Перезагружаю Nginx...
+echo '' && echo '📍 Проверка http://localhost/100:' && curl -s http://localhost/100 | head -20
+echo '📍 Docker контейнеры:' && docker ps
+echo '📍 K8s pods:' && kubectl get pods -A
+echo '📍 Открытые порты:' && ss -tlnp | grep -E '3000|80|443'
+✅ Nginx перезагружен
+[?2004h]0;root@788047: ~root@788047:~# echo '📍 Проверка localhost:3000:' && curl -s http://localhost:3000/ | head -20
+[?2004l📍 Проверка localhost:3000:
+<!doctype html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+    <title>Sergeev Digitization System</title>    
+    <!-- THIS IS THE START OF A COMMENT BLOCK, BLOCK TO BE DELETED: Google Fonts here, example:
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    THIS IS THE END OF A COMMENT BLOCK, BLOCK TO BE DELETED -->
+    <script type="module" crossorigin src="/100/assets/index-HGnt2LXC.js"></script>
+    <link rel="stylesheet" crossorigin href="/100/assets/index-Duh-JVoj.css">
+  </head>
+
+  <body>
+    <script id="manus-runtime">window.__MANUS_HOST_DEV__ = false;
+[?2004h]0;root@788047: ~root@788047:~# echo '' && echo '📍 Проверка localhost:3000/100:' && curl -s http://localhost:3000/100 | head -20
+[?2004l
+📍 Проверка localhost:3000/100:
+<!doctype html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+    <title>Sergeev Digitization System</title>    
+    <!-- THIS IS THE START OF A COMMENT BLOCK, BLOCK TO BE DELETED: Google Fonts here, example:
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    THIS IS THE END OF A COMMENT BLOCK, BLOCK TO BE DELETED -->
+    <script type="module" crossorigin src="/100/assets/index-HGnt2LXC.js"></script>
+    <link rel="stylesheet" crossorigin href="/100/assets/index-Duh-JVoj.css">
+  </head>
+
+  <body>
+    <script id="manus-runtime">window.__MANUS_HOST_DEV__ = false;
+[?2004h]0;root@788047: ~root@788047:~# echo '📍 Проверка http://localhost/:' && curl -s http://localhost/ | head -20
+[?2004l📍 Проверка http://localhost/:
+<!doctype html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+    <title>Sergeev Digitization System</title>    
+    <!-- THIS IS THE START OF A COMMENT BLOCK, BLOCK TO BE DELETED: Google Fonts here, example:
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    THIS IS THE END OF A COMMENT BLOCK, BLOCK TO BE DELETED -->
+    <script type="module" crossorigin src="/100/assets/index-HGnt2LXC.js"></script>
+    <link rel="stylesheet" crossorigin href="/100/assets/index-Duh-JVoj.css">
+  </head>
+
+  <body>
+    <script id="manus-runtime">window.__MANUS_HOST_DEV__ = false;
+[?2004h]0;root@788047: ~root@788047:~# echo '' && echo '📍 Проверка http://localhost/100:' && curl -s http://localhost/100 | head -20
+[?2004l
+📍 Проверка http://localhost/100:
+<!doctype html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+    <title>Sergeev Digitization System</title>    
+    <!-- THIS IS THE START OF A COMMENT BLOCK, BLOCK TO BE DELETED: Google Fonts here, example:
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    THIS IS THE END OF A COMMENT BLOCK, BLOCK TO BE DELETED -->
+    <script type="module" crossorigin src="/100/assets/index-HGnt2LXC.js"></script>
+    <link rel="stylesheet" crossorigin href="/100/assets/index-Duh-JVoj.css">
+  </head>
+
+  <body>
+    <script id="manus-runtime">window.__MANUS_HOST_DEV__ = false;
+[?2004h]0;root@788047: ~root@788047:~# echo '📍 Docker контейнеры:' && docker ps
+[?2004l📍 Docker контейнеры:
+exit
+CONTAINER ID   IMAGE                             COMMAND                  CREATED        STATUS                 PORTS                                                             NAMES
+18571962b8e7   sergeev_digitization_system-app   "dumb-init -- pnpm s…"   16 hours ago   Up 2 hours (healthy)   0.0.0.0:3000->3000/tcp, [::]:3000->3000/tcp                       sergeev_digitization_system-app-1
+64ae37a7dce1   redis:7-alpine                    "docker-entrypoint.s…"   16 hours ago   Up 16 hours            6379/tcp                                                          sergeev_digitization_system-redis-1
+65f40268ec44   qdrant/qdrant:latest              "./entrypoint.sh"        16 hours ago   Up 16 hours            6333-6334/tcp                                                     sergeev_digitization_system-qdrant-1
+19b81d640ac2   mysql:8.0                         "docker-entrypoint.s…"   16 hours ago   Up 16 hours            3306/tcp, 33060/tcp                                               sergeev_digitization_system-mysql-1
+ab4ae4750c60   qdrant/qdrant:latest              "./entrypoint.sh"        2 weeks ago    Up 2 weeks             0.0.0.0:6333-6334->6333-6334/tcp, [::]:6333-6334->6333-6334/tcp   dt_qdrant
+2f5741609484   ubuntu/squid:latest               "entrypoint.sh -f /e…"   2 weeks ago    Up 2 weeks             0.0.0.0:3128->3128/tcp, [::]:3128->3128/tcp                       dt_squid
+[?2004h]0;root@788047: ~root@788047:~# echo '📍 K8s pods:' && kubectl get pods -A
+[?2004l📍 K8s pods:
+NAMESPACE     NAME                                      READY   STATUS             RESTARTS         AGE
+kb-system     app-5c97c58479-d6wjh                      0/1     ImagePullBackOff   0                31m
+kb-system     app-5c97c58479-kmq4f                      0/1     ImagePullBackOff   0                31m
+kb-system     app-5c97c58479-zgrms                      0/1     ImagePullBackOff   0                31m
+kb-system     grafana-f98f6f84c-fjvwt                   1/1     Running            0                14m
+kb-system     postgres-0                                1/1     Running            0                31m
+kb-system     prometheus-7f5b9497d6-p8jdj               1/1     Running            0                14m
+kb-system     qdrant-0                                  0/1     CrashLoopBackOff   11 (5m14s ago)   31m
+kb-system     redis-0                                   1/1     Running            0                31m
+kube-system   coredns-c4dbffb5f-mhg5d                   1/1     Running            0                33m
+kube-system   helm-install-traefik-crd-wmtth            0/1     Completed          0                33m
+kube-system   helm-install-traefik-dln9b                0/1     Completed          1                33m
+kube-system   local-path-provisioner-5c4dc5d66d-rm6vx   1/1     Running            0                33m
+kube-system   metrics-server-786d997795-qtpl5           1/1     Running            0                33m
+kube-system   svclb-traefik-194f7236-km9x8              2/2     Running            0                33m
+kube-system   traefik-9bcdbbd9-cpmxh                    1/1     Running            0                33m
+[?2004h]0;root@788047: ~root@788047:~# echo '📍 Открытые порты:' && ss -tlnp | grep -E '3000|80|443'
+[?2004l📍 Открытые порты:
+LISTEN 0      511          0.0.0.0:10[01;31m[K80[m[K       0.0.0.0:*    users:(("danted",pid=1116341,fd=8))                                                                                                                                                                                                                       
+LISTEN 0      511          0.0.0.0:[01;31m[K443[m[K        0.0.0.0:*    users:(("nginx",pid=642073,fd=9),("nginx",pid=642072,fd=9),("nginx",pid=642071,fd=9),("nginx",pid=642070,fd=9),("nginx",pid=642069,fd=9),("nginx",pid=642068,fd=9),("nginx",pid=642067,fd=9),("nginx",pid=642066,fd=9),("nginx",pid=179365,fd=9))         
+LISTEN 0      511          0.0.0.0:[01;31m[K80[m[K         0.0.0.0:*    users:(("nginx",pid=642073,fd=7),("nginx",pid=642072,fd=7),("nginx",pid=642071,fd=7),("nginx",pid=642070,fd=7),("nginx",pid=642069,fd=7),("nginx",pid=642068,fd=7),("nginx",pid=642067,fd=7),("nginx",pid=642066,fd=7),("nginx",pid=179365,fd=7))         
+LISTEN 0      4096         0.0.0.0:[01;31m[K3000[m[K       0.0.0.0:*    users:(("docker-proxy",pid=306087,fd=8))                                                                                                                                                                                                                  
+LISTEN 0      4096               *:6[01;31m[K443[m[K             *:*    users:(("k3s-server",pid=525316,fd=12))                                                                                                                                                                                                                   
+LISTEN 0      511             [::]:[01;31m[K443[m[K           [::]:*    users:(("nginx",pid=642073,fd=10),("nginx",pid=642072,fd=10),("nginx",pid=642071,fd=10),("nginx",pid=642070,fd=10),("nginx",pid=642069,fd=10),("nginx",pid=642068,fd=10),("nginx",pid=642067,fd=10),("nginx",pid=642066,fd=10),("nginx",pid=179365,fd=10))
+LISTEN 0      511             [::]:[01;31m[K80[m[K            [::]:*    users:(("nginx",pid=642073,fd=8),("nginx",pid=642072,fd=8),("nginx",pid=642071,fd=8),("nginx",pid=642070,fd=8),("nginx",pid=642069,fd=8),("nginx",pid=642068,fd=8),("nginx",pid=642067,fd=8),("nginx",pid=642066,fd=8),("nginx",pid=179365,fd=8))         
+LISTEN 0      4096            [::]:[01;31m[K3000[m[K          [::]:*    users:(("docker-proxy",pid=306094,fd=8))                                                                                                                                                                                                                  
+[?2004h]0;root@788047: ~root@788047:~# exit
+[?2004llogout
+Connection to 46.8.255.137 closed.
+✅ Исправление завершено
